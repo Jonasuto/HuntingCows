@@ -5,4 +5,6 @@ package mx.itesm.jcampos.huntingcows;
  */
 public class Ziii {
     int ca=0;
+    int yeyeye=2;
+    double tre=3;
 }
