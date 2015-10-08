@@ -51,7 +51,7 @@ public class EscenaMenu extends EscenaBase
         regionBtnAcercaDe = cargarImagen("Imagenes/MenuInicio/btnAcercaDe.png");
         regionBtnJugar = cargarImagen("Imagenes/MenuInicio/btnJugar.png");
         regionBtnRojo = cargarImagen("Imagenes/MenuInicio/botonRojo.gif");
-        regionBtnMusica = cargarImagen("Imagenes/MenuInicio/musica.png");
+        regionBtnMusica = cargarImagen("Imagenes/MenuInicio/vale.png");
         regionBtnSonido = cargarImagen("Imagenes/MenuInicio/sonido.jpg");
 
     }

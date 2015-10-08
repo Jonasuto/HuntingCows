@@ -86,8 +86,8 @@ public class AdministradorMusica {
     public void vibrar(int i){
         Vibrator v = (Vibrator)actividadJuego.getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(i);
-
     }
+
 
 
     public void reproducirMusica(){
