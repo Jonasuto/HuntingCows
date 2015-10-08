@@ -183,7 +183,7 @@ public class EscenaMenu extends EscenaBase
 
                     case OPCION_BOTON_ROJO:
                         // Mostrar la escena de AcercaDe
-                        admMusica.vibrar(500);
+                        admMusica.vibrar(250);
                         admMusica.reproducirMusicaBoton();
 
                         break;
