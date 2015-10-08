@@ -24,6 +24,7 @@ public class EscenaAcercaDe extends mx.itesm.jcampos.huntingcows.EscenaBase
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
         attachChild(spriteFondo);
         admMusica.cargarMusica(1);
+        admMusica.vibrar(40000);
 
     }
 
