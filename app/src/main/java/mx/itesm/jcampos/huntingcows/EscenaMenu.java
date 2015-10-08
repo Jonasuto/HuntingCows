@@ -24,6 +24,9 @@ public class EscenaMenu extends EscenaBase
     private ITextureRegion regionBtnRojo;
     private ITextureRegion regionBtnMusica;
     private ITextureRegion regionBtnSonido;
+    private ITextureRegion regionBtnContinuarJuego;
+    private ITextureRegion regionBtnComic;
+    private ITextureRegion regionBtnArcade;
 
 
     // Sprites sobre la escena
@@ -39,6 +42,10 @@ public class EscenaMenu extends EscenaBase
     private final int OPCION_BOTON_ROJO = 2;
     private final int OPCION_MUSICA = 3;
     private final int OPCION_SONIDO = 4;
+    private final int OPCION_COMICS = 5;
+    private final int OPCION_ARCADE = 6;
+    private final int OPCION_CONTINUAR_JUEGO = 7;
+
 
 
 
@@ -49,10 +56,13 @@ public class EscenaMenu extends EscenaBase
         regionFondo = cargarImagen("Imagenes/MenuInicio/fondoMenu.jpg");
         // Botones del menú
         regionBtnAcercaDe = cargarImagen("Imagenes/MenuInicio/btnAcercaDe.png");
-        regionBtnJugar = cargarImagen("Imagenes/MenuInicio/btnJugar.png");
-        regionBtnRojo = cargarImagen("Imagenes/MenuInicio/botonRojo.gif");
-        regionBtnMusica = cargarImagen("Imagenes/MenuInicio/vale.png");
+        regionBtnJugar = cargarImagen("Imagenes/MenuInicio/btnNewGame.png");
+        regionBtnRojo = cargarImagen("Imagenes/MenuInicio/btnRojo.png");
+        regionBtnMusica = cargarImagen("Imagenes/MenuInicio/musica.png");
         regionBtnSonido = cargarImagen("Imagenes/MenuInicio/sonido.jpg");
+        regionBtnArcade = cargarImagen("Imagenes/MenuInicio/btnArcade.png");
+        regionBtnComic = cargarImagen("Imagenes/MenuInicio/btnHistoria.png");
+        regionBtnContinuarJuego = cargarImagen("Imagenes/MenuInicio/btnLoadGame.png");
 
     }
 
@@ -100,6 +110,15 @@ public class EscenaMenu extends EscenaBase
         IMenuItem opcionMusica = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_MUSICA,
                 regionBtnMusica, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
+        IMenuItem opcionBotonArcade = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_ARCADE,
+                regionBtnArcade, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
+
+        IMenuItem opcionBotonComics = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_COMICS,
+                regionBtnComic, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
+
+        IMenuItem opcionContinuarJuego = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_CONTINUAR_JUEGO,
+                regionBtnContinuarJuego, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
+
 
         // Agrega las opciones al menú
         menu.addMenuItem(opcionAcercaDe);
@@ -107,6 +126,9 @@ public class EscenaMenu extends EscenaBase
         menu.addMenuItem(opcionBotonRojo);
         menu.addMenuItem(opcionSonido);
         menu.addMenuItem(opcionMusica);
+        menu.addMenuItem(opcionBotonArcade);
+        menu.addMenuItem(opcionBotonComics);
+        menu.addMenuItem(opcionContinuarJuego);
 
         // que es esto??
 
@@ -116,11 +138,14 @@ public class EscenaMenu extends EscenaBase
         menu.setBackgroundEnabled(false);   // Completamente transparente
 
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
-        opcionAcercaDe.setPosition(-180, 0);
-        opcionJugar.setPosition(180, 0);
-        opcionBotonRojo.setPosition(300, -300);
+        opcionAcercaDe.setPosition(280, -300);
+        opcionJugar.setPosition(300, 300);
+        opcionBotonRojo.setPosition(460, -300);
         opcionMusica.setPosition(-500, 270);
         opcionSonido.setPosition(-300, 270);
+        opcionBotonArcade.setPosition(-300, -100);
+        opcionBotonComics.setPosition(0, 0);
+        opcionContinuarJuego.setPosition(300, -50);
 
         // Registra el Listener para atender las opciones
         menu.setOnMenuItemClickListener(new MenuScene.IOnMenuItemClickListener() {
@@ -129,6 +154,7 @@ public class EscenaMenu extends EscenaBase
                                              float pMenuItemLocalX, float pMenuItemLocalY) {
                 // El parámetro pMenuItem indica la opción oprimida
                 switch(pMenuItem.getID()) {
+
                     case OPCION_ACERCA_DE:
                         // Mostrar la escena de AcercaDe
                         admEscenas.liberarEscenaMenu();
@@ -160,6 +186,21 @@ public class EscenaMenu extends EscenaBase
                         admMusica.vibrar(500);
                         admMusica.reproducirMusicaBoton();
 
+                        break;
+
+                    case OPCION_ARCADE:
+                        // Mostrar la escena de AcercaDe
+                        admMusica.reproduceio();
+                        break;
+
+                    case OPCION_COMICS:
+                        // Mostrar la escena de AcercaDe
+                        admMusica.reproduceio();
+                        break;
+
+                    case OPCION_CONTINUAR_JUEGO:
+                        // Mostrar la escena de AcercaDe
+                        admMusica.reproduceio();
                         break;
                 }
 
