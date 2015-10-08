@@ -138,14 +138,15 @@ public class EscenaMenu extends EscenaBase
         menu.setBackgroundEnabled(false);   // Completamente transparentee
 
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
-        opcionAcercaDe.setPosition(280, -300);
-        opcionJugar.setPosition(300, 300);
-        opcionBotonRojo.setPosition(460, -300);
-        opcionMusica.setPosition(-500, 270);
-        opcionSonido.setPosition(-300, 270);
-        opcionBotonArcade.setPosition(-300, -100);
-        opcionBotonComics.setPosition(0, 0);
-        opcionContinuarJuego.setPosition(300, -50);
+        opcionAcercaDe.setPosition(300, -320);
+        opcionJugar.setPosition(340, 190);
+        opcionBotonRojo.setPosition(520, -340);
+        opcionMusica.setPosition(-520, 290);
+        opcionSonido.setPosition(-360, 290);
+        opcionBotonArcade.setPosition(-470, -100);
+        opcionBotonComics.setPosition(-300, 80);
+        opcionBotonComics.setRotation(-20);
+        opcionContinuarJuego.setPosition(410, -100);
 
         // Registra el Listener para atender las opciones
         menu.setOnMenuItemClickListener(new MenuScene.IOnMenuItemClickListener() {
@@ -173,8 +174,8 @@ public class EscenaMenu extends EscenaBase
 
                     case OPCION_MUSICA:
                         // Mostrar la escena de AcercaDe
-                        admMusica.reproduceio();
-                        break;
+                        admMusica.vibrar(250);
+                        admMusica.reproducirMusicaBoton();                        break;
 
                     case OPCION_SONIDO:
                         // Mostrar la escena de AcercaDe
@@ -190,17 +191,20 @@ public class EscenaMenu extends EscenaBase
 
                     case OPCION_ARCADE:
                         // Mostrar la escena de AcercaDe
-                        admMusica.reproduceio();
+                        admMusica.vibrar(250);
+                        admMusica.reproducirMusicaBoton();
                         break;
 
                     case OPCION_COMICS:
                         // Mostrar la escena de AcercaDe
-                        admMusica.reproduceio();
+                        admMusica.vibrar(250);
+                        admMusica.reproducirMusicaBoton();
                         break;
 
                     case OPCION_CONTINUAR_JUEGO:
                         // Mostrar la escena de AcercaDe
-                        admMusica.reproduceio();
+                        admMusica.vibrar(250);
+                        admMusica.reproducirMusicaBoton();
                         break;
                 }
 

@@ -44,7 +44,7 @@ public class AdministradorMusica {
         if(num==0){
             try {
                 musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Imagenes/chucucha.mp3");
+                        actividadJuego, "Musica/chucucha.mp3");
             } catch (IOException e) {
                 Log.i("cargarSonidos", "No se puede cargar demo.ogg");
             }
@@ -58,7 +58,7 @@ public class AdministradorMusica {
         else if(num==1){
             try {
                 musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Imagenes/gloria.mp3");
+                        actividadJuego, "Musica/gloria.mp3");
             } catch (IOException e) {
                 Log.i("cargarSonidos", "No se puede cargar demo.ogg");
             }
@@ -72,7 +72,7 @@ public class AdministradorMusica {
 
         try {
             musicaBoton = SoundFactory.createSoundFromAsset(engine.getSoundManager(),
-                    actividadJuego, "Imagenes/sonidoBoton.wav");
+                    actividadJuego, "Musica/sonidoBoton.wav");
         }
         catch (IOException e) {
             Log.i("cargarSonidos", "No se puede cargar demo.ogg");
@@ -123,7 +123,7 @@ public class AdministradorMusica {
         if(nummusica==0){
             try {
                 musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Imagenes/pasopaso.mp3");
+                        actividadJuego, "Musica/pasopaso.mp3");
             }
             catch (IOException e) {
                 Log.i("cargarSonidos", "No se puede cargar demo.ogg");
@@ -139,7 +139,7 @@ public class AdministradorMusica {
         else{
             try {
                 musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Imagenes/chucucha.mp3");
+                        actividadJuego, "Musica/chucucha.mp3");
             }
             catch (IOException e) {
                 Log.i("cargarSonidos", "No se puede cargar demo.ogg");
