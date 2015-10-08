@@ -9,7 +9,6 @@ import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
 import android.os.Vibrator;
-
 import java.io.IOException;
 
 
@@ -27,7 +26,6 @@ public class AdministradorMusica {
 
     public int reproducesiono=1;
     public int nummusica=0;
-
 
 
 
@@ -84,10 +82,9 @@ public class AdministradorMusica {
     }
 
     public void vibrar(int i){
-        Vibrator v = (Vibrator)actividadJuego.getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(i);
+        Vibrator vibrador=(Vibrator)actividadJuego.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrador.vibrate(i);
     }
-
 
 
     public void reproducirMusica(){
