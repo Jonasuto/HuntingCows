@@ -173,8 +173,8 @@ public class EscenaMenu extends EscenaBase
 
                     case OPCION_MUSICA:
                         // Mostrar la escena de AcercaDe
-                        admMusica.vibrar(250);
-                        admMusica.reproducirMusicaBoton();                        break;
+                        admMusica.reproduceio();
+                        break;
 
                     case OPCION_SONIDO:
                         // Mostrar la escena de AcercaDe

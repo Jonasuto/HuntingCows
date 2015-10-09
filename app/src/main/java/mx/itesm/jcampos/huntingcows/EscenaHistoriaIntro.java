@@ -34,12 +34,13 @@ public class EscenaHistoriaIntro extends EscenaBase
     @Override
     public void cargarRecursos() {
 
-        regionSlides = new ITextureRegion[5];
-        regionSlides[0]=cargarImagen("Imagenes/Historia/Intro/uno.jpg");
-        regionSlides[1] = cargarImagen("Imagenes/Historia/Intro/dos.jpg");
-        regionSlides[2] = cargarImagen("Imagenes/Historia/Intro/tres.jpg");
-        regionSlides[3] = cargarImagen("Imagenes/Historia/Intro/cuatro.jpg");
-        regionSlides[4] = cargarImagen("Imagenes/Historia/Intro/cinco.jpg");
+        regionSlides = new ITextureRegion[6];
+        regionSlides[0]=cargarImagen("Imagenes/Historia/IntroHistoria/uno.jpg");
+        regionSlides[1] = cargarImagen("Imagenes/Historia/IntroHistoria/dos.jpg");
+        regionSlides[2] = cargarImagen("Imagenes/Historia/IntroHistoria/tres.jpg");
+        regionSlides[3] = cargarImagen("Imagenes/Historia/IntroHistoria/cuatro.jpg");
+        regionSlides[4] = cargarImagen("Imagenes/Historia/IntroHistoria/cinco.jpg");
+        regionSlides[5] = cargarImagen("Imagenes/Historia/IntroHistoria/seis.jpg");
         regionSlideActual=regionSlides[0];
         regionsiguiente = cargarImagen("Imagenes/Historia/flecha.png");
         regionanterior = cargarImagen("Imagenes/Historia/flecha.png");
@@ -79,9 +80,10 @@ public class EscenaHistoriaIntro extends EscenaBase
         menu.setBackgroundEnabled(false);   // Completamente transparente
 
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
-        opcionSiguiente.setPosition(400, -310);
+        opcionSiguiente.setPosition(450, -350);
 
-        opcionanterior.setPosition(-400, -310);
+        opcionanterior.setPosition(-450, -350);
+        opcionanterior.setRotation(-180);
 
 
         // Registra el Listener para atender las opciones
@@ -94,7 +96,7 @@ public class EscenaHistoriaIntro extends EscenaBase
 
                     case OPCION_SIGUIENTE:
                         // Mostrar la escena de AcercaDe
-                        if (contadorSlide < 4) {
+                        if (contadorSlide < regionSlides.length-1) {
                             contadorSlide++;
                             regionSlideActual = regionSlides[contadorSlide];
                             spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
