@@ -84,11 +84,6 @@ public class EscenaMenu extends EscenaBase
 
         agregarMenu();
 
-        spritePersonaje = new AnimatedSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2,
-                regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
-        spritePersonaje.animate(200);   // 200ms entre frames, 1000/200 fps
-        attachChild(spritePersonaje);
-
 
     }
 
