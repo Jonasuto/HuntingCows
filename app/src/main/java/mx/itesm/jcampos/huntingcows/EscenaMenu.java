@@ -144,7 +144,7 @@ public class EscenaMenu extends EscenaBase
         opcionMusica.setPosition(-570, 310);
         opcionSonido.setPosition(-450, 310);
         opcionBotonArcade.setPosition(-480, -60);
-        opcionBotonComics.setPosition(-300, 80);
+        opcionBotonComics.setPosition(-300, 95);
         opcionContinuarJuego.setPosition(410, -60);
 
         // Registra el Listener para atender las opciones

@@ -44,7 +44,7 @@ public class AdministradorMusica {
         if(num==0){
             try {
                 musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Musica/chucucha.mp3");
+                        actividadJuego, "Musica/MenuTheme/theme3.mp3");
             } catch (IOException e) {
                 Log.i("cargarSonidos", "No se puede cargar demo.ogg");
             }
@@ -58,7 +58,7 @@ public class AdministradorMusica {
         else if(num==1){
             try {
                 musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Musica/gloria.mp3");
+                        actividadJuego, "Musica/MenuTheme/acercaDeTheme.wav");
             } catch (IOException e) {
                 Log.i("cargarSonidos", "No se puede cargar demo.ogg");
             }
@@ -123,7 +123,7 @@ public class AdministradorMusica {
         if(nummusica==0){
             try {
                 musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Musica/pasopaso.mp3");
+                        actividadJuego, "Musica/MenuTheme/theme.wav");
             }
             catch (IOException e) {
                 Log.i("cargarSonidos", "No se puede cargar demo.ogg");
@@ -139,7 +139,7 @@ public class AdministradorMusica {
         else{
             try {
                 musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Musica/chucucha.mp3");
+                        actividadJuego, "Musica/MenuTheme/theme3.mp3");
             }
             catch (IOException e) {
                 Log.i("cargarSonidos", "No se puede cargar demo.ogg");
