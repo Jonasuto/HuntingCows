@@ -1,14 +1,9 @@
 package mx.itesm.jcampos.huntingcows;
 
-import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground;
-import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
-
-import java.util.ArrayList;
 
 /**
  * Created by Campos on 09/10/15.
@@ -18,18 +13,29 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private ITextureRegion regionFondo;
     private ITextureRegion regionFondoFrente;
-    private Sprite spriteFondo;
 
 
     public void cargarRecursos() {
         regionFondo = cargarImagen("Imagenes/Niveles/fondoJuego.jpg");
-        regionFondoFrente = cargarImagen("starsFront.png");
+        regionFondoFrente = cargarImagen("Imagenes/starsFront.png");
     }
 
 
     public void crearEscena() {
-        spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
-        attachChild(spriteFondo);
+        // Fondo animado
+        AutoParallaxBackground fondoAnimado = new AutoParallaxBackground(1, 1, 1, 5);
+
+        // Fondo atrás
+        Sprite spriteFondoAtras = cargarSprite(ControlJuego.ANCHO_CAMARA/2,
+                ControlJuego.ALTO_CAMARA/2, regionFondo);
+        fondoAnimado.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-3, spriteFondoAtras));
+        // Fondo frente
+        Sprite spriteFondofrente = cargarSprite(ControlJuego.ANCHO_CAMARA/2,
+                ControlJuego.ALTO_CAMARA / 2, regionFondoFrente);
+        fondoAnimado.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-8, spriteFondofrente));
+
+        setBackground(fondoAnimado);
+
         admMusica.cargarMusica(1);
 
     }
@@ -60,6 +66,8 @@ public class EscenaCazaJurasica extends EscenaBase {
         actividadJuego.getEngine().disableAccelerationSensor(actividadJuego);
         regionFondo.getTexture().unload();
         regionFondo = null;
+        regionFondoFrente.getTexture().unload();
+        regionFondoFrente = null;
     }
 
 
