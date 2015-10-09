@@ -81,14 +81,39 @@ public class ControlJuego extends SimpleBaseGameActivity
                         //** 1. CREA la escena del menú (la NUEVA)
                         //** 2. PONE la escena del menú (la NUEVA)
                         //** 3. LIBERA la escena de Splash (la ANTERIOR)
-                        admEscenas.crearEscenaMenu();
-                        admEscenas.setEscena(mx.itesm.jcampos.huntingcows.TipoEscena.ESCENA_MENU);
+
+                        admEscenas.crearEscenaSplashHuntingCows();
+                        admEscenas.setEscena(TipoEscena.ESCENA_SPLASH_HUNTING_COWS);
                         admEscenas.liberarEscenaSplash();
+
+                        mEngine.registerUpdateHandler(new TimerHandler(2,
+                                new ITimerCallback() {
+                                    @Override
+                                    public void onTimePassed(TimerHandler pTimerHandler) {
+                                        mEngine.unregisterUpdateHandler(pTimerHandler); // Invalida el timer
+                                        // Cambia a la escena del MENU
+                                        //** 1. CREA la escena del menú (la NUEVA)
+                                        //** 2. PONE la escena del menú (la NUEVA)
+                                        //** 3. LIBERA la escena de Splash (la ANTERIOR)
+
+                                        admEscenas.crearEscenaMenu();
+                                        admEscenas.setEscena(mx.itesm.jcampos.huntingcows.TipoEscena.ESCENA_MENU);
+                                        admEscenas.liberarEscenaSplashHuntingCows();
+                                    }
+                                }));
+
                     }
                 }));
 
         return admEscenas.getEscenaActual();    // Regresa la primer escena que se muestra
     }
+
+
+
+
+
+
+
 
     // Atiende la tecla de BACK.
     @Override

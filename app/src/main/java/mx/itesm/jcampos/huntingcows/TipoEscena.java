@@ -9,4 +9,5 @@ public enum TipoEscena {
     ESCENA_MENU,
     ESCENA_ACERCA_DE,
     ESCENA_HISTORIA_INTRO,
+    ESCENA_SPLASH_HUNTING_COWS,
 }
