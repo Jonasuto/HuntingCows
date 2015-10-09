@@ -5,6 +5,7 @@ import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
+import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -82,6 +83,11 @@ public class EscenaMenu extends EscenaBase
         admMusica.cargarMusicaBoton();
 
         agregarMenu();
+
+        spritePersonaje = new AnimatedSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2,
+                regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
+        spritePersonaje.animate(200);   // 200ms entre frames, 1000/200 fps
+        attachChild(spritePersonaje);
 
 
     }
