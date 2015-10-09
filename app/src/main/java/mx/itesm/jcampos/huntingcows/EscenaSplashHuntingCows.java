@@ -16,7 +16,7 @@ public class EscenaSplashHuntingCows extends EscenaBase {
     @Override
     public void cargarRecursos() {
 
-        regionFondo = cargarImagen("logoHuntingCows.png");
+        regionFondo = cargarImagen("Imagenes/logoHuntingCows.png");
     }
 
     // Arma la escena que se presentará en pantalla

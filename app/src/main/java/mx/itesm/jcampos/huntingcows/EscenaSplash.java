@@ -19,7 +19,7 @@ public class EscenaSplash extends EscenaBase
     @Override
     public void cargarRecursos() {
 
-        regionFondo = cargarImagen("logoTec.png");
+        regionFondo = cargarImagen("Imagenes/logoTec.png");
     }
 
     // Arma la escena que se presentará en pantalla
