@@ -155,7 +155,7 @@ public class AdministradorMusica {
 
     }
 
-    public void liberarMusicaMenu(){
+    public void liberarMusica(){
 
         musicaTodo.release();
     }

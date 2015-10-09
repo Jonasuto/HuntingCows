@@ -104,6 +104,12 @@ public class EscenaHistoriaIntro extends EscenaBase
                             attachChild(spriteFondo);
                             break;
                         }
+                        else{
+                            admEscenas.liberarEscenaHistoriaIntro();
+                            admEscenas.crearEscenaCazaJurasica();
+                            admEscenas.setEscena(mx.itesm.jcampos.huntingcows.TipoEscena.ESCENA_CAZA_JURASICA);
+                        }
+
 
                         return true;
 

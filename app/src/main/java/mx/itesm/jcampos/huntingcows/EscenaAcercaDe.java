@@ -60,7 +60,7 @@ public class EscenaAcercaDe extends mx.itesm.jcampos.huntingcows.EscenaBase
 
     @Override
     public void liberarRecursos() {
-        admMusica.liberarMusicaMenu();
+        admMusica.liberarMusica();
         regionFondo.getTexture().unload();
         regionFondo = null;
     }

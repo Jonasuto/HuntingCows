@@ -1,5 +1,4 @@
 package mx.itesm.jcampos.huntingcows;
-import android.os.Vibrator;
 
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.scene.menu.MenuScene;
@@ -245,7 +244,7 @@ public class EscenaMenu extends EscenaBase
 
     @Override
     public void liberarRecursos() {
-        admMusica.liberarMusicaMenu();
+        admMusica.liberarMusica();
         regionFondo.getTexture().unload();
         regionFondo = null;
     }
