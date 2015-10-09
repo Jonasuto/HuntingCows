@@ -16,7 +16,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
 
     public void cargarRecursos() {
-        regionFondo = cargarImagen("Imagenes/Niveles/fondoJuego.jpg");
+        regionFondo = cargarImagen("Imagenes/Niveles/fondo.jpg");
         regionFondoFrente = cargarImagen("Imagenes/starsFront.png");
     }
 
@@ -28,7 +28,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         // Fondo atrás
         Sprite spriteFondoAtras = cargarSprite(ControlJuego.ANCHO_CAMARA/2,
                 ControlJuego.ALTO_CAMARA/2, regionFondo);
-        fondoAnimado.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-3, spriteFondoAtras));
+        fondoAnimado.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(3, spriteFondoAtras));
         // Fondo frente
         Sprite spriteFondofrente = cargarSprite(ControlJuego.ANCHO_CAMARA/2,
                 ControlJuego.ALTO_CAMARA / 2, regionFondoFrente);
