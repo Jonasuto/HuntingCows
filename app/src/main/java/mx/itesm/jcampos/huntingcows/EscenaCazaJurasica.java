@@ -35,9 +35,10 @@ public class EscenaCazaJurasica extends EscenaBase {
     }
 
     public void onBackKeyPressed() {
+        admEscenas.liberarEscenaCazaJurasica();
         admEscenas.crearEscenaMenu();
         admEscenas.setEscena(TipoEscena.ESCENA_MENU);
-        admEscenas.liberarEscenaCazaJurasica();
+
     }
 
     public TipoEscena getTipoEscena() {
@@ -55,13 +56,10 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     public void liberarRecursos() {
         // Detiene el acelerómetro
+        admMusica.liberarMusica();
         actividadJuego.getEngine().disableAccelerationSensor(actividadJuego);
-
         regionFondo.getTexture().unload();
         regionFondo = null;
-        regionFondoFrente.getTexture().unload();
-        regionFondoFrente = null;
-
     }
 
 
