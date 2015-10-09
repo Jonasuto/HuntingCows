@@ -25,6 +25,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         // Fondo animado
         AutoParallaxBackground fondoAnimado = new AutoParallaxBackground(1, 1, 1, 5);
 
+        
         // Fondo atrás
         Sprite spriteFondoAtras = cargarSprite(ControlJuego.ANCHO_CAMARA/2,
                 ControlJuego.ALTO_CAMARA/2, regionFondo);
