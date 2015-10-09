@@ -41,6 +41,7 @@ public class EscenaHistoriaIntro extends EscenaBase
         regionSlides[3] = cargarImagen("Imagenes/Historia/IntroHistoria/cuatro.jpg");
         regionSlides[4] = cargarImagen("Imagenes/Historia/IntroHistoria/cinco.jpg");
         regionSlides[5] = cargarImagen("Imagenes/Historia/IntroHistoria/seis.jpg");
+        
         regionSlideActual=regionSlides[0];
         regionsiguiente = cargarImagen("Imagenes/Historia/flecha.png");
         regionanterior = cargarImagen("Imagenes/Historia/flecha.png");
