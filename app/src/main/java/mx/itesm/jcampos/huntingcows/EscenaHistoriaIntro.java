@@ -54,6 +54,7 @@ public class EscenaHistoriaIntro extends EscenaBase
         attachChild(spriteFondo);
         agregarMenu();
     }
+    int i
 
     private void agregarMenu() {
         // Crea el objeto que representa el menú
