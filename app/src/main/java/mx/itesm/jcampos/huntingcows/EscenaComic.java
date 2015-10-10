@@ -35,13 +35,16 @@ public class EscenaComic extends EscenaBase
     @Override
     public void cargarRecursos() {
 
-        regionSlides = new ITextureRegion[6];
+        regionSlides = new ITextureRegion[9];
         regionSlides[0]=cargarImagen("Imagenes/Historia/IntroHistoria/uno.jpg");
         regionSlides[1] = cargarImagen("Imagenes/Historia/IntroHistoria/dos.jpg");
         regionSlides[2] = cargarImagen("Imagenes/Historia/IntroHistoria/tres.jpg");
         regionSlides[3] = cargarImagen("Imagenes/Historia/IntroHistoria/cuatro.jpg");
         regionSlides[4] = cargarImagen("Imagenes/Historia/IntroHistoria/cinco.jpg");
         regionSlides[5] = cargarImagen("Imagenes/Historia/IntroHistoria/seis.jpg");
+        regionSlides[6] = cargarImagen("Imagenes/Historia/CazaJurasica/uno.jpg");
+        regionSlides[7] = cargarImagen("Imagenes/Historia/CazaJurasica/dos.jpg");
+        regionSlides[8] = cargarImagen("Imagenes/Historia/CazaJurasica/tres.jpg");
 
         regionSlideActual=regionSlides[0];
         regionsiguiente = cargarImagen("Imagenes/Historia/flecha.png");
@@ -106,7 +109,7 @@ public class EscenaComic extends EscenaBase
                             break;
                         }
                         else{
-                            admEscenas.liberarEscenaHistoriaIntro();
+                            admEscenas.liberarEscenaComic();
                             admEscenas.crearEscenaMenu();
                             admEscenas.setEscena(mx.itesm.jcampos.huntingcows.TipoEscena.ESCENA_MENU);
                         }
