@@ -60,7 +60,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         this.dispose();
 
     }
-
+    int i
     public void liberarRecursos() {
         // Detiene el acelerómetro
         admMusica.liberarMusica();
