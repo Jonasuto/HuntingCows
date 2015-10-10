@@ -43,7 +43,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         // Fondo atrás
         Sprite spriteFondoAtras = cargarSprite(ControlJuego.ANCHO_CAMARA/2,
                 ControlJuego.ALTO_CAMARA/2, regionFondo);
-        fondoAnimado.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-1, spriteFondoAtras));
+        fondoAnimado.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-10, spriteFondoAtras));
         // Fondo frente
         Sprite spriteFondofrente = cargarSprite(ControlJuego.ANCHO_CAMARA/2,
                 ControlJuego.ALTO_CAMARA / 2, regionFondoFrente);
@@ -51,7 +51,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         setBackground(fondoAnimado);
 
-        spritePersonaje = new AnimatedSprite(ControlJuego.ANCHO_CAMARA/4, ControlJuego.ALTO_CAMARA/4,
+        spritePersonaje = new AnimatedSprite(ControlJuego.ANCHO_CAMARA/4+ControlJuego.ANCHO_CAMARA, ControlJuego.ALTO_CAMARA+ControlJuego.ALTO_CAMARA/4,
                 regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonaje.animate(200);   // 200ms entre frames, 1000/200 fps
         attachChild(spritePersonaje);

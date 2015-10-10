@@ -17,6 +17,8 @@ public class AdministradorEscenas {
     private mx.itesm.jcampos.huntingcows.EscenaBase escenaHistoriaIntro;
     private mx.itesm.jcampos.huntingcows.EscenaBase escenaSplashHUntingCows;
     private mx.itesm.jcampos.huntingcows.EscenaBase escenaCazaJurasica;
+    private mx.itesm.jcampos.huntingcows.EscenaBase escenaComic;
+
 
 
     // El tipo de escena que se está mostrando
@@ -83,6 +85,9 @@ public class AdministradorEscenas {
                 break;
             case ESCENA_CAZA_JURASICA:
                 setEscenaBase(escenaCazaJurasica);
+                break;
+            case ESCENA_COMIC:
+                setEscenaBase(escenaComic);
                 break;
         }
     }
@@ -155,6 +160,17 @@ public class AdministradorEscenas {
     public void liberarEscenaCazaJurasica() {
         escenaCazaJurasica.liberarEscena();
         escenaCazaJurasica = null;
+    }
+
+    public void crearEscenaComic() {
+        // Carga los recursos
+        escenaComic = new mx.itesm.jcampos.huntingcows.EscenaComic();
+    }
+
+    //*** Libera la escena de AcercDe
+    public void liberarEscenaComic() {
+        escenaComic.liberarEscena();
+        escenaComic = null;
     }
 
 }

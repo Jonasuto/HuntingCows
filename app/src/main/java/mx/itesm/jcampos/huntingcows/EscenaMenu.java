@@ -196,8 +196,10 @@ public class EscenaMenu extends EscenaBase
 
                     case OPCION_COMICS:
                         // Mostrar la escena de AcercaDe
-                        admMusica.vibrar(250);
-                        admMusica.reproducirMusicaBoton();
+                        admEscenas.liberarEscenaMenu();
+                        admEscenas.crearEscenaComic();
+                        admEscenas.setEscena(mx.itesm.jcampos.huntingcows.TipoEscena.ESCENA_COMIC);
+
                         break;
 
                     case OPCION_CONTINUAR_JUEGO:
