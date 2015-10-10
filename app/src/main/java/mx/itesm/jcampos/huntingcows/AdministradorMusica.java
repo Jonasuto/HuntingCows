@@ -65,6 +65,16 @@ public class AdministradorMusica {
             musicaTodo.setLooping(true);
             reproducirMusica();
         }
+        else if(num==2){
+            try {
+                musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
+                        actividadJuego, "Musica/themeNivel1.wav");
+            } catch (IOException e) {
+                Log.i("cargarSonidos", "No se puede cargar demo.ogg");
+            }
+            musicaTodo.setLooping(true);
+            reproducirMusica();
+        }
 
     }
 
