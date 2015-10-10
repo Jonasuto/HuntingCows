@@ -51,7 +51,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         setBackground(fondoAnimado);
 
-        spritePersonaje = new AnimatedSprite(ControlJuego.ANCHO_CAMARA/4+ControlJuego.ANCHO_CAMARA, ControlJuego.ALTO_CAMARA+ControlJuego.ALTO_CAMARA/4,
+        spritePersonaje = new AnimatedSprite(-ControlJuego.ANCHO_CAMARA/4+ControlJuego.ANCHO_CAMARA, ControlJuego.ALTO_CAMARA/4,
                 regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonaje.animate(200);   // 200ms entre frames, 1000/200 fps
         attachChild(spritePersonaje);
