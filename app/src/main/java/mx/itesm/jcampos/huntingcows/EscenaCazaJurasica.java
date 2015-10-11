@@ -97,8 +97,8 @@ public class EscenaCazaJurasica extends EscenaBase
         menu.setBackgroundEnabled(false);   // Completamente transparentee
 
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
-        opcionDerecha.setPosition(300, -320);
-        opcionIzquierda.setPosition(340, 190);
+        opcionDerecha.setPosition(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2);
+        opcionIzquierda.setPosition((ControlJuego.ANCHO_CAMARA / 2)-50, ControlJuego.ALTO_CAMARA / 2);
         opcionIzquierda.setRotation(-180);
 
         // Registra el Listener para atender las opciones
