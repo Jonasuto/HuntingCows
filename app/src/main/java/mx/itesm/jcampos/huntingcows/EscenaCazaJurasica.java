@@ -111,12 +111,12 @@ public class EscenaCazaJurasica extends EscenaBase
 
                     case OPCION_IZQUIERDA:
                         // Mostrar la escena de AcercaDe
-                        admMusica.reproduceio();
+                        admMusica.reproducirMusicaBoton();
                         break;
 
                     case OPCION_DERECHA:
                         // Mostrar la escena de AcercaDe
-                        admMusica.reproduceio();
+                        admMusica.reproducirMusicaBoton();
                         break;
 
                 }
@@ -143,7 +143,7 @@ public class EscenaCazaJurasica extends EscenaBase
         // Salir del juego, no hacemos nada
         admEscenas.crearEscenaMenu();
         admEscenas.setEscena(mx.itesm.jcampos.huntingcows.TipoEscena.ESCENA_MENU);
-        admEscenas.liberarEscenaHistoriaIntro();
+        admEscenas.liberarEscenaCazaJurasica();
     }
 
     @Override
