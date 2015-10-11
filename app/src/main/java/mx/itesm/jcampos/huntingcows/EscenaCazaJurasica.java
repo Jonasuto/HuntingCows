@@ -22,8 +22,8 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private TiledTextureRegion regionPersonajeAnimado;
 
-    private final int OPCION_SIGUIENTE = 0;
-    private final int OPCION_ANTERIOR = 1;
+    private final int OPCION_DERECHA = 0;
+    private final int OPCION_IZQUIERDA = 1;
 
 
 
@@ -66,10 +66,10 @@ public class EscenaCazaJurasica extends EscenaBase {
         menu.setPosition(ControlJuego.ANCHO_CAMARA/2,ControlJuego.ALTO_CAMARA/2);
 
         // Crea las opciones (por ahora, acerca de y jugar)
-        IMenuItem opcionSiguiente = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_SIGUIENTE,
+        IMenuItem opcionSiguiente = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_DERECHA,
                 regionsiguiente, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
-        IMenuItem opcionanterior = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_ANTERIOR,
+        IMenuItem opcionanterior = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_IZQUIERDA,
                 regionanterior, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
 
@@ -85,9 +85,9 @@ public class EscenaCazaJurasica extends EscenaBase {
         menu.setBackgroundEnabled(false);   // Completamente transparente
 
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
-        opcionSiguiente.setPosition((-ControlJuego.ANCHO_CAMARA/5)-30, -ControlJuego.ANCHO_CAMARA/4);
+        opcionSiguiente.setPosition((-ControlJuego.ANCHO_CAMARA/5)-110, -ControlJuego.ANCHO_CAMARA/4);
 
-        opcionanterior.setPosition((-ControlJuego.ANCHO_CAMARA/3)-80, -ControlJuego.ANCHO_CAMARA/4);
+        opcionanterior.setPosition((-ControlJuego.ANCHO_CAMARA/3)-160, -ControlJuego.ANCHO_CAMARA/4);
         opcionanterior.setRotation(-180);
 
 
@@ -99,16 +99,15 @@ public class EscenaCazaJurasica extends EscenaBase {
                 // El parámetro pMenuItem indica la opción oprimida
                 switch (pMenuItem.getID()) {
 
-                    case OPCION_SIGUIENTE:
-
-                        admMusica.vibrar(250);
+                    case OPCION_DERECHA:
                         admMusica.reproducirMusicaBoton();
+                        spritePersonaje.setX(spritePersonaje.getX()+50);
                         break;
 
-                    case OPCION_ANTERIOR:
+                    case OPCION_IZQUIERDA:
                         // Mostrar la escena de AcercaDe
-                        admMusica.vibrar(250);
                         admMusica.reproducirMusicaBoton();
+                        spritePersonaje.setX(spritePersonaje.getX()-50);
                         break;
 
                 }
@@ -132,6 +131,10 @@ public class EscenaCazaJurasica extends EscenaBase {
     public mx.itesm.jcampos.huntingcows.TipoEscena getTipoEscena() {
 
         return mx.itesm.jcampos.huntingcows.TipoEscena.ESCENA_CAZA_JURASICA;
+    }
+
+    protected void onManagedUpdate(float pSecondsElapsed) {
+        super.onManagedUpdate(pSecondsElapsed);
     }
 
     @Override
