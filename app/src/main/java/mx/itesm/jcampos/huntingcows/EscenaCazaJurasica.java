@@ -1,5 +1,13 @@
 package mx.itesm.jcampos.huntingcows;
 
+import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
+import org.andengine.engine.camera.hud.controls.DigitalOnScreenControl;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.JumpModifier;
+import org.andengine.entity.modifier.ParallelEntityModifier;
+import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.scene.background.AutoParallaxBackground;
+import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
@@ -7,50 +15,50 @@ import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
-
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 /**
- * Representa la escena del MENU PRINCIPAL
- *
- * @author Roberto Martínez Román
+ * Created by Campos on 09/10/15.
  */
-public class EscenaCazaJurasica extends EscenaBase
-{
-    // Regiones para las imágenes de la escena
+
+public class EscenaCazaJurasica extends EscenaBase{
+
     private ITextureRegion regionFondo;
-    private ITextureRegion regionBtnFlechaIzquierda;
-    private ITextureRegion regionBtnFlechaDerecha;
 
-
-    // Sprites sobre la escena
     private Sprite spriteFondo;
 
-    // Un menú de tipo SceneMenu
-    private MenuScene menu;     // Contenedor de las opciones
+    private ITextureRegion flechaIzquierda;
+    private ITextureRegion flechaDerecha;
 
 
-    // Constantes para cada opción
-    private final int OPCION_IZQUIERDA = 0;
-    private final int OPCION_DERECHA = 1;
+    private final int OPCION_SIGUIENTE = 0;
+    private final int OPCION_ANTERIOR = 1;
 
 
+    private MenuScene menu;
+
+    private AnimatedSprite spritePersonaje;
+    private TiledTextureRegion regionPersonajeAnimado;
 
 
-    @Override
 
     public void cargarRecursos() {
-        // Fondo
+
         regionFondo = cargarImagen("Imagenes/Niveles/fondo.jpg");
-        // Botones del menú
-        regionBtnFlechaDerecha = cargarImagen("Imagenes/Historia/flecha.png");
-        regionBtnFlechaIzquierda = cargarImagen("Imagenes/Historia/flecha.png");
+        regionPersonajeAnimado = cargarImagenMosaico("Imagenes/kiki.png", 600, 158, 1, 4);
+
+        flechaIzquierda=cargarImagen("Imagenes/Historia/flecha.png");
+        flechaDerecha=cargarImagen("Imagenes/Historia/flecha.png");
 
     }
 
-    @Override
+
     public void crearEscena() {
-        // Creamos el sprite de manera óptima
+        // Fondo animado
+
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondo);
 
         // Crea el fondo de la pantalla
@@ -58,48 +66,48 @@ public class EscenaCazaJurasica extends EscenaBase
         setBackground(fondo);
         setBackgroundEnabled(true);
 
-        // Mostrar un recuadro atrás del menú
-        // Mostrar opciones de menú
+        spritePersonaje = new AnimatedSprite(-ControlJuego.ANCHO_CAMARA/4+ControlJuego.ANCHO_CAMARA, ControlJuego.ALTO_CAMARA/4,
+                regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
+        spritePersonaje.animate(200);   // 200ms entre frames, 1000/200 fps
+        attachChild(spritePersonaje);
 
         admMusica.cargarMusica(2);
-        admMusica.cargarMusicaBoton();
 
         agregarMenu();
 
-
     }
-
 
     private void agregarMenu() {
         // Crea el objeto que representa el menú
         menu = new MenuScene(actividadJuego.camara);
         // Centrado en la pantalla
-        menu.setPosition(ControlJuego.ANCHO_CAMARA/2,ControlJuego.ALTO_CAMARA/2);
+        menu.setPosition(ControlJuego.ANCHO_CAMARA,ControlJuego.ALTO_CAMARA/2);
 
         // Crea las opciones (por ahora, acerca de y jugar)
-        IMenuItem opcionDerecha = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_DERECHA,
-                regionBtnFlechaDerecha, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
+        IMenuItem opcionSiguiente = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_SIGUIENTE,
+                flechaDerecha, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
-        IMenuItem opcionIzquierda = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_IZQUIERDA,
-                regionBtnFlechaIzquierda, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
-
+        IMenuItem opcionanterior = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_ANTERIOR,
+                flechaIzquierda, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
 
         // Agrega las opciones al menú
-        menu.addMenuItem(opcionDerecha);
-        menu.addMenuItem(opcionIzquierda);
+        menu.addMenuItem(opcionSiguiente);
+        menu.addMenuItem(opcionanterior);
 
         // que es esto??
 
 
         // Termina la configuración
         menu.buildAnimations();
-        menu.setBackgroundEnabled(false);   // Completamente transparentee
+        menu.setBackgroundEnabled(false);   // Completamente transparente
 
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
-        opcionDerecha.setPosition(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2);
-        opcionIzquierda.setPosition((ControlJuego.ANCHO_CAMARA / 2)-50, ControlJuego.ALTO_CAMARA / 2);
-        opcionIzquierda.setRotation(-180);
+        opcionSiguiente.setPosition(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2);
+
+        opcionanterior.setPosition(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2);
+        opcionanterior.setRotation(-180);
+
 
         // Registra el Listener para atender las opciones
         menu.setOnMenuItemClickListener(new MenuScene.IOnMenuItemClickListener() {
@@ -107,20 +115,22 @@ public class EscenaCazaJurasica extends EscenaBase
             public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
                                              float pMenuItemLocalX, float pMenuItemLocalY) {
                 // El parámetro pMenuItem indica la opción oprimida
-                switch(pMenuItem.getID()) {
+                switch (pMenuItem.getID()) {
 
-                    case OPCION_IZQUIERDA:
-                        // Mostrar la escena de AcercaDe
+                    case OPCION_SIGUIENTE:
+
+                        admMusica.vibrar(250);
                         admMusica.reproducirMusicaBoton();
                         break;
 
-                    case OPCION_DERECHA:
+
+                    case OPCION_ANTERIOR:
                         // Mostrar la escena de AcercaDe
+                        admMusica.vibrar(250);
                         admMusica.reproducirMusicaBoton();
                         break;
 
                 }
-
                 return true;
             }
         });
@@ -129,41 +139,42 @@ public class EscenaCazaJurasica extends EscenaBase
         setChildScene(menu);
     }
 
-    // La escena se debe actualizar en este método que se repite "varias" veces por segundo
-    // Aquí es donde programan TODA la acción de la escena (movimientos, choques, disparos, etc.)
-    @Override
+
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed);
-
     }
 
 
-    @Override
+
     public void onBackKeyPressed() {
-        // Salir del juego, no hacemos nada
-        admEscenas.crearEscenaMenu();
-        admEscenas.setEscena(mx.itesm.jcampos.huntingcows.TipoEscena.ESCENA_MENU);
         admEscenas.liberarEscenaCazaJurasica();
+        admEscenas.crearEscenaMenu();
+        admEscenas.setEscena(TipoEscena.ESCENA_MENU);
+
     }
 
-    @Override
-    public mx.itesm.jcampos.huntingcows.TipoEscena getTipoEscena() {
+    public TipoEscena getTipoEscena() {
 
-        return mx.itesm.jcampos.huntingcows.TipoEscena.ESCENA_CAZA_JURASICA;
+        return TipoEscena.ESCENA_CAZA_JURASICA;
     }
 
 
-    @Override
     public void liberarEscena() {
         liberarRecursos();
-        this.detachSelf();      // La escena se deconecta del engine
-        this.dispose();         // Libera la memoria
+        this.detachSelf();
+        this.dispose();
+
     }
 
-    @Override
     public void liberarRecursos() {
+        // Detiene el acelerómetro
         admMusica.liberarMusica();
+        actividadJuego.getEngine().disableAccelerationSensor(actividadJuego);
         regionFondo.getTexture().unload();
         regionFondo = null;
     }
+
+
+
+
 }
