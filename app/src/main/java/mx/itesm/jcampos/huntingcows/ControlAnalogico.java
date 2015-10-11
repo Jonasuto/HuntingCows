@@ -1,4 +1,4 @@
-
+package mx.itesm.jcampos.huntingcows;
 import javax.microedition.khronos.opengles.GL10;
 
 import org.anddev.andengine.engine.Engine;
