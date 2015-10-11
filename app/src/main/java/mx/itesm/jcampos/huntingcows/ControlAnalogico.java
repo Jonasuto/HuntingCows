@@ -24,16 +24,12 @@ import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import android.widget.Toast;
 
 public class AnalogOnScreenControlExample extends BaseExample {
-        // ===========================================================
-        // Constants
-        // ===========================================================
+        // Constantes
 
-        private static final int CAMERA_WIDTH = 480;
-        private static final int CAMERA_HEIGHT = 320;
+        private static final int CAMERA_WIDTH = 1280;
+        private static final int CAMERA_HEIGHT = 800;
 
-        // ===========================================================
-        // Fields
-        // ===========================================================
+        // Campos
 
         private Camera mCamera;
 
@@ -44,17 +40,9 @@ public class AnalogOnScreenControlExample extends BaseExample {
         private TextureRegion mOnScreenControlBaseTextureRegion;
         private TextureRegion mOnScreenControlKnobTextureRegion;
 
-        // ===========================================================
-        // Constructors
-        // ===========================================================
+     
+        // Metodos for/from SuperClass/Interfaces
 
-        // ===========================================================
-        // Getter & Setter
-        // ===========================================================
-
-        // ===========================================================
-        // Methods for/from SuperClass/Interfaces
-        // ===========================================================
 
         @Override
         public Engine onLoadEngine() {
@@ -119,12 +107,4 @@ public class AnalogOnScreenControlExample extends BaseExample {
         public void onLoadComplete() {
 
         }
-
-        // ===========================================================
-        // Methods
-        // ===========================================================
-
-        // ===========================================================
-        // Inner and Anonymous Classes
-        // ===========================================================
 }
