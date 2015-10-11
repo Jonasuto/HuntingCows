@@ -141,6 +141,9 @@ public class EscenaCazaJurasica extends EscenaBase
     @Override
     public void onBackKeyPressed() {
         // Salir del juego, no hacemos nada
+        admEscenas.crearEscenaMenu();
+        admEscenas.setEscena(mx.itesm.jcampos.huntingcows.TipoEscena.ESCENA_MENU);
+        admEscenas.liberarEscenaHistoriaIntro();
     }
 
     @Override
