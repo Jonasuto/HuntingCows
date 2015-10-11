@@ -4,26 +4,28 @@ import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
+import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 /**
  * Created by Campos on 11/10/15.
  */
-public class EscenaCazaJurasica extends EscenaBase
-{
+public class EscenaCazaJurasica extends EscenaBase {
 
     private ITextureRegion regionsiguiente;
     private ITextureRegion regionanterior;
     private ITextureRegion regionFondo;
 
+    private AnimatedSprite spritePersonaje;
 
-    private int contadorSlide;
-
-
+    private TiledTextureRegion regionPersonajeAnimado;
 
     private final int OPCION_SIGUIENTE = 0;
     private final int OPCION_ANTERIOR = 1;
+
+
 
     private MenuScene menu;
 
@@ -34,9 +36,12 @@ public class EscenaCazaJurasica extends EscenaBase
     @Override
     public void cargarRecursos() {
 
-        regionFondo = cargarImagen("Imagenes/MenuInicio/fondoMenu.jpg");
+        regionFondo = cargarImagen("Imagenes/Niveles/fondo.jpg");
         regionsiguiente = cargarImagen("Imagenes/Historia/flecha.png");
         regionanterior = cargarImagen("Imagenes/Historia/flecha.png");
+
+        regionPersonajeAnimado = cargarImagenMosaico("Imagenes/kiki.png", 600, 158, 1, 4);
+
 
     }
 
@@ -45,6 +50,13 @@ public class EscenaCazaJurasica extends EscenaBase
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondo);
         attachChild(spriteFondo);
         agregarMenu();
+
+        spritePersonaje = new AnimatedSprite(-ControlJuego.ANCHO_CAMARA/4+ControlJuego.ANCHO_CAMARA, ControlJuego.ALTO_CAMARA/4,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
+        spritePersonaje.animate(200);
+        attachChild(spritePersonaje);
+
+        admMusica.cargarMusica(2);
+
     }
 
     private void agregarMenu() {
@@ -73,9 +85,9 @@ public class EscenaCazaJurasica extends EscenaBase
         menu.setBackgroundEnabled(false);   // Completamente transparente
 
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
-        opcionSiguiente.setPosition(450, -350);
+        opcionSiguiente.setPosition((-ControlJuego.ANCHO_CAMARA/5)-30, -ControlJuego.ANCHO_CAMARA/4);
 
-        opcionanterior.setPosition(-450, -350);
+        opcionanterior.setPosition((-ControlJuego.ANCHO_CAMARA/3)-80, -ControlJuego.ANCHO_CAMARA/4);
         opcionanterior.setRotation(-180);
 
 
@@ -88,14 +100,16 @@ public class EscenaCazaJurasica extends EscenaBase
                 switch (pMenuItem.getID()) {
 
                     case OPCION_SIGUIENTE:
-                        // Mostrar la escena de AcercaDe
 
-
-                        return true;
+                        admMusica.vibrar(250);
+                        admMusica.reproducirMusicaBoton();
+                        break;
 
                     case OPCION_ANTERIOR:
                         // Mostrar la escena de AcercaDe
-                        return true;
+                        admMusica.vibrar(250);
+                        admMusica.reproducirMusicaBoton();
+                        break;
 
                 }
                 return true;
@@ -109,9 +123,9 @@ public class EscenaCazaJurasica extends EscenaBase
     @Override
     public void onBackKeyPressed() {
         // Regresar al menú principal
+        admEscenas.liberarEscenaCazaJurasica();
         admEscenas.crearEscenaMenu();
         admEscenas.setEscena(mx.itesm.jcampos.huntingcows.TipoEscena.ESCENA_MENU);
-        admEscenas.liberarEscenaCazaJurasica();
     }
 
     @Override
@@ -129,6 +143,9 @@ public class EscenaCazaJurasica extends EscenaBase
 
     @Override
     public void liberarRecursos() {
+
+        admMusica.liberarMusica();
+        actividadJuego.getEngine().disableAccelerationSensor(actividadJuego);
         regionFondo.getTexture().unload();
         regionFondo=null;
     }
