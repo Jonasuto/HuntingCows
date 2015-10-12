@@ -36,8 +36,8 @@ public class EscenaHistoriaIntro extends EscenaBase
 
         regionSlides = new ITextureRegion[6];
         regionSlides[0]=cargarImagen("Imagenes/Historia/IntroHistoria/jurasicouno.jpg");
-        regionSlides[1] = cargarImagen("Imagenes/Historia/IntroHistoria/dos.jpg");
-        regionSlides[2] = cargarImagen("Imagenes/Historia/IntroHistoria/tres.jpg");
+        regionSlides[1] = cargarImagen("Imagenes/Historia/IntroHistoria/jurasico2.jpg");
+        regionSlides[2] = cargarImagen("Imagenes/Historia/IntroHistoria/jurasicotres.jpg");
         regionSlides[3] = cargarImagen("Imagenes/Historia/IntroHistoria/cuatro.jpg");
         regionSlides[4] = cargarImagen("Imagenes/Historia/IntroHistoria/cinco.jpg");
         regionSlides[5] = cargarImagen("Imagenes/Historia/IntroHistoria/seis.jpg");
