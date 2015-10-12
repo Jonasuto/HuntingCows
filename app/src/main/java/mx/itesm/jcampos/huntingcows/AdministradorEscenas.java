@@ -163,6 +163,7 @@ public class AdministradorEscenas {
     }
 
     //*** Libera la escena de AcercDe
+
     public void liberarEscenaCazaJurasica() {
         escenaCazaJurasica.liberarEscena();
         escenaCazaJurasica = null;
