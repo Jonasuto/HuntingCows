@@ -158,7 +158,7 @@ public class AdministradorEscenas {
     public void crearEscenaCazaJurasica() {
         // Carga los recursos
 
-        
+
         escenaCazaJurasica = new mx.itesm.jcampos.huntingcows.EscenaCazaJurasica();
     }
 
