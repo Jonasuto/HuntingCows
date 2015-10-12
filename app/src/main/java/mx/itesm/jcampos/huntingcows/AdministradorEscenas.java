@@ -8,6 +8,8 @@ import org.andengine.engine.Engine;
 public class AdministradorEscenas {
     // Instancia única
     private static final AdministradorEscenas INSTANCE = new AdministradorEscenas();
+
+    
     protected mx.itesm.jcampos.huntingcows.ControlJuego actividadJuego;
 
     // Declara las distintas escenas que forman el juego
