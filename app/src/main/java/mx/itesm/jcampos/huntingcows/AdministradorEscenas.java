@@ -9,11 +9,13 @@ public class AdministradorEscenas {
     // Instancia única
     private static final AdministradorEscenas INSTANCE = new AdministradorEscenas();
 
-    
+
     protected mx.itesm.jcampos.huntingcows.ControlJuego actividadJuego;
 
     // Declara las distintas escenas que forman el juego
     private mx.itesm.jcampos.huntingcows.EscenaBase escenaSplash;
+
+
     private mx.itesm.jcampos.huntingcows.EscenaBase escenaMenu;
     private mx.itesm.jcampos.huntingcows.EscenaBase escenaAcercaDe;
     private mx.itesm.jcampos.huntingcows.EscenaBase escenaHistoriaIntro;
