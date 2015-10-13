@@ -2,10 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion '23.0.0'
+    buildToolsVersion "23.0.0"
+
     defaultConfig {
-        applicationId "mx.itesm.jcampos.huntingcows"
-        minSdkVersion 14
+        applicationId "mx.itesm.rmroman.proyectobasegpo01"
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -16,10 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    productFlavors {
-    }
 }
 
 dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':org.andengine')
 }
