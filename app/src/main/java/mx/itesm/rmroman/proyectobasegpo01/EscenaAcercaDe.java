@@ -11,6 +11,10 @@ import android.os.Vibrator;
 public class EscenaAcercaDe extends mx.itesm.rmroman.proyectobasegpo01.EscenaBase
 {
     // Regiones para imágenes
+
+    // Dream Team
+
+
     private ITextureRegion regionFondo;
     // Sprite para el fondo
     //sprite
