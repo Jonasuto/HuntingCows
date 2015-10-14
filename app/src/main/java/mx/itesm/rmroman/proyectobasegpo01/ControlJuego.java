@@ -3,6 +3,8 @@ package mx.itesm.rmroman.proyectobasegpo01;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.KeyEvent;
+import android.widget.Toast;
+
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -11,6 +13,7 @@ import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.audio.music.Music;
 import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.entity.scene.Scene;
+import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import java.io.IOException;
@@ -49,6 +52,20 @@ public class ControlJuego extends SimpleBaseGameActivity
         opciones.getAudioOptions().setNeedsMusic(true);
         // Para habilitar la reproducciñon de sonidos 'cortos'. -Efectos-
         opciones.getAudioOptions().setNeedsSound(true);
+
+        if(MultiTouch.isSupported(this)) {
+            if(MultiTouch.isSupportedDistinct(this)) {
+                Toast.makeText(this, "Touch si!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "hay error.", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(this, "no lo agarra.)\n\nControls are placed at different vertical locations.", Toast.LENGTH_LONG).show();
+        }
+
+
+        opciones.getTouchOptions().setNeedsMultiTouch(true);
+
 
         return opciones;
     }
@@ -107,13 +124,6 @@ public class ControlJuego extends SimpleBaseGameActivity
 
         return admEscenas.getEscenaActual();    // Regresa la primer escena que se muestra
     }
-
-
-
-
-
-
-
 
     // Atiende la tecla de BACK.
     @Override

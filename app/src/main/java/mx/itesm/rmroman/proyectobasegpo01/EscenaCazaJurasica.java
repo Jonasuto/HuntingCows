@@ -1,5 +1,6 @@
 package mx.itesm.rmroman.proyectobasegpo01;
 
+import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
@@ -31,6 +32,9 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private Sprite spriteFlechaIzquierda;
     private Sprite spriteFlechaDerecha;
+
+    private AnalogOnScreenControl controlFlechas;
+    private AnalogOnScreenControl controSalta;
 
     @Override
     public void cargarRecursos() {
