@@ -1,5 +1,7 @@
 package mx.itesm.rmroman.proyectobasegpo01;
 
+import android.util.Log;
+
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.engine.camera.hud.controls.DigitalOnScreenControl;
@@ -76,10 +78,19 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         spriteFlechaIzquierda = new ButtonSprite(90,100,
                 regionFlecha,actividadJuego.getVertexBufferObjectManager()) {
+
+
             // Aquí el código que ejecuta el botón cuando es presionado
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                spritePersonaje.moverIzquierda();
+
+                if(pSceneTouchEvent.isActionDown()){
+                    spritePersonaje.moverIzquierda();
+                }
+                else if(pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionCancel() || pTouchAreaLocalX<spriteFlechaIzquierda.getX()-90 || pTouchAreaLocalX >spriteFlechaIzquierda.getX()+90 || pTouchAreaLocalY<spriteFlechaIzquierda.getY()-90 || pTouchAreaLocalY>spriteFlechaIzquierda.getY()+90){
+                    spritePersonaje.detener();
+                }
+
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
@@ -90,13 +101,21 @@ public class EscenaCazaJurasica extends EscenaBase {
 
 
 
-        spriteFlechaDerecha = new ButtonSprite(170,100,
+        spriteFlechaDerecha = new ButtonSprite(250,100,
                 regionFlecha,actividadJuego.getVertexBufferObjectManager()) {
+
+            Log.i("x=",s)
 
             // Aquí el código que ejecuta el botón cuando es presionado
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                spritePersonaje.moverDerecha();
+                if(pSceneTouchEvent.isActionDown()){
+                    spritePersonaje.moverDerecha();
+                }
+                else if(pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionCancel() || pTouchAreaLocalX<spriteFlechaDerecha.getX()-90 || pTouchAreaLocalX >spriteFlechaDerecha.getX()+90 || pTouchAreaLocalY<spriteFlechaDerecha.getY()-90 || pTouchAreaLocalY>spriteFlechaDerecha.getY()+90){
+                    spritePersonaje.detener();
+                }
+
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
@@ -108,7 +127,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
 
 
-        btnSaltar = new ButtonSprite(300,100,
+        btnSaltar = new ButtonSprite(900,100,
                 regionControlSalto,actividadJuego.getVertexBufferObjectManager()) {
 
             // Aquí el código que ejecuta el botón cuando es presionado
