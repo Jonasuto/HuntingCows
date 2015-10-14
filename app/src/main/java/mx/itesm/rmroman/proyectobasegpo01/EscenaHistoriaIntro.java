@@ -136,9 +136,9 @@ public class EscenaHistoriaIntro extends EscenaBase
 
                     case OPCION_FINAL:
 
-                        admEscenas.liberarEscenaComic();
-                        admEscenas.crearEscenaMenu();
-                        admEscenas.setEscena(mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_MENU);
+                        admEscenas.liberarEscenaHistoriaIntro();
+                        admEscenas.crearEscenaCazaJurasica();
+                        admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA);
 
                         return true;
 

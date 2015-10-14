@@ -3,7 +3,11 @@ package mx.itesm.rmroman.proyectobasegpo01;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.engine.camera.hud.controls.DigitalOnScreenControl;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.JumpModifier;
 import org.andengine.entity.modifier.MoveByModifier;
+import org.andengine.entity.modifier.ParallelEntityModifier;
+import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.menu.MenuScene;
@@ -27,6 +31,7 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionFondo;
     private ITextureRegion regionControlSalto;
 
+    private boolean personajeSaltando = false;
 
 
     private Jugador spritePersonaje;
@@ -81,6 +86,10 @@ public class EscenaCazaJurasica extends EscenaBase {
         registerTouchArea(spriteFlechaIzquierda);
         attachChild(spriteFlechaIzquierda);
 
+
+
+
+
         spriteFlechaDerecha = new ButtonSprite(170,100,
                 regionFlecha,actividadJuego.getVertexBufferObjectManager()) {
 
@@ -94,13 +103,52 @@ public class EscenaCazaJurasica extends EscenaBase {
         registerTouchArea(spriteFlechaDerecha);
         attachChild(spriteFlechaDerecha);
 
-        btnSaltar = new ButtonSprite(100,100,
+
+
+
+
+
+        btnSaltar = new ButtonSprite(300,100,
                 regionControlSalto,actividadJuego.getVertexBufferObjectManager()) {
 
             // Aquí el código que ejecuta el botón cuando es presionado
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                spritePersonaje.moverDerecha();
+
+                if (pSceneTouchEvent.isActionDown() && !personajeSaltando) {
+                    personajeSaltando = true;
+                    // Animar sprite central
+                    JumpModifier salto = new JumpModifier(1, spritePersonaje.getX(), spritePersonaje.getX(),
+                            spritePersonaje.getY(), spritePersonaje.getY(),-200);
+                    RotationModifier rotacion = new RotationModifier(1, 360, 0);
+                    ParallelEntityModifier paralelo = new ParallelEntityModifier(salto,rotacion)
+                    {
+                        @Override
+                        protected void onModifierFinished(IEntity pItem) {
+                            personajeSaltando = false;
+                            unregisterEntityModifier(this);
+                            super.onModifierFinished(pItem);
+                        }
+                    };
+                    spritePersonaje.registerEntityModifier(paralelo);
+                }
+
+                if (pSceneTouchEvent.isActionDown()) {
+                    // El usuario toca la pantalla
+                    float x = pSceneTouchEvent.getX();
+                    float y = pSceneTouchEvent.getY();
+                    spritePersonaje.setPosition(x, y);
+                }
+                if (pSceneTouchEvent.isActionMove()) {
+                    // El usuario mueve el dedo sobre la pantalla
+                    float x = pSceneTouchEvent.getX();
+                    float y = pSceneTouchEvent.getY();
+                    spritePersonaje.setPosition(x, y);
+                }
+                if (pSceneTouchEvent.isActionUp()) {
+                    // El usuario deja de tocar la pantalla
+                }
+
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
