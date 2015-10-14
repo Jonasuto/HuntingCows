@@ -1,11 +1,17 @@
 package mx.itesm.rmroman.proyectobasegpo01;
 
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
+import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
+import org.andengine.engine.camera.hud.controls.DigitalOnScreenControl;
+import org.andengine.entity.modifier.MoveByModifier;
+import org.andengine.entity.scene.ITouchArea;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.AnimatedSprite;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -19,6 +25,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private ITextureRegion regionFlecha;
     private ITextureRegion regionFondo;
+    private ITextureRegion regionControlSalto;
 
 
 
@@ -33,14 +40,17 @@ public class EscenaCazaJurasica extends EscenaBase {
     private Sprite spriteFlechaIzquierda;
     private Sprite spriteFlechaDerecha;
 
+    private ButtonSprite btnSaltar;
+
     private AnalogOnScreenControl controlFlechas;
-    private AnalogOnScreenControl controSalta;
+    private AnalogOnScreenControl controlSalta;
 
     @Override
     public void cargarRecursos() {
 
         regionFondo = cargarImagen("Imagenes/Niveles/fondo.jpg");
         regionFlecha=cargarImagen("Imagenes/Historia/flecha.png");
+        regionControlSalto=cargarImagen("Imagenes/joystick.png");
 
         regionPersonajeAnimado = cargarImagenMosaico("Imagenes/kiki.png", 600, 158, 1, 4);
 
@@ -66,6 +76,21 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteFlechaDerecha= spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFlecha);
         attachChild(spriteFlechaDerecha);
 
+
+        btnSaltar = new ButtonSprite(100,100,
+                regionControlSalto,actividadJuego.getVertexBufferObjectManager()) {
+
+            // Aquí el código que ejecuta el botón cuando es presionado
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+
+                spritePersonaje.moverDerecha();
+
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
+        registerTouchArea(btnSaltar);
+        attachChild(btnSaltar);
 
     }
 

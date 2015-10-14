@@ -1,6 +1,7 @@
 package org.andengine.engine.camera.hud.controls;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.scene.ITouchArea;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.math.MathUtils;
@@ -42,6 +43,8 @@ public class DigitalOnScreenControl extends BaseOnScreenControl {
 
 		this.mAllowDiagonal = pAllowDiagonal;
 	}
+
+
 
 	// ===========================================================
 	// Getter & Setter
