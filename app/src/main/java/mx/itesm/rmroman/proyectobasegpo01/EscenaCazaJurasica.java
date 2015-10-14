@@ -37,9 +37,8 @@ public class EscenaCazaJurasica extends EscenaBase {
     // Sprite para el fondo
     private Sprite spriteFondo;
 
-    private Sprite spriteFlechaIzquierda;
-    private Sprite spriteFlechaDerecha;
-
+    private ButtonSprite spriteFlechaIzquierda;
+    private ButtonSprite spriteFlechaDerecha;
     private ButtonSprite btnSaltar;
 
     private AnalogOnScreenControl controlFlechas;
@@ -69,13 +68,31 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         admMusica.cargarMusica(2);
 
-        spriteFlechaIzquierda= spriteFondo = cargarSprite((ControlJuego.ANCHO_CAMARA/2)-130, ControlJuego.ALTO_CAMARA / 2, regionFlecha);
-        spriteFlechaIzquierda.setRotation(-180);
+
+        spriteFlechaIzquierda = new ButtonSprite(60,100,
+                regionFlecha,actividadJuego.getVertexBufferObjectManager()) {
+            // Aquí el código que ejecuta el botón cuando es presionado
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                spritePersonaje.moverIzquierda();
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
+        registerTouchArea(spriteFlechaIzquierda);
         attachChild(spriteFlechaIzquierda);
 
-        spriteFlechaDerecha= spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFlecha);
-        attachChild(spriteFlechaDerecha);
+        spriteFlechaDerecha = new ButtonSprite(100,100,
+                regionFlecha,actividadJuego.getVertexBufferObjectManager()) {
 
+            // Aquí el código que ejecuta el botón cuando es presionado
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                spritePersonaje.moverDerecha();
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
+        registerTouchArea(spriteFlechaDerecha);
+        attachChild(spriteFlechaDerecha);
 
         btnSaltar = new ButtonSprite(100,100,
                 regionControlSalto,actividadJuego.getVertexBufferObjectManager()) {
@@ -83,9 +100,7 @@ public class EscenaCazaJurasica extends EscenaBase {
             // Aquí el código que ejecuta el botón cuando es presionado
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-
                 spritePersonaje.moverDerecha();
-
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };

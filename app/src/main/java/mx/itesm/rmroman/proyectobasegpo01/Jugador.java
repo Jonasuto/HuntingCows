@@ -1,6 +1,10 @@
 package mx.itesm.rmroman.proyectobasegpo01;
 
 import android.view.MotionEvent;
+
+import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
+import org.andengine.engine.camera.hud.controls.DigitalOnScreenControl;
+import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.JumpModifier;
@@ -20,7 +24,18 @@ public class Jugador extends AnimatedSprite {
     }
 
     public void moverDerecha(){
+        MoveByModifier movimiento=new MoveByModifier(0.1f,	10,	0);
+        this.registerEntityModifier(movimiento);
+    }
+
+    public void moverIzquierda(){
+        MoveByModifier movimiento=new MoveByModifier(0.1f,	-10,	0);
+        this.registerEntityModifier(movimiento);    }
+
+    public void moverSaltar(){
         this.setX(this.getX()+10);
     }
+
+
 
 }
