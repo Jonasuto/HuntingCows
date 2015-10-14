@@ -69,7 +69,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         admMusica.cargarMusica(2);
 
 
-        spriteFlechaIzquierda = new ButtonSprite(60,100,
+        spriteFlechaIzquierda = new ButtonSprite(90,100,
                 regionFlecha,actividadJuego.getVertexBufferObjectManager()) {
             // Aquí el código que ejecuta el botón cuando es presionado
             @Override
@@ -81,7 +81,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         registerTouchArea(spriteFlechaIzquierda);
         attachChild(spriteFlechaIzquierda);
 
-        spriteFlechaDerecha = new ButtonSprite(100,100,
+        spriteFlechaDerecha = new ButtonSprite(170,100,
                 regionFlecha,actividadJuego.getVertexBufferObjectManager()) {
 
             // Aquí el código que ejecuta el botón cuando es presionado

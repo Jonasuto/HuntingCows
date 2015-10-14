@@ -136,17 +136,10 @@ public class EscenaComic extends EscenaBase
                         return true;
 
                     case OPCION_FINAL:
-                        if (contadorSlide < regionSlides.length - 1) {
-                            contadorSlide++;
-                            regionSlideActual = regionSlides[contadorSlide];
-                            spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 3, ControlJuego.ALTO_CAMARA / 3, regionSlideActual);
-                            admEscenas.liberarEscenaComic();
-                            admEscenas.crearEscenaCazaJurasica();
-                            admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA);
-                            spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
-                            attachChild(spriteFondo);
-                            break;
-                        }
+
+                        admEscenas.liberarEscenaComic();
+                        admEscenas.crearEscenaMenu();
+                        admEscenas.setEscena(mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_MENU);
 
                         return true;
                 }
