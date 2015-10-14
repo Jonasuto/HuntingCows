@@ -17,6 +17,7 @@ public class EscenaHistoriaIntro extends EscenaBase
     private ITextureRegion regionSlideActual;
     private ITextureRegion regionsiguiente;
     private ITextureRegion regionanterior;
+    private ITextureRegion regionfinal;
 
     private int contadorSlide;
 
@@ -24,6 +25,7 @@ public class EscenaHistoriaIntro extends EscenaBase
 
     private final int OPCION_SIGUIENTE = 0;
     private final int OPCION_ANTERIOR = 1;
+    private final int OPCION_FINAL = 2;
 
     private MenuScene menu;
 
@@ -45,6 +47,7 @@ public class EscenaHistoriaIntro extends EscenaBase
         regionSlideActual=regionSlides[0];
         regionsiguiente = cargarImagen("Imagenes/Historia/flecha.png");
         regionanterior = cargarImagen("Imagenes/Historia/flecha.png");
+        regionfinal = cargarImagen("Imagenes/Historia/flecha.png");
         contadorSlide=0;
     }
 
@@ -68,10 +71,14 @@ public class EscenaHistoriaIntro extends EscenaBase
         IMenuItem opcionanterior = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_ANTERIOR,
                 regionanterior, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
+        IMenuItem opcionafinal = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_FINAL,
+                regionfinal, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
+
 
         // Agrega las opciones al menú
         menu.addMenuItem(opcionSiguiente);
         menu.addMenuItem(opcionanterior);
+        menu.addMenuItem(opcionafinal);
 
         // que es esto??
 
@@ -85,6 +92,8 @@ public class EscenaHistoriaIntro extends EscenaBase
 
         opcionanterior.setPosition(-450, -350);
         opcionanterior.setRotation(-180);
+
+        opcionafinal.setPosition(450,350);
 
 
         // Registra el Listener para atender las opciones
@@ -120,6 +129,21 @@ public class EscenaHistoriaIntro extends EscenaBase
                             regionSlideActual = regionSlides[contadorSlide];
                             spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
                             attachChild(spriteFondo);
+                            break;
+                        }
+
+                        return true;
+                    case OPCION_FINAL:
+                        if (contadorSlide < regionSlides.length - 1) {
+                            contadorSlide++;
+                            regionSlideActual = regionSlides[contadorSlide];
+                            spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
+                            spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
+                            attachChild(spriteFondo);
+                            admEscenas.liberarEscenaComic();
+                            admEscenas.crearEscenaCazaJurasica();
+                            admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA);
+
                             break;
                         }
 

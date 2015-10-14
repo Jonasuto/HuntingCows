@@ -18,6 +18,7 @@ public class EscenaComic extends EscenaBase
     private ITextureRegion regionSlideActual;
     private ITextureRegion regionsiguiente;
     private ITextureRegion regionanterior;
+    private ITextureRegion regionfinal;
 
     private int contadorSlide;
 
@@ -25,6 +26,7 @@ public class EscenaComic extends EscenaBase
 
     private final int OPCION_SIGUIENTE = 0;
     private final int OPCION_ANTERIOR = 1;
+    private final int OPCION_FINAL = 2;
 
     private MenuScene menu;
 
@@ -49,6 +51,7 @@ public class EscenaComic extends EscenaBase
         regionSlideActual=regionSlides[0];
         regionsiguiente = cargarImagen("Imagenes/Historia/flecha.png");
         regionanterior = cargarImagen("Imagenes/Historia/flecha.png");
+        regionfinal = cargarImagen("Imagenes/Historia/flecha.png");
         contadorSlide=0;
     }
 
@@ -71,11 +74,14 @@ public class EscenaComic extends EscenaBase
 
         IMenuItem opcionanterior = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_ANTERIOR,
                 regionanterior, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
+        IMenuItem opcionfinal = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_FINAL,
+                regionfinal,actividadJuego.getVertexBufferObjectManager()),1.5f,1);
 
 
         // Agrega las opciones al menú
         menu.addMenuItem(opcionSiguiente);
         menu.addMenuItem(opcionanterior);
+        menu.addMenuItem(opcionfinal);
 
         // que es esto??
 
@@ -89,6 +95,7 @@ public class EscenaComic extends EscenaBase
 
         opcionanterior.setPosition(-450, -350);
         opcionanterior.setRotation(-180);
+        opcionfinal.setPosition(450, 350);
 
 
         // Registra el Listener para atender las opciones
@@ -101,14 +108,13 @@ public class EscenaComic extends EscenaBase
 
                     case OPCION_SIGUIENTE:
                         // Mostrar la escena de AcercaDe
-                        if (contadorSlide < regionSlides.length-1) {
+                        if (contadorSlide < regionSlides.length - 1) {
                             contadorSlide++;
                             regionSlideActual = regionSlides[contadorSlide];
                             spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
                             attachChild(spriteFondo);
                             break;
-                        }
-                        else{
+                        } else {
                             admEscenas.liberarEscenaComic();
                             admEscenas.crearEscenaMenu();
                             admEscenas.setEscena(mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_MENU);
@@ -129,6 +135,20 @@ public class EscenaComic extends EscenaBase
 
                         return true;
 
+                    case OPCION_FINAL:
+                        if (contadorSlide < regionSlides.length - 1) {
+                            contadorSlide++;
+                            regionSlideActual = regionSlides[contadorSlide];
+                            spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 3, ControlJuego.ALTO_CAMARA / 3, regionSlideActual);
+                            admEscenas.liberarEscenaComic();
+                            admEscenas.crearEscenaCazaJurasica();
+                            admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA);
+                            spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
+                            attachChild(spriteFondo);
+                            break;
+                        }
+
+                        return true;
                 }
                 return true;
             }
