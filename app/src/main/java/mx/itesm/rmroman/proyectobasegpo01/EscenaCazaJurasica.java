@@ -20,6 +20,7 @@ import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
@@ -32,12 +33,14 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionFondo;
     private ITextureRegion regionControlSalto;
     private ITextureRegion regionBase;
+    private ITextureRegion regionEnemigo;
 
     private AnalogOnScreenControl control;
     private AnalogOnScreenControl controlDos;
 
 
     private Jugador spritePersonaje;
+    private Enemigo spriteEnemigo;
 
     private TiledTextureRegion regionPersonajeAnimado;
 
@@ -54,6 +57,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         regionBase=cargarImagen("Imagenes/baseJoystick.png");
         regionControlSalto=cargarImagen("Imagenes/joystick.png");
         regionPersonajeAnimado = cargarImagenMosaico("Imagenes/kiki.png", 600, 158, 1, 4);
+        regionEnemigo=cargarImagen("Imagenes/alienblaster.png");
 
 
     }
@@ -67,6 +71,9 @@ public class EscenaCazaJurasica extends EscenaBase {
         spritePersonaje = new Jugador(ControlJuego.ANCHO_CAMARA / 4, ControlJuego.ALTO_CAMARA / 4,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonaje.animate(200);
         attachChild(spritePersonaje);
+
+        spriteEnemigo = new Enemigo(200, 200,regionEnemigo, actividadJuego.getVertexBufferObjectManager());
+        attachChild(spriteEnemigo);
 
         admMusica.cargarMusica(2);
 
@@ -112,6 +119,7 @@ public class EscenaCazaJurasica extends EscenaBase {
                 }
                 spritePersonaje.setX(x);
             }
+
         });
         EscenaCazaJurasica.this.setChildScene(control);
     }
