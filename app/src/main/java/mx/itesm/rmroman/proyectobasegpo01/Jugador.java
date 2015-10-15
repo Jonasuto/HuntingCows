@@ -21,6 +21,7 @@ import org.andengine.util.modifier.LoopModifier;
  */
 public class Jugador extends AnimatedSprite {
 
+    private boolean saltoLargo = false;
     LoopEntityModifier loop;
     MoveByModifier movimiento;
 
@@ -29,7 +30,7 @@ public class Jugador extends AnimatedSprite {
     }
 
     public void moverDerecha(){
-        movimiento=new MoveByModifier(0.1f,	20,0);
+        movimiento=new MoveByModifier(0.1f,	10,0);
         loop= new LoopEntityModifier(movimiento);
         this.registerEntityModifier(loop);
     }
@@ -42,7 +43,7 @@ public class Jugador extends AnimatedSprite {
 
     public void moverIzquierda(){
 
-        movimiento=new MoveByModifier(0.1f,	-20,0);
+        movimiento=new MoveByModifier(0.1f,	-10,0);
         loop= new LoopEntityModifier(movimiento);
         this.registerEntityModifier(loop);
     }

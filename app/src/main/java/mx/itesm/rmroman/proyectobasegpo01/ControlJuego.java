@@ -53,7 +53,6 @@ public class ControlJuego extends SimpleBaseGameActivity
         // Para habilitar la reproducciñon de sonidos 'cortos'. -Efectos-
         opciones.getAudioOptions().setNeedsSound(true);
 
-
         opciones.getTouchOptions().setNeedsMultiTouch(true);
 
 
