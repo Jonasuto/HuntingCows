@@ -101,11 +101,6 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
-
     private void agregarJoystick() {
         control = new AnalogOnScreenControl(100, 100, actividadJuego.camara,
                 regionBase, regionControlSalto,
