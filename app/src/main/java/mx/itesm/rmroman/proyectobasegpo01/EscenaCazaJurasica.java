@@ -41,6 +41,8 @@ public class EscenaCazaJurasica extends EscenaBase {
     private AnalogOnScreenControl controlDos;
 
     private Jugador spritePersonaje;
+    private Jugador zombraSpritePersonaje;
+    private Enemigo spriteEnemigo;
 
     private TiledTextureRegion regionPersonajeAnimado;
 
@@ -68,9 +70,15 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondo);
         attachChild(spriteFondo);
 
+        zombraSpritePersonaje = new Jugador(-ControlJuego.ANCHO_CAMARA/4+ControlJuego.ANCHO_CAMARA, ControlJuego.ALTO_CAMARA/4,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
+        attachChild(zombraSpritePersonaje);
+
         spritePersonaje = new Jugador(-ControlJuego.ANCHO_CAMARA/4+ControlJuego.ANCHO_CAMARA, ControlJuego.ALTO_CAMARA/4,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonaje.animate(200);
         attachChild(spritePersonaje);
+
+        spriteEnemigo = new Enemigo(200, 200,regionEnemigo, actividadJuego.getVertexBufferObjectManager());
+        spriteFondo.attachChild(spriteEnemigo);
 
         admMusica.cargarMusica(2);
 
@@ -133,11 +141,11 @@ public class EscenaCazaJurasica extends EscenaBase {
                     x = spritePersonaje.getX();
                 }
                 spritePersonaje.setX(x);
+                actividadJuego.camara.setChaseEntity(spritePersonaje.getX());
             }
 
         });
         EscenaCazaJurasica.this.setChildScene(control);
-        actividadJuego.camara.setChaseEntity(spritePersonaje);
     }
 
     private void agregarBotonSalto() {
