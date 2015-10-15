@@ -14,37 +14,18 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 public class Enemigo extends Sprite {
 
 
-    LoopEntityModifier loop;
-    MoveByModifier movimiento;
+    private MoveByModifier movimiento;
+    private boolean izquierda=false;
 
     public Enemigo(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager) {
         super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
     }
 
+    protected void onManagedUpdate(float pSecondsElapsed) {
+        super.onManagedUpdate(pSecondsElapsed);
 
-    public void moverDerecha(){
-        movimiento=new MoveByModifier(0.1f,	20,0);
-        loop= new LoopEntityModifier(movimiento);
-        this.registerEntityModifier(loop);
-    }
-
-    public void detener(){
-
-        this.unregisterEntityModifier(loop);
 
     }
-
-    public void moverIzquierda(){
-
-        movimiento=new MoveByModifier(0.1f,	-20,0);
-        loop= new LoopEntityModifier(movimiento);
-        this.registerEntityModifier(loop);
-    }
-
-    public void moverSaltar(){
-
-    }
-
 
 
 }
