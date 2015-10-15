@@ -24,7 +24,7 @@ public class EscenaAcercaDe extends mx.itesm.rmroman.proyectobasegpo01.EscenaBas
     @Override
     public void cargarRecursos() {
 
-        regionFondo = cargarImagen("Imagenes/MenuInicio/creditos.jpg");
+        regionFondo = cargarImagen("Imagenes/MenuInicio/acerca-de.psd");
         vibrador=(Vibrator)actividadJuego.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
