@@ -56,13 +56,13 @@ public class EscenaMenu extends EscenaBase
         regionFondo = cargarImagen("Imagenes/MenuInicio/fondoMenu.jpg");
         // Botones del menú
         regionBtnAcercaDe = cargarImagen("Imagenes/MenuInicio/btnAcercaDe.png");
-        regionBtnJugar = cargarImagen("Imagenes/MenuInicio/btnNewGame.png");
+        regionBtnJugar = cargarImagen("Imagenes/MenuInicio/boton_azulnave.png");
         regionBtnRojo = cargarImagen("Imagenes/MenuInicio/btnRojo.png");
         regionBtnMusica = cargarImagen("Imagenes/MenuInicio/musica.png");
         regionBtnSonido = cargarImagen("Imagenes/MenuInicio/sonido.jpg");
-        regionBtnArcade = cargarImagen("Imagenes/MenuInicio/btnArcade.png");
-        regionBtnComic = cargarImagen("Imagenes/MenuInicio/btnHistoria.png");
-        regionBtnContinuarJuego = cargarImagen("Imagenes/MenuInicio/btnLoadGame.png");
+        regionBtnArcade = cargarImagen("Imagenes/MenuInicio/boton_rojoarcade.png");
+        regionBtnComic = cargarImagen("Imagenes/MenuInicio/boton_blancocomic.png");
+        regionBtnContinuarJuego = cargarImagen("Imagenes/MenuInicio/boton_verdeplaneta.png");
 
     }
 
