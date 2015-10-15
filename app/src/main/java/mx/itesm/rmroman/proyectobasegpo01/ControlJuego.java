@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.KeyEvent;
 import android.widget.Toast;
-
+import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -15,7 +15,6 @@ import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.controller.MultiTouch;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-
 import java.io.IOException;
 
 /*
@@ -43,8 +42,9 @@ public class ControlJuego extends SimpleBaseGameActivity
     @Override
 
     public EngineOptions onCreateEngineOptions() {
-        camara = new Camera(0,0,ANCHO_CAMARA,ALTO_CAMARA);
 
+
+        camara = new Camera(0,0,ANCHO_CAMARA,ALTO_CAMARA);
         EngineOptions opciones = new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR,
                 new FillResolutionPolicy(),camara);
 

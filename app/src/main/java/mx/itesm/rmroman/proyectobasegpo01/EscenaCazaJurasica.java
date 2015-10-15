@@ -56,6 +56,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         regionFondo = cargarImagen("Imagenes/Niveles/fondo.jpg");
         regionBase=cargarImagen("Imagenes/baseJoystick.png");
         regionControlSalto=cargarImagen("Imagenes/joystick.png");
+        regionEnemigo=cargarImagen("Imagenes/alienblaster.png");
         regionPersonajeAnimado = cargarImagenMosaico("Imagenes/kiki.png", 600, 158, 1, 4);
 
 
@@ -136,6 +137,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         });
         EscenaCazaJurasica.this.setChildScene(control);
+        actividadJuego.camara.setChaseEntity(spritePersonaje);
     }
 
     private void agregarBotonSalto() {
