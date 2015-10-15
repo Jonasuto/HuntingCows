@@ -70,9 +70,6 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondo);
         attachChild(spriteFondo);
 
-        zombraSpritePersonaje = new Jugador(-ControlJuego.ANCHO_CAMARA/4+ControlJuego.ANCHO_CAMARA, ControlJuego.ALTO_CAMARA/4,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
-        attachChild(zombraSpritePersonaje);
-
         spritePersonaje = new Jugador(-ControlJuego.ANCHO_CAMARA/4+ControlJuego.ANCHO_CAMARA, ControlJuego.ALTO_CAMARA/4,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonaje.animate(200);
         attachChild(spritePersonaje);
@@ -135,13 +132,12 @@ public class EscenaCazaJurasica extends EscenaBase {
             @Override
             public void onControlChange(BaseOnScreenControl pBaseOnScreenControl, float pValueX, float pValueY) {
 
-                float x = spritePersonaje.getX() + 10 * pValueX;
+                float x = spriteFondo.getX() + 10 * pValueX;
 
                 if (x > 2800 || x < 0) {
-                    x = spritePersonaje.getX();
+                    x = spriteFondo.getX();
                 }
-                spritePersonaje.setX(x);
-                actividadJuego.camara.setChaseEntity(spritePersonaje.getX());
+                spriteFondo.setX(x);
             }
 
         });
