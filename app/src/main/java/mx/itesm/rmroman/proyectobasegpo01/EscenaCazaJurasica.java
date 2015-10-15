@@ -104,7 +104,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteFlechaDerecha = new ButtonSprite(250,100,
                 regionFlecha,actividadJuego.getVertexBufferObjectManager()) {
 
-            Log.i("x=",s)
+
 
             // Aquí el código que ejecuta el botón cuando es presionado
             @Override
