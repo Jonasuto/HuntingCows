@@ -97,8 +97,6 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     }
 
-<<<<<<< Updated upstream
-=======
 
 
     @Override
@@ -118,7 +116,6 @@ public class EscenaCazaJurasica extends EscenaBase {
     }
 
 
->>>>>>> Stashed changes
     private void agregarJoystick() {
         control = new AnalogOnScreenControl(100, 100, actividadJuego.camara,
                 regionBase, regionControlSalto,
