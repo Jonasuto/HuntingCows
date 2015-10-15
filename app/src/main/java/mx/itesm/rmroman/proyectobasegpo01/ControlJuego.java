@@ -55,12 +55,12 @@ public class ControlJuego extends SimpleBaseGameActivity
 
         if(MultiTouch.isSupported(this)) {
             if(MultiTouch.isSupportedDistinct(this)) {
-                Toast.makeText(this, "Touch si!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "hay error.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "", Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this, "no lo agarra.)\n\nControls are placed at different vertical locations.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "", Toast.LENGTH_LONG).show();
         }
 
 
