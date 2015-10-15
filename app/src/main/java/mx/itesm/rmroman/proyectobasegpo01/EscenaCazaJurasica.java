@@ -29,11 +29,12 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
  */
 public class EscenaCazaJurasica extends EscenaBase {
 
-    private ITextureRegion regionFlecha;
     private ITextureRegion regionFondo;
     private ITextureRegion regionControlSalto;
+    private ITextureRegion regionBase;
 
-    private boolean personajeSaltando = false;
+    private AnalogOnScreenControl control;
+    private AnalogOnScreenControl controlDos;
 
 
     private Jugador spritePersonaje;
@@ -44,20 +45,14 @@ public class EscenaCazaJurasica extends EscenaBase {
     // Sprite para el fondo
     private Sprite spriteFondo;
 
-    private ButtonSprite spriteFlechaIzquierda;
-    private ButtonSprite spriteFlechaDerecha;
     private ButtonSprite btnSaltar;
-
-    private AnalogOnScreenControl controlFlechas;
-    private AnalogOnScreenControl controlSalta;
 
     @Override
     public void cargarRecursos() {
 
         regionFondo = cargarImagen("Imagenes/Niveles/fondo.jpg");
-        regionFlecha=cargarImagen("Imagenes/Historia/flecha.png");
+        regionBase=cargarImagen("Imagenes/baseJoystick.png");
         regionControlSalto=cargarImagen("Imagenes/joystick.png");
-
         regionPersonajeAnimado = cargarImagenMosaico("Imagenes/kiki.png", 600, 158, 1, 4);
 
 
@@ -69,84 +64,14 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondo);
         attachChild(spriteFondo);
 
-        spritePersonaje = new Jugador(-ControlJuego.ANCHO_CAMARA/4+ControlJuego.ANCHO_CAMARA, ControlJuego.ALTO_CAMARA/4,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
+        spritePersonaje = new Jugador(ControlJuego.ANCHO_CAMARA / 4, ControlJuego.ALTO_CAMARA / 4,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonaje.animate(200);
         attachChild(spritePersonaje);
 
         admMusica.cargarMusica(2);
 
-
-        spriteFlechaIzquierda = new ButtonSprite(90,100,
-                regionFlecha,actividadJuego.getVertexBufferObjectManager()) {
-
-
-            // Aquí el código que ejecuta el botón cuando es presionado
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-
-
-                if(pSceneTouchEvent.isActionDown()){
-
-                    spritePersonaje.moverIzquierda();
-                }
-                else if(pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionCancel() || pTouchAreaLocalX<20 || pTouchAreaLocalX >115 || pTouchAreaLocalY>70 || pTouchAreaLocalY<20){
-
-                    spritePersonaje.detener();
-                }
-
-                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-            }
-        };
-        registerTouchArea(spriteFlechaIzquierda);
-        attachChild(spriteFlechaIzquierda);
-
-
-
-
-
-        spriteFlechaDerecha = new ButtonSprite(220,100,
-                regionFlecha,actividadJuego.getVertexBufferObjectManager()) {
-
-
-            // Aquí el código que ejecuta el botón cuando es presionado
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-
-
-                if(pSceneTouchEvent.isActionDown()){
-                    //Log.i("Estoy bien aqui eje x= ", pTouchAreaLocalX + " eje y= "+pTouchAreaLocalY);
-                    spritePersonaje.moverDerecha();
-                }
-                else if(pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionCancel() || pTouchAreaLocalX<35 || pTouchAreaLocalX >110 || pTouchAreaLocalY>70 || pTouchAreaLocalY<20){
-                    spritePersonaje.detener();
-                }
-
-                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-            }
-        };
-        registerTouchArea(spriteFlechaDerecha);
-        attachChild(spriteFlechaDerecha);
-
-
-
-
-
-
-        btnSaltar = new ButtonSprite(900,100,
-                regionControlSalto,actividadJuego.getVertexBufferObjectManager()) {
-
-
-            // Aquí el código que ejecuta el botón cuando es presionado
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-
-
-
-                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-            }
-        };
-        registerTouchArea(btnSaltar);
-        attachChild(btnSaltar);
+        agregarJoystick();
+        agregarBotonSalto();
 
     }
 
@@ -169,6 +94,44 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     }
 
+
+    private void agregarJoystick() {
+        control = new AnalogOnScreenControl(100, 100, actividadJuego.camara,
+                regionBase, regionControlSalto,
+                0.03f, 100, actividadJuego.getVertexBufferObjectManager(), new AnalogOnScreenControl.IAnalogOnScreenControlListener() {
+            @Override
+            public void onControlClick(AnalogOnScreenControl pAnalogOnScreenControl) {
+            }
+            @Override
+            public void onControlChange(BaseOnScreenControl pBaseOnScreenControl, float pValueX, float pValueY) {
+
+                float x = spritePersonaje.getX() + 10 * pValueX;
+
+                if (x > 2800 || x < 0) {
+                    x = spritePersonaje.getX();
+                }
+                spritePersonaje.setX(x);
+            }
+        });
+        EscenaCazaJurasica.this.setChildScene(control);
+    }
+
+
+    private void agregarBotonSalto() {
+        btnSaltar = new ButtonSprite(1100,100,
+                regionControlSalto,actividadJuego.getVertexBufferObjectManager()) {
+            // Aquí el código que ejecuta el botón cuando es presionado
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if(pSceneTouchEvent.isActionDown()){
+                    admMusica.reproducirMusicaBoton();
+                }
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
+        registerTouchArea(btnSaltar);
+        attachChild(btnSaltar);
+    }
 
 
     @Override
