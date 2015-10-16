@@ -34,14 +34,13 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionBase;
     private ITextureRegion regionEnemigo;
 
+
     private boolean personajeSaltando = false;
 
 
     private AnalogOnScreenControl control;
-    private AnalogOnScreenControl controlDos;
 
     private Jugador spritePersonaje;
-    private Jugador zombraSpritePersonaje;
     private Enemigo spriteEnemigo;
 
     private TiledTextureRegion regionPersonajeAnimado;
@@ -121,7 +120,6 @@ public class EscenaCazaJurasica extends EscenaBase {
         regionFondo=null;
     }
 
-
     private void agregarJoystick() {
         control = new AnalogOnScreenControl(100, 100, actividadJuego.camara,
                 regionBase, regionControlSalto,
@@ -131,21 +129,15 @@ public class EscenaCazaJurasica extends EscenaBase {
             }
             @Override
             public void onControlChange(BaseOnScreenControl pBaseOnScreenControl, float pValueX, float pValueY) {
-
-                Log.i("estoy en x= ", spriteFondo.getX() + " ");
-                if ( spriteFondo.getX()> 1037.8 || spriteFondo.getX() < 239.2) {
-
-                }
-                else{
-                    pValueX=pValueX*(-1);
-                    float x = (spriteFondo.getX() + 20 * pValueX);
-                    spriteFondo.setX(x);
-                }
+                pValueX=pValueX*(-1);
+                float x = spriteFondo.getX() + 20 * pValueX;
+                spriteFondo.setX(x);
             }
 
         });
         EscenaCazaJurasica.this.setChildScene(control);
     }
+
 
     private void agregarBotonSalto() {
         btnSaltar = new ButtonSprite(1100,100,
@@ -153,23 +145,24 @@ public class EscenaCazaJurasica extends EscenaBase {
             // Aquí el código que ejecuta el botón cuando es presionado
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                if (pSceneTouchEvent.isActionDown() && !personajeSaltando) {
-                    personajeSaltando = true;
-                    // Animar sprite central
-                    JumpModifier salto = new JumpModifier(1, spritePersonaje.getX(), spritePersonaje.getX(),
-                            spritePersonaje.getY(), spritePersonaje.getY(),-300);
-                    RotationModifier rotacion = new RotationModifier(1, 360, 0);
-                    ParallelEntityModifier paralelo = new ParallelEntityModifier(salto,rotacion)
-                    {
-                        @Override
-                        protected void onModifierFinished(IEntity pItem) {
-                            personajeSaltando = false;
-                            unregisterEntityModifier(this);
-                            super.onModifierFinished(pItem);
-                        }
-                    };
-                    spritePersonaje.registerEntityModifier(paralelo);
-                }
+
+
+                    if (pSceneTouchEvent.isActionDown() && !personajeSaltando) {
+                        personajeSaltando = true;
+                        // Animar sprite central
+                        JumpModifier salto = new JumpModifier(1, spritePersonaje.getX(), spritePersonaje.getX(),
+                                spritePersonaje.getY(), spritePersonaje.getY(), -300);
+                        RotationModifier rotacion = new RotationModifier(1, 360, 0);
+                        ParallelEntityModifier paralelo = new ParallelEntityModifier(salto, rotacion) {
+                            @Override
+                            protected void onModifierFinished(IEntity pItem) {
+                                personajeSaltando = false;
+                                unregisterEntityModifier(this);
+                                super.onModifierFinished(pItem);
+                            }
+                        };
+                        spritePersonaje.registerEntityModifier(paralelo);
+                    }
 
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
