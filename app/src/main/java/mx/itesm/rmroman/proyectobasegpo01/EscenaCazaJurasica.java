@@ -134,10 +134,10 @@ public class EscenaCazaJurasica extends EscenaBase {
 
                 float x = spriteFondo.getX() + 10 * pValueX;
 
-                if (x > 2800 || x < 0) {
+                if (x > 3800 || x < 0) {
                     x = spriteFondo.getX();
                 }
-                spriteFondo.setX(x);
+                spriteFondo.setX(-x);
             }
 
         });
