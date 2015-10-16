@@ -132,12 +132,13 @@ public class EscenaCazaJurasica extends EscenaBase {
             @Override
             public void onControlChange(BaseOnScreenControl pBaseOnScreenControl, float pValueX, float pValueY) {
 
-                float x = spriteFondo.getX() + 10 * pValueX;
+                pValueX=pValueX*(-1);
+                float x = (spriteFondo.getX() + 10 * pValueX);
 
                 if (x > 3800 || x < 0) {
                     x = spriteFondo.getX();
                 }
-                spriteFondo.setX(-x);
+                spriteFondo.setX(x);
             }
 
         });
@@ -150,8 +151,38 @@ public class EscenaCazaJurasica extends EscenaBase {
             // Aquí el código que ejecuta el botón cuando es presionado
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                if(pSceneTouchEvent.isActionDown()){
-                    admMusica.reproducirMusicaBoton();
+                if (pSceneTouchEvent.isActionDown() && !personajeSaltando) {
+                    personajeSaltando = true;
+                    // Animar sprite central
+                    JumpModifier salto = new JumpModifier(1, spritePersonaje.getX(), spritePersonaje.getX(),
+                            spritePersonaje.getY(), spritePersonaje.getY(),-200);
+                    RotationModifier rotacion = new RotationModifier(1, 360, 0);
+                    ParallelEntityModifier paralelo = new ParallelEntityModifier(salto,rotacion)
+                    {
+                        @Override
+                        protected void onModifierFinished(IEntity pItem) {
+                            personajeSaltando = false;
+                            unregisterEntityModifier(this);
+                            super.onModifierFinished(pItem);
+                        }
+                    };
+                    spritePersonaje.registerEntityModifier(paralelo);
+                }
+
+                if (pSceneTouchEvent.isActionDown()) {
+                    // El usuario toca la pantalla
+                    float x = pSceneTouchEvent.getX();
+                    float y = pSceneTouchEvent.getY();
+                    spritePersonaje.setPosition(x, y);
+                }
+                if (pSceneTouchEvent.isActionMove()) {
+                    // El usuario mueve el dedo sobre la pantalla
+                    float x = pSceneTouchEvent.getX();
+                    float y = pSceneTouchEvent.getY();
+                    spritePersonaje.setPosition(x, y);
+                }
+                if (pSceneTouchEvent.isActionUp()) {
+                    // El usuario deja de tocar la pantalla
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
