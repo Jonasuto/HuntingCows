@@ -58,7 +58,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         regionFondo = cargarImagen("Imagenes/Niveles/fondo.jpg");
         regionBase=cargarImagen("Imagenes/baseJoystick.png");
         regionControlSalto=cargarImagen("Imagenes/joystick.png");
-        regionEnemigo=cargarImagen("Imagenes/alienblaster.png");
+        regionEnemigo=cargarImagen("Imagenes/vacaDinosaurio.png");
         regionPersonajeAnimado = cargarImagenMosaico("Imagenes/kiki.png", 600, 158, 1, 4);
 
 
@@ -70,7 +70,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondo);
         attachChild(spriteFondo);
 
-        spritePersonaje = new Jugador(-ControlJuego.ANCHO_CAMARA/4+ControlJuego.ANCHO_CAMARA, ControlJuego.ALTO_CAMARA/4,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
+        spritePersonaje = new Jugador(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/4,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonaje.animate(200);
         attachChild(spritePersonaje);
 
@@ -132,13 +132,15 @@ public class EscenaCazaJurasica extends EscenaBase {
             @Override
             public void onControlChange(BaseOnScreenControl pBaseOnScreenControl, float pValueX, float pValueY) {
 
-                pValueX=pValueX*(-1);
-                float x = (spriteFondo.getX() + 10 * pValueX);
+                Log.i("estoy en x= ", spriteFondo.getX() + " ");
+                if ( spriteFondo.getX()> 1037.8 || spriteFondo.getX() < 239.2) {
 
-                if (x > 3800 || x < 0) {
-                    x = spriteFondo.getX();
                 }
-                spriteFondo.setX(x);
+                else{
+                    pValueX=pValueX*(-1);
+                    float x = (spriteFondo.getX() + 20 * pValueX);
+                    spriteFondo.setX(x);
+                }
             }
 
         });
@@ -155,7 +157,7 @@ public class EscenaCazaJurasica extends EscenaBase {
                     personajeSaltando = true;
                     // Animar sprite central
                     JumpModifier salto = new JumpModifier(1, spritePersonaje.getX(), spritePersonaje.getX(),
-                            spritePersonaje.getY(), spritePersonaje.getY(),-200);
+                            spritePersonaje.getY(), spritePersonaje.getY(),-300);
                     RotationModifier rotacion = new RotationModifier(1, 360, 0);
                     ParallelEntityModifier paralelo = new ParallelEntityModifier(salto,rotacion)
                     {
@@ -169,21 +171,6 @@ public class EscenaCazaJurasica extends EscenaBase {
                     spritePersonaje.registerEntityModifier(paralelo);
                 }
 
-                if (pSceneTouchEvent.isActionDown()) {
-                    // El usuario toca la pantalla
-                    float x = pSceneTouchEvent.getX();
-                    float y = pSceneTouchEvent.getY();
-                    spritePersonaje.setPosition(x, y);
-                }
-                if (pSceneTouchEvent.isActionMove()) {
-                    // El usuario mueve el dedo sobre la pantalla
-                    float x = pSceneTouchEvent.getX();
-                    float y = pSceneTouchEvent.getY();
-                    spritePersonaje.setPosition(x, y);
-                }
-                if (pSceneTouchEvent.isActionUp()) {
-                    // El usuario deja de tocar la pantalla
-                }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
