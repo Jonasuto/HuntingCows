@@ -36,13 +36,19 @@ public class EscenaHistoriaIntro extends EscenaBase
     @Override
     public void cargarRecursos() {
 
-        regionSlides = new ITextureRegion[6];
-        regionSlides[0]=cargarImagen("Imagenes/Historia/IntroHistoria/uno.jpg");
-        regionSlides[1] = cargarImagen("Imagenes/Historia/IntroHistoria/dos.jpg");
-        regionSlides[2] = cargarImagen("Imagenes/Historia/IntroHistoria/tres.jpg");
-        regionSlides[3] = cargarImagen("Imagenes/Historia/IntroHistoria/cuatro.jpg");
-        regionSlides[4] = cargarImagen("Imagenes/Historia/IntroHistoria/cinco.jpg");
-        regionSlides[5] = cargarImagen("Imagenes/Historia/IntroHistoria/seis.jpg");
+        regionSlides = new ITextureRegion[12];
+        regionSlides[0]=cargarImagen("Imagenes/Historia/IntroHistoria/historia_00.jpg");
+        regionSlides[1] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_01.jpg");
+        regionSlides[2] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_02.jpg");
+        regionSlides[3] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_03.jpg");
+        regionSlides[4] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_04.jpg");
+        regionSlides[5] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_05.jpg");
+        regionSlides[6] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_06.jpg");
+        regionSlides[7] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_07.jpg");
+        regionSlides[8] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_08.jpg");
+        regionSlides[9] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_09.jpg");
+        regionSlides[10] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_10.jpg");
+        regionSlides[11] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_11.jpg");
         
         regionSlideActual=regionSlides[0];
         regionsiguiente = cargarImagen("Imagenes/Historia/flecha.png");

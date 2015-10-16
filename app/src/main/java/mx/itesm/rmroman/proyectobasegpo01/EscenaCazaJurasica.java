@@ -5,6 +5,7 @@ import android.util.Log;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.engine.camera.hud.controls.DigitalOnScreenControl;
+import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.JumpModifier;
 import org.andengine.entity.modifier.MoveByModifier;
@@ -34,7 +35,6 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionBase;
     private ITextureRegion regionEnemigo;
 
-
     private boolean personajeSaltando = false;
 
 
@@ -42,6 +42,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private Jugador spritePersonaje;
     private Enemigo spriteEnemigo;
+
 
     private TiledTextureRegion regionPersonajeAnimado;
 
@@ -80,7 +81,6 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         agregarJoystick();
         agregarBotonSalto();
-
     }
 
     @Override

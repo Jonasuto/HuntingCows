@@ -37,16 +37,23 @@ public class EscenaComic extends EscenaBase
     @Override
     public void cargarRecursos() {
 
-        regionSlides = new ITextureRegion[9];
-        regionSlides[0]=cargarImagen("Imagenes/Historia/IntroHistoria/uno.jpg");
-        regionSlides[1] = cargarImagen("Imagenes/Historia/IntroHistoria/dos.jpg");
-        regionSlides[2] = cargarImagen("Imagenes/Historia/IntroHistoria/tres.jpg");
-        regionSlides[3] = cargarImagen("Imagenes/Historia/IntroHistoria/cuatro.jpg");
-        regionSlides[4] = cargarImagen("Imagenes/Historia/IntroHistoria/cinco.jpg");
-        regionSlides[5] = cargarImagen("Imagenes/Historia/IntroHistoria/seis.jpg");
-        regionSlides[6] = cargarImagen("Imagenes/Historia/CazaJurasica/jurasicouno.jpg");
-        regionSlides[7] = cargarImagen("Imagenes/Historia/CazaJurasica/jurasico2.jpg");
-        regionSlides[8] = cargarImagen("Imagenes/Historia/CazaJurasica/jurasicotres.jpg");
+        regionSlides = new ITextureRegion[16];
+        regionSlides[0]=cargarImagen("Imagenes/Historia/IntroHistoria/historia_00.jpg");
+        regionSlides[1] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_01.jpg");
+        regionSlides[2] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_02.jpg");
+        regionSlides[3] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_03.jpg");
+        regionSlides[4] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_04.jpg");
+        regionSlides[5] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_05.jpg");
+        regionSlides[6] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_06.jpg");
+        regionSlides[7] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_07.jpg");
+        regionSlides[8] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_08.jpg");
+        regionSlides[9] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_09.jpg");
+        regionSlides[10] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_10.jpg");
+        regionSlides[11] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_11.jpg");
+        regionSlides[12] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_12.jpg");
+        regionSlides[13] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_13.jpg");
+        regionSlides[14] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_14.jpg");
+        regionSlides[15] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_15.jpg");
 
         regionSlideActual=regionSlides[0];
         regionsiguiente = cargarImagen("Imagenes/Historia/flecha.png");
