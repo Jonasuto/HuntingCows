@@ -18,11 +18,5 @@ public class Enemigo extends Sprite {
 
     public Enemigo(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager) {
         super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-        mover();
-    }
-
-
-    public void mover() {
-        movimiento=new MoveByModifier(0.1f,	10,0);
     }
 }

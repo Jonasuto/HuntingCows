@@ -32,6 +32,9 @@ public class ControlJuego extends SimpleBaseGameActivity
     // El administrador de escenas (se encarga de cambiar las escenas)
 
     private mx.itesm.rmroman.proyectobasegpo01.AdministradorEscenas admEscenas;
+    private mx.itesm.rmroman.proyectobasegpo01.AdministradorMusica admMusica;
+
+
     /*
     Se crea la configuración del Engine.
     new FillResolutionPolicy() - Escala la cámara a lo ancho y alto de la pantalla
@@ -130,6 +133,8 @@ public class ControlJuego extends SimpleBaseGameActivity
         return super.onKeyDown(keyCode, event);
     }
 
+
+
     // La aplicación sale de memoria, la eliminamos completamente.
     @Override
     protected void onDestroy() {
@@ -138,5 +143,6 @@ public class ControlJuego extends SimpleBaseGameActivity
             System.exit(0);
         }
     }
+
 
 }

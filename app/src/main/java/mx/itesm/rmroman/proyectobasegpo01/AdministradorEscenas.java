@@ -30,7 +30,7 @@ public class AdministradorEscenas {
     // La escena que se está mostrando
     private mx.itesm.rmroman.proyectobasegpo01.EscenaBase escenaActual;
     // El engine para hacer el cambio de escenas
-    private Engine engine;
+    public Engine engine;
 
     // Asigna valores iniciales del administrador, por que??
     public static void inicializarAdministrador(mx.itesm.rmroman.proyectobasegpo01.ControlJuego actividadJuego, Engine engine) {
