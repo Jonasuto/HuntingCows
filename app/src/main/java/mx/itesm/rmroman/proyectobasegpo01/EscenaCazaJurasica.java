@@ -75,12 +75,14 @@ public class EscenaCazaJurasica extends EscenaBase {
     @Override
     public void cargarRecursos() {
 
+
+        
         vidas = new ITextureRegion[4];
         vidas[0]=cargarImagen("Imagenes/corazon.png");
         vidas[1] = cargarImagen("Imagenes/corazon.png");
         vidas[2] = cargarImagen("Imagenes/corazon.png");
         vidas[3] = cargarImagen("Imagenes/corazon.png");
-        
+
         regionFondo = cargarImagen("Imagenes/Niveles/fondo.jpg");
         regionFondoPausa = cargarImagen("Imagenes/logoHuntingCows.png");
         regionBase=cargarImagen("Imagenes/baseJoystick.png");
