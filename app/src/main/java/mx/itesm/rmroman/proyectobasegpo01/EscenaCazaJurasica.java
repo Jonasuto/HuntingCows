@@ -44,10 +44,13 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionFondoPausa;
     private ITextureRegion regionControlSalto;
     private ITextureRegion regionBase;
-    private ITextureRegion regionEnemigo;
-    private ITextureRegion regionMercancia;
 
-    private ITextureRegion[] vidas;
+    private ITextureRegion regionEnemigo;
+    private ITextureRegion regionVida;
+
+
+    private ITextureRegion vidas;
+    private Sprite[] spriteVidas;
 
     private boolean personajeSaltando = false;
 
@@ -55,10 +58,12 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private Jugador spritePersonaje;
     private Enemigo spriteEnemigo;
-    private Mercancia spriteMercancia;
+    private Enemigo spriteVida;
 
     private boolean juegoCorriendo = true;
 
+
+    private CameraScene escenaPausa;
     private ITextureRegion regionPausa;
     private ITextureRegion regionBtnPausa;
 
@@ -71,27 +76,23 @@ public class EscenaCazaJurasica extends EscenaBase {
     private Sprite spriteFondoPausa;
 
     private ButtonSprite btnSaltar;
+    private int vida;
 
     @Override
     public void cargarRecursos() {
 
-
-
-        vidas = new ITextureRegion[4];
-        vidas[0]=cargarImagen("Imagenes/corazon.png");
-        vidas[1] = cargarImagen("Imagenes/corazon.png");
-        vidas[2] = cargarImagen("Imagenes/corazon.png");
-        vidas[3] = cargarImagen("Imagenes/corazon.png");
-
+        vida=2;
+        vidas=cargarImagen("Imagenes/corazon.png");
         regionFondo = cargarImagen("Imagenes/Niveles/fondo.jpg");
         regionFondoPausa = cargarImagen("Imagenes/logoHuntingCows.png");
         regionBase=cargarImagen("Imagenes/baseJoystick.png");
         regionControlSalto =cargarImagen("Imagenes/joystick.png");
         regionEnemigo = cargarImagen("Imagenes/vacaDinosaurio.png");
-        regionPersonajeAnimado = cargarImagenMosaico("Imagenes/kiki.png", 600, 158, 1, 4);
-        regionMercancia=cargarImagen("Imagenes/corazon.png");
-
+        regionVida = cargarImagen("Imagenes/vacaDinosaurio.png");
+        regionPersonajeAnimado = cargarImagenMosaico("Imagenes/kiki.png", 590, 138, 1, 4);
         // Pausa
+
+
         regionBtnPausa = cargarImagen("Imagenes/btnPausa.png");
         regionPausa = cargarImagen("Imagenes/pausa.png");
 
@@ -103,6 +104,17 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondo);
         attachChild(spriteFondo);
 
+        spriteVidas= new Sprite[3];
+
+        spriteVidas[0]= cargarSprite(900, 750, vidas);
+        attachChild(spriteVidas[0]);
+
+        spriteVidas[1]= cargarSprite(950, 750, vidas);
+        attachChild(spriteVidas[1]);
+
+        spriteVidas[2]= cargarSprite(1000, 750, vidas);
+        attachChild(spriteVidas[2]);
+
         spritePersonaje = new Jugador(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/4,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonaje.animate(200);
         attachChild(spritePersonaje);
@@ -110,29 +122,33 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteEnemigo = new Enemigo(200, 200,regionEnemigo, actividadJuego.getVertexBufferObjectManager());
         spriteFondo.attachChild(spriteEnemigo);
 
-        spriteMercancia = new Mercancia(700, 200,regionMercancia, actividadJuego.getVertexBufferObjectManager());
-        spriteFondo.attachChild(spriteMercancia);
+        spriteVida = new Enemigo(1800, 200,regionVida, actividadJuego.getVertexBufferObjectManager());
+        spriteFondo.attachChild(spriteVida);
 
         admMusica.cargarMusica(2);
 
         agregarJoystick();
         agregarBotonSalto();
 
-        Sprite btnPausa = new Sprite(regionBtnPausa.getWidth()/2, ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight()/2,
+        Sprite btnPausa = new Sprite(regionBtnPausa.getWidth(), ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight(),
                 regionBtnPausa, actividadJuego.getVertexBufferObjectManager()) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                //Log.i("onAreaTouched", "BTN Touch");
                 if (pSceneTouchEvent.isActionDown()) {
                     pausarJuego();
-                    return true;
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
-        btnPausa.setAlpha(0.4f);
         attachChild(btnPausa);
         registerTouchArea(btnPausa);
+
+        // Crear la escena de PAUSA, pero NO lo agrega a la escena
+        escenaPausa = new CameraScene(actividadJuego.camara);
+        Sprite fondoPausa = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2,
+                regionPausa);
+        escenaPausa.attachChild(fondoPausa);
+        escenaPausa.setBackgroundEnabled(false);
 
 
     }
@@ -145,16 +161,15 @@ public class EscenaCazaJurasica extends EscenaBase {
         admEscenas.setEscena(mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_MENU);
     }
 
+
     private void pausarJuego() {
-        //Log.i("pausarJuego", "pausando");
         if (juegoCorriendo) {
-            spriteFondoPausa = cargarSprite(ControlJuego.
-                    ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondoPausa);
-            spriteFondoPausa.setAlpha(0.4f);
-            attachChild(spriteFondoPausa);
+            escenaPausa.setChildScene(control);
+            setChildScene(escenaPausa,false,true,false);
             juegoCorriendo = false;
         } else {
-            spriteFondoPausa.detachSelf();
+            clearChildScene();
+            EscenaCazaJurasica.this.setChildScene(control);
             juegoCorriendo = true;
         }
     }
@@ -168,13 +183,30 @@ public class EscenaCazaJurasica extends EscenaBase {
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed);
 
+        Log.i("tienes vidas",vida+"");
+
         if (!juegoCorriendo) {
             return;
         }
 
         if(spritePersonaje.collidesWith(spriteEnemigo)){
-            admMusica.vibrar(1000);
+
+            spriteEnemigo.detachSelf();
+            spriteVidas[vida].detachSelf();
+            vida--;
+            admMusica.vibrar(400);
         }
+
+        if(spritePersonaje.collidesWith(spriteVida)){
+
+            spriteVida.detachSelf();
+
+            if(vida<2){
+                vida++;
+            }
+            admMusica.vibrar(400);
+        }
+
     }
 
 
@@ -208,7 +240,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
                 if(juegoCorriendo){
                     pValueX=pValueX*(-1);
-                    float x = spriteFondo.getX() + 20 * pValueX;
+                    float x = spriteFondo.getX() + 29 * pValueX;
                     spriteFondo.setX(x);
                 }
             }
@@ -230,7 +262,7 @@ public class EscenaCazaJurasica extends EscenaBase {
                         personajeSaltando = true;
                         // Animar sprite central
                         JumpModifier salto = new JumpModifier(1, spritePersonaje.getX(), spritePersonaje.getX(),
-                                spritePersonaje.getY(), spritePersonaje.getY(), -300);
+                                spritePersonaje.getY(), spritePersonaje.getY(), -400);
                         RotationModifier rotacion = new RotationModifier(1, 360, 0);
                         ParallelEntityModifier paralelo = new ParallelEntityModifier(salto, rotacion) {
                             @Override
