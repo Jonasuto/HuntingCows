@@ -99,7 +99,9 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed);
-
+        if(spritePersonaje.collidesWith(spriteEnemigo)){
+            admMusica.vibrar(1000);
+        }
     }
 
 
