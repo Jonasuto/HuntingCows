@@ -192,9 +192,9 @@ public class EscenaCazaJurasica extends EscenaBase {
         if(spritePersonaje.collidesWith(spriteEnemigo)){
 
             spriteEnemigo.detachSelf();
-            spriteVidas[vida].detachSelf();
+            spriteVidas[2-vida].detachSelf();
             vida--;
-            admMusica.vibrar(400);
+            admMusica.vibrar(200);
         }
 
         if(spritePersonaje.collidesWith(spriteVida)){
@@ -202,13 +202,22 @@ public class EscenaCazaJurasica extends EscenaBase {
             spriteVida.detachSelf();
 
             if(vida<2){
-                vida++;
+
+                if(vida==0){
+                    spriteVidas[1]= cargarSprite(950, 750, vidas);
+                    attachChild(spriteVidas[1]);
+                    vida++;
+                }
+                else if(vida==1){
+                    spriteVidas[0]= cargarSprite(900, 750, vidas);
+                    attachChild(spriteVidas[0]);
+                    vida++;
+                }
             }
-            admMusica.vibrar(400);
+            admMusica.vibrar(200);
         }
 
     }
-
 
 
     @Override
