@@ -46,6 +46,10 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionFondoPausa;
     private ITextureRegion regionControlSalto;
     private ITextureRegion regionBase;
+    private ITextureRegion regionNave;
+
+    private ArrayList<Sprite> listaProyectilesEnemigo;
+
 
     private float[] posicionesEnemigos;
     private ArrayList<Enemigo> listaEnemigos;
@@ -58,6 +62,8 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private ITextureRegion vidas;
     private Sprite[] spriteVidas;
+
+    private Sprite spriteNave;
 
     private boolean personajeSaltando = false;
 
@@ -83,6 +89,7 @@ public class EscenaCazaJurasica extends EscenaBase {
     private Sprite spriteFondoPausa;
 
     private ButtonSprite btnSaltar;
+    private ButtonSprite btnDisparar;
     private int vida;
 
     @Override
@@ -90,6 +97,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         vida=2;
         vidas=cargarImagen("Imagenes/corazon.png");
+        regionNave=cargarImagen("Imagenes/nave.png");
         regionFondo = cargarImagen("Imagenes/Niveles/fondo.jpg");
         regionFondoPausa = cargarImagen("Imagenes/logoHuntingCows.png");
         regionBase=cargarImagen("Imagenes/baseJoystick.png");
@@ -121,6 +129,9 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         spriteVidas= new Sprite[3];
 
+        spriteNave=cargarSprite(200, 270, regionNave);
+        spriteFondo.attachChild(spriteNave);
+
         spriteVidas[0]= cargarSprite(900, 750, vidas);
         attachChild(spriteVidas[0]);
 
@@ -143,6 +154,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         agregarJoystick();
         agregarBotonSalto();
+        agregarBotonDisparar();
 
         Sprite btnPausa = new Sprite(regionBtnPausa.getWidth(), ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight(),
                 regionBtnPausa, actividadJuego.getVertexBufferObjectManager()) {
@@ -234,13 +246,17 @@ public class EscenaCazaJurasica extends EscenaBase {
             }
 
             // Revisa si choca el personaje con el enemigo
+            /*
+
             if (spritePersonaje.collidesWith(enemigo)) {
                 enemigo.detachSelf();
                 spriteVidas[2-vida].detachSelf();
                 vida--;
                 listaEnemigos.remove(enemigo);
                 admMusica.vibrar(200);
+                spritePersonaje.setSize(spritePersonaje.getWidth()-20,spritePersonaje.getHeight()-20);
             }
+            */
         }
 
         /*
@@ -264,9 +280,7 @@ public class EscenaCazaJurasica extends EscenaBase {
             admMusica.vibrar(200);
         }
         */
-
     }
-
 
     @Override
     public void liberarEscena() {
@@ -296,9 +310,25 @@ public class EscenaCazaJurasica extends EscenaBase {
             public void onControlChange(BaseOnScreenControl pBaseOnScreenControl, float pValueX, float pValueY) {
 
                 if(juegoCorriendo){
-                    pValueX=pValueX*(-1);
-                    float x = spriteFondo.getX() + 29 * pValueX;
-                    spriteFondo.setX(x);
+
+                    Log.i("estoy",spriteFondo.getX()+"");
+
+                    if(spriteFondo.getX()>1070){
+                        if(pValueX<0){
+                        }
+                        else{
+                            pValueX = pValueX * (-1);
+                            float x = spriteFondo.getX() + 30 * pValueX;
+                            spriteFondo.setX(x);
+                        }
+                    }
+
+                    else{
+                        pValueX = pValueX * (-1);
+                        float x = spriteFondo.getX() + 30 * pValueX;
+                        spriteFondo.setX(x);
+                    }
+
                 }
             }
 
@@ -334,7 +364,6 @@ public class EscenaCazaJurasica extends EscenaBase {
         }
     }
 
-
     private void agregarBotonSalto() {
         btnSaltar = new ButtonSprite(1100,100,
                 regionControlSalto,actividadJuego.getVertexBufferObjectManager()) {
@@ -366,4 +395,36 @@ public class EscenaCazaJurasica extends EscenaBase {
         registerTouchArea(btnSaltar);
         attachChild(btnSaltar);
     }
+
+
+    private void agregarBotonDisparar() {
+        btnDisparar = new ButtonSprite(1190,200,
+                regionControlSalto,actividadJuego.getVertexBufferObjectManager()) {
+            // Aquí el código que ejecuta el botón cuando es presionado
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+
+                if (juegoCorriendo) {
+                    //dispararProyectil();
+
+                }
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
+        registerTouchArea(btnDisparar);
+        attachChild(btnDisparar);
+    }
+
+
+    /*
+    private void dispararProyectil() {
+        // Crearlo
+        Sprite spriteProyectil = cargarSprite(spritePersonaje.getX(), spritePersonaje.getY(), regionProyectil);
+        attachChild(spriteProyectil);   // Lo agrega a la escena
+        listaProyectiles.add(spriteProyectil);  // Lo agrega a la lista
+    }
+    */
+
+
+
 }
