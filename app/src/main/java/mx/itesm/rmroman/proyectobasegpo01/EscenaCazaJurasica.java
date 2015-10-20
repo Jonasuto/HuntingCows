@@ -52,9 +52,11 @@ public class EscenaCazaJurasica extends EscenaBase {
 
 
     private float[] posicionesEnemigos;
+
     private ArrayList<Enemigo> listaEnemigos;
 
     private ITextureRegion regionEnemigo;
+    private ITextureRegion regionBala;
     private ITextureRegion regionVida;
 
 
@@ -103,6 +105,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         regionBase=cargarImagen("Imagenes/baseJoystick.png");
         regionControlSalto =cargarImagen("Imagenes/joystick.png");
         regionEnemigo = cargarImagen("Imagenes/vacaDinosaurio.png");
+        regionBala = cargarImagen("Imagenes/laser.png");
         regionVida = cargarImagen("Imagenes/corazon.png");
         regionPersonajeAnimado = cargarImagenMosaico("Imagenes/kiki.png", 590, 138, 1, 4);
         // Pausa
@@ -123,6 +126,8 @@ public class EscenaCazaJurasica extends EscenaBase {
     public void crearEscena() {
 
         listaEnemigos = new ArrayList<>();
+
+        listaProyectilesEnemigo= new ArrayList<>();
 
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondo);
         attachChild(spriteFondo);
@@ -245,8 +250,6 @@ public class EscenaCazaJurasica extends EscenaBase {
                 enemigo.mover();
             }
 
-            // Revisa si choca el personaje con el enemigo
-            /*
 
             if (spritePersonaje.collidesWith(enemigo)) {
                 enemigo.detachSelf();
@@ -256,10 +259,10 @@ public class EscenaCazaJurasica extends EscenaBase {
                 admMusica.vibrar(200);
                 spritePersonaje.setSize(spritePersonaje.getWidth()-20,spritePersonaje.getHeight()-20);
             }
-            */
+
         }
 
-        /*
+
         if(spritePersonaje.collidesWith(spriteVida)){
 
             spriteVida.detachSelf();
@@ -279,7 +282,7 @@ public class EscenaCazaJurasica extends EscenaBase {
             }
             admMusica.vibrar(200);
         }
-        */
+
     }
 
     @Override

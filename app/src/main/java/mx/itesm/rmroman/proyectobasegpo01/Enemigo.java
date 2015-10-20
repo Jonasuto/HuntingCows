@@ -8,6 +8,7 @@ import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.modifier.SequenceModifier;
 
 import java.util.Random;
 
@@ -40,7 +41,8 @@ public class Enemigo extends Sprite {
                 voltear=false;
             }
 
-            this.setX(this.getX()-5);
+            this.setX(this.getX()-3);
+
             pasos--;
             if(pasos<-40){
                 limiteDerecho=1;
@@ -55,7 +57,7 @@ public class Enemigo extends Sprite {
                 voltear=false;
             }
 
-            this.setX(this.getX()+5);
+            this.setX(this.getX()+3);
             pasos++;
             if(pasos>40){
                 limiteDerecho=0;
