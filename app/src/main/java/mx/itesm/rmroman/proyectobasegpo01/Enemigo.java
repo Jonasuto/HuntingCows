@@ -30,16 +30,20 @@ public class Enemigo extends Sprite {
     private boolean vaPaBajo =false;
     private boolean voltear=true;
     private int pasos=0;
+    private boolean brinco;
+
+    private boolean brincando=false;
 
     private int alturaBrinco=0;
 
     private Random regaloAleatorio=new Random();
     private int regalo=0;
 
-    public Enemigo(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager,int comportamiento) {
+    public Enemigo(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager,int comportamiento,boolean brinco) {
         super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
         limiteDerecho=comportamiento;
         regalo=regaloAleatorio.nextInt(5);
+        this.brinco=brinco;
 
     }
 
@@ -52,6 +56,18 @@ public class Enemigo extends Sprite {
     public int getRegalo(){
 
         return regalo;
+    }
+
+    public boolean getBrinco(){
+        return brinco;
+    }
+
+    public boolean getBrincando(){
+        return brincando;
+    }
+
+    public void setBrincando(boolean brincando){
+        this.brincando=brincando;
     }
 
     public void mover(float tiempo){
@@ -89,15 +105,15 @@ public class Enemigo extends Sprite {
         else if(limiteDerecho==2){
 
             if(vaPaBajo ==false){
-                this.setY(this.getY()+10);
+                this.setY(this.getY()+12);
                 alturaBrinco++;
 
-                if(alturaBrinco>100){
+                if(alturaBrinco>80){
                     vaPaBajo =true;
                 }
             }
             else{
-                this.setY(this.getY()-10);
+                this.setY(this.getY()-12);
                 alturaBrinco--;
 
                 if(alturaBrinco<=0){

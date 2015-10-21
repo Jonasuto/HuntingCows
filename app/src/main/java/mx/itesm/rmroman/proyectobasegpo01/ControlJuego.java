@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.widget.Toast;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.LimitedFPSEngine;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -65,6 +66,13 @@ public class ControlJuego extends SimpleBaseGameActivity
 
         return opciones;
     }
+
+
+    @Override
+    public Engine onCreateEngine(EngineOptions pEngineOptions){
+        return new LimitedFPSEngine(pEngineOptions,50);
+    }
+
 
     // Crea los recursos del juego.
     @Override

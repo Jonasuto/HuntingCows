@@ -84,7 +84,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         cantidadVida =2;
         vidas=cargarImagen("Imagenes/corazon.png");
         regionNave=cargarImagen("Imagenes/nave.png");
-        regionFondo = cargarImagen("Imagenes/Niveles/fondo.jpg");
+        regionFondo = cargarImagen("Imagenes/Niveles/fondo2.jpg");
         regionFondoPausa = cargarImagen("Imagenes/logoHuntingCows.png");
         regionBase=cargarImagen("Imagenes/baseJoystick.png");
         regionControlSalto =cargarImagen("Imagenes/joystick.png");
@@ -196,7 +196,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         }
 
 
-        Log.i("vidas", cantidadVida + "");
+        Log.i("fondo", spriteFondo.getX() + "");
 
 
         actualizarProyectiles(pSecondsElapsed);
@@ -205,9 +205,31 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         for (int i= listaEnemigos.size()-1; i>=0; i--) {
 
-            Enemigo enemigo = listaEnemigos.get(i);
+            final Enemigo enemigo = listaEnemigos.get(i);
 
-            enemigo.mover(pSecondsElapsed);
+
+            if(enemigo.getBrinco()==true){
+                if (enemigo.getBrincando()==false) {
+                    enemigo.setBrincando(true);
+                    // Animar sprite central
+                    JumpModifier salto = new JumpModifier(1, enemigo.getX(), enemigo.getX(),
+                            enemigo.getY(), enemigo.getY(), -400);
+                    RotationModifier rotacion = new RotationModifier(1, 360, 0);
+                    ParallelEntityModifier paralelo = new ParallelEntityModifier(salto, rotacion) {
+                        @Override
+                        protected void onModifierFinished(IEntity pItem) {
+                            enemigo.setBrincando(false);
+                            unregisterEntityModifier(this);
+                            super.onModifierFinished(pItem);
+                        }
+                    };
+                    enemigo.registerEntityModifier(paralelo);
+                }
+            }
+
+            else{
+                enemigo.mover(pSecondsElapsed);
+            }
 
             if (spritePersonaje.collidesWith(enemigo)) {
 
@@ -305,7 +327,11 @@ public class EscenaCazaJurasica extends EscenaBase {
         int cont;
         for( cont = 0; cont<posicionesEnemigos.length;cont++){
 
-            Enemigo spriteEnemigo = new Enemigo(posicionesEnemigos[cont], 150,regionEnemigo, actividadJuego.getVertexBufferObjectManager(),2);
+
+            boolean brinca = true;
+            int camina =1;
+
+            Enemigo spriteEnemigo = new Enemigo(posicionesEnemigos[cont], 150,regionEnemigo, actividadJuego.getVertexBufferObjectManager(),camina,brinca);
             Enemigo nuevoEnemigo = spriteEnemigo;
             listaEnemigos.add(nuevoEnemigo);
             spriteFondo.attachChild(nuevoEnemigo);
