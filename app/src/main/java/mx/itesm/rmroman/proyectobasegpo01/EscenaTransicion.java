@@ -1,12 +1,5 @@
 package mx.itesm.rmroman.proyectobasegpo01;
-import android.util.Log;
-
-import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.JumpModifier;
-import org.andengine.entity.modifier.ParallelEntityModifier;
-import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.scene.background.SpriteBackground;
-import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -14,22 +7,18 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 /**
  * Created by Campos on 09/10/15.
  */
-public class EscenaSplashHuntingCows extends EscenaBase {
+public class EscenaTransicion extends EscenaBase {
 
     private ITextureRegion regionFondo;
     private ITextureRegion regionLogo;
-    private ITextureRegion regionPress;
     private ITextureRegion regionNaveVaca;
 
 
     // Sprites sobre la escena
     private Sprite spriteFondo;
     private Sprite spriteLogo;
-    private ButtonSprite spritePress;
     private Sprite spriteNaveVaca1;
     private Sprite spriteNaveVaca2;
-
-    private boolean tocar= false;
 
 
 
@@ -39,7 +28,6 @@ public class EscenaSplashHuntingCows extends EscenaBase {
 
         regionFondo = cargarImagen("Imagenes/fondo_hunting.jpg");
         regionLogo = cargarImagen("Imagenes/titulo.png");
-        regionPress = cargarImagen("Imagenes/press.png");
         regionNaveVaca = cargarImagen("Imagenes/naveVaca.png");
 
     }
@@ -59,30 +47,14 @@ public class EscenaSplashHuntingCows extends EscenaBase {
         spriteLogo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionLogo);
         attachChild(spriteLogo);
 
-        spriteNaveVaca1 = cargarSprite(ControlJuego.ANCHO_CAMARA / 2-350, ControlJuego.ALTO_CAMARA / 2, regionNaveVaca);
+        spriteNaveVaca1 = cargarSprite(ControlJuego.ANCHO_CAMARA/2-350, ControlJuego.ALTO_CAMARA / 2, regionNaveVaca);
         attachChild(spriteNaveVaca1);
 
-        spriteNaveVaca2 = cargarSprite(ControlJuego.ANCHO_CAMARA / 2+400, ControlJuego.ALTO_CAMARA / 2, regionNaveVaca);
+        spriteNaveVaca2 = cargarSprite(ControlJuego.ANCHO_CAMARA/2+400, ControlJuego.ALTO_CAMARA / 2, regionNaveVaca);
         attachChild(spriteNaveVaca2);
 
         admMusica.cargarMusica(0);
         admMusica.setMusicaTodo();
-
-
-        Sprite spritePress = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-200,
-                regionPress, actividadJuego.getVertexBufferObjectManager()) {
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                if (pSceneTouchEvent.isActionUp()) {
-                    admEscenas.liberarEscenaSplashHuntingCows();
-                    admEscenas.crearEscenaMenu();
-                    admEscenas.setEscena(TipoEscena.ESCENA_MENU);
-                }
-                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-            }
-        };
-        attachChild(spritePress);
-        registerTouchArea(spritePress);
 
 
     }
@@ -96,15 +68,16 @@ public class EscenaSplashHuntingCows extends EscenaBase {
     }
 
 
+
     @Override
     public void onBackKeyPressed() {
 
     }
 
     @Override
-    public mx.itesm.rmroman.proyectobasegpo01.TipoEscena getTipoEscena() {
+    public TipoEscena getTipoEscena() {
 
-        return TipoEscena.ESCENA_SPLASH_HUNTING_COWS;
+        return TipoEscena.ESCENA_TRANSICION;
     }
 
     // Libera la escena misma del engine
@@ -121,7 +94,6 @@ public class EscenaSplashHuntingCows extends EscenaBase {
     @Override
     public void liberarRecursos() {
         // Estas dos instrucciones por cada región inicializada
-        admMusica.liberarMusica();
         regionFondo.getTexture().unload();
         regionFondo = null;
     }

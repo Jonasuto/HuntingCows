@@ -22,6 +22,7 @@ public class AdministradorEscenas {
     private mx.itesm.rmroman.proyectobasegpo01.EscenaBase escenaSplashHUntingCows;
     private mx.itesm.rmroman.proyectobasegpo01.EscenaBase escenaCazaJurasica;
     private mx.itesm.rmroman.proyectobasegpo01.EscenaBase escenaComic;
+    private mx.itesm.rmroman.proyectobasegpo01.EscenaBase escenaTransicion;
 
 
 
@@ -93,6 +94,9 @@ public class AdministradorEscenas {
             case ESCENA_COMIC:
                 setEscenaBase(escenaComic);
                 break;
+            case ESCENA_TRANSICION:
+                setEscenaBase(escenaTransicion);
+                break;
         }
     }
 
@@ -117,6 +121,17 @@ public class AdministradorEscenas {
     public void liberarEscenaSplashHuntingCows() {
         escenaSplashHUntingCows.liberarEscena();
         escenaSplashHUntingCows = null;
+    }
+
+    public void crearEscenaTransicion() {
+        // Carga los recursos
+        escenaTransicion = new mx.itesm.rmroman.proyectobasegpo01.EscenaTransicion();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaTransicion() {
+        escenaTransicion.liberarEscena();
+        escenaTransicion = null;
     }
 
     // ** MENU

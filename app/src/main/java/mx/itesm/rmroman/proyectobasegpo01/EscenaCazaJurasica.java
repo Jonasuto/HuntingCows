@@ -4,35 +4,16 @@ import android.util.Log;
 
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
-import org.andengine.engine.camera.hud.controls.DigitalOnScreenControl;
-import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.JumpModifier;
-import org.andengine.entity.modifier.MoveByModifier;
-import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.RotationModifier;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
-import org.andengine.entity.scene.ITouchArea;
-import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.menu.MenuScene;
-import org.andengine.entity.scene.menu.item.IMenuItem;
-import org.andengine.entity.scene.menu.item.SpriteMenuItem;
-import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
-import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.font.Font;
-import org.andengine.opengl.font.FontFactory;
-import org.andengine.opengl.font.IFont;
-import org.andengine.opengl.texture.ITexture;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
-import org.andengine.util.adt.color.Color;
 
 import java.util.ArrayList;
 
@@ -48,19 +29,12 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionBase;
     private ITextureRegion regionNave;
 
-    private ArrayList<Sprite> listaProyectilesEnemigo;
-
-
     private float[] posicionesEnemigos;
 
     private ArrayList<Enemigo> listaEnemigos;
 
     private ITextureRegion regionEnemigo;
-    private ITextureRegion regionBala;
     private ITextureRegion regionVida;
-
-
-    private boolean[] brincosEnemigos;
 
     private ITextureRegion vidas;
     private Sprite[] spriteVidas;
@@ -73,7 +47,6 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private Jugador spritePersonaje;
     private Enemigo spriteEnemigo;
-    private Vida spriteVida;
 
     private boolean juegoCorriendo = true;
 
@@ -85,6 +58,8 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private TiledTextureRegion regionPersonajeAnimado;
 
+    private boolean personajeVolteandoDerecha=true;
+
 
     // Sprite para el fondo
     private Sprite spriteFondo;
@@ -92,12 +67,21 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private ButtonSprite btnSaltar;
     private ButtonSprite btnDisparar;
-    private int vida;
+    private int cantidadVida;
+
+
+    // Proyectiles del personaje
+    private ITextureRegion regionProyectil;
+    private ArrayList<Laser> listaProyectiles;
+
+    private ArrayList<Vida> listaVidasEncontradas;
+
+
 
     @Override
     public void cargarRecursos() {
 
-        vida=2;
+        cantidadVida =2;
         vidas=cargarImagen("Imagenes/corazon.png");
         regionNave=cargarImagen("Imagenes/nave.png");
         regionFondo = cargarImagen("Imagenes/Niveles/fondo.jpg");
@@ -105,31 +89,27 @@ public class EscenaCazaJurasica extends EscenaBase {
         regionBase=cargarImagen("Imagenes/baseJoystick.png");
         regionControlSalto =cargarImagen("Imagenes/joystick.png");
         regionEnemigo = cargarImagen("Imagenes/vacaDinosaurio.png");
-        regionBala = cargarImagen("Imagenes/laser.png");
         regionVida = cargarImagen("Imagenes/corazon.png");
         regionPersonajeAnimado = cargarImagenMosaico("Imagenes/kiki.png", 590, 138, 1, 4);
         // Pausa
-
-        brincosEnemigos=new boolean[9];
-        brincosEnemigos[0]=false;
-        brincosEnemigos[3]=false;
-        brincosEnemigos[6]=false;
-        brincosEnemigos[7]=false;
-
-
-            regionBtnPausa = cargarImagen("Imagenes/btnPausa.png");
+        regionBtnPausa = cargarImagen("Imagenes/btnPausa.png");
         regionPausa = cargarImagen("Imagenes/pausa.png");
+
+        regionProyectil = cargarImagen("Imagenes/laser.png");
 
     }
 
     @Override
     public void crearEscena() {
 
+
+        listaProyectiles = new ArrayList<>();
+
         listaEnemigos = new ArrayList<>();
 
-        listaProyectilesEnemigo= new ArrayList<>();
+        listaVidasEncontradas = new ArrayList<>();
 
-        spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondo);
+        spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2 , regionFondo);
         attachChild(spriteFondo);
 
         spriteVidas= new Sprite[3];
@@ -137,21 +117,18 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteNave=cargarSprite(200, 270, regionNave);
         spriteFondo.attachChild(spriteNave);
 
-        spriteVidas[0]= cargarSprite(900, 750, vidas);
+        spriteVidas[0]= cargarSprite(1000, 780, vidas);
         attachChild(spriteVidas[0]);
 
-        spriteVidas[1]= cargarSprite(950, 750, vidas);
+        spriteVidas[1]= cargarSprite(1050, 780, vidas);
         attachChild(spriteVidas[1]);
 
-        spriteVidas[2]= cargarSprite(1000, 750, vidas);
+        spriteVidas[2]= cargarSprite(1100, 780, vidas);
         attachChild(spriteVidas[2]);
 
-        spritePersonaje = new Jugador(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/4,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
+        spritePersonaje = new Jugador(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/4-100,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonaje.animate(200);
         attachChild(spritePersonaje);
-
-        spriteVida = new Vida(1800, 200,regionVida, actividadJuego.getVertexBufferObjectManager());
-        spriteFondo.attachChild(spriteVida);
 
         admMusica.cargarMusica(2);
 
@@ -214,75 +191,37 @@ public class EscenaCazaJurasica extends EscenaBase {
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed);
 
-
-
-
         if (!juegoCorriendo) {
             return;
         }
 
+
+        Log.i("vidas",cantidadVida+"");
+
+
+        actualizarProyectiles(pSecondsElapsed);
+
+        actualizarVidas(pSecondsElapsed);
+
         for (int i= listaEnemigos.size()-1; i>=0; i--) {
+
             Enemigo enemigo = listaEnemigos.get(i);
 
-            enemigo.mover();
-
-            if(i==0 || i==3 || i==6 || i==7){
-
-                final int subindice=i;
-
-                if (brincosEnemigos[i]==false) {
-                    brincosEnemigos[i] = true;
-                    // Animar sprite central
-                    JumpModifier salto = new JumpModifier(1, enemigo.getX(), enemigo.getX(),
-                            enemigo.getY(), enemigo.getY(), -400);
-                    ParallelEntityModifier paralelo = new ParallelEntityModifier(salto) {
-                        @Override
-                        protected void onModifierFinished(IEntity pItem) {
-                            brincosEnemigos[subindice] = false;
-                            unregisterEntityModifier(this);
-                            super.onModifierFinished(pItem);
-                        }
-                    };
-                    enemigo.registerEntityModifier(paralelo);
-                }
-            }
-            else{
-                enemigo.mover();
-            }
-
-
             if (spritePersonaje.collidesWith(enemigo)) {
-                enemigo.detachSelf();
-                spriteVidas[2-vida].detachSelf();
-                vida--;
-                listaEnemigos.remove(enemigo);
-                admMusica.vibrar(200);
-                spritePersonaje.setSize(spritePersonaje.getWidth()-20,spritePersonaje.getHeight()-20);
-            }
 
-        }
-
-
-        if(spritePersonaje.collidesWith(spriteVida)){
-
-            spriteVida.detachSelf();
-
-            if(vida<2){
-
-                if(vida==0){
-                    spriteVidas[1]= cargarSprite(950, 750, vidas);
-                    attachChild(spriteVidas[1]);
-                    vida++;
+                if(cantidadVida -1<0){
+                    onBackKeyPressed();
                 }
-                else if(vida==1){
-                    spriteVidas[0]= cargarSprite(900, 750, vidas);
-                    attachChild(spriteVidas[0]);
-                    vida++;
+                else{
+                    enemigo.detachSelf();
+                    spriteVidas[2- cantidadVida].detachSelf();
+                    listaEnemigos.remove(enemigo);
+                    admMusica.vibrar(200);
+                    spritePersonaje.setSize(spritePersonaje.getWidth() - 20, spritePersonaje.getHeight() - 20);
+                    cantidadVida--;
                 }
             }
-            admMusica.vibrar(200);
         }
-
     }
 
     @Override
@@ -314,24 +253,30 @@ public class EscenaCazaJurasica extends EscenaBase {
 
                 if(juegoCorriendo){
 
-                    Log.i("estoy",spriteFondo.getX()+"");
+                    if(pValueX>0){
+                        personajeVolteandoDerecha=true;
+                    }
 
-                    if(spriteFondo.getX()>1070){
+                    else if(pValueX<0){
+                        personajeVolteandoDerecha=false;
+                    }
+
+
+                    if(spriteFondo.getX()>2000){
                         if(pValueX<0){
                         }
                         else{
                             pValueX = pValueX * (-1);
-                            float x = spriteFondo.getX() + 30 * pValueX;
+                            float x = spriteFondo.getX() + 25 * pValueX;
                             spriteFondo.setX(x);
                         }
                     }
 
                     else{
                         pValueX = pValueX * (-1);
-                        float x = spriteFondo.getX() + 30 * pValueX;
+                        float x = spriteFondo.getX() + 25 * pValueX;
                         spriteFondo.setX(x);
                     }
-
                 }
             }
 
@@ -343,23 +288,22 @@ public class EscenaCazaJurasica extends EscenaBase {
     private void posicionarEnemigos(){
 
         posicionesEnemigos= new float[10];
-        posicionesEnemigos[0]=0 ;
-        posicionesEnemigos[1]=-30 ;
-        posicionesEnemigos[2]=-80 ;
-        posicionesEnemigos[3]=1800 ;
-        posicionesEnemigos[4]=1900 ;
-        posicionesEnemigos[5]=2000 ;
-        posicionesEnemigos[6]=2600 ;
-        posicionesEnemigos[7]=3000 ;
-        posicionesEnemigos[8]=3400 ;
-        posicionesEnemigos[9]=4000 ;
+        posicionesEnemigos[0]=2000;
+        posicionesEnemigos[1]=2500;
+        posicionesEnemigos[2]=3000;
+        posicionesEnemigos[3]=3500;
+        posicionesEnemigos[4]=4000 ;
+        posicionesEnemigos[5]=4500 ;
+        posicionesEnemigos[6]=5000 ;
+        posicionesEnemigos[7]=5500 ;
+        posicionesEnemigos[8]=6000 ;
+        posicionesEnemigos[9]=7000 ;
 
 
         int cont;
         for( cont = 0; cont<posicionesEnemigos.length;cont++){
 
-            Enemigo spriteEnemigo = new Enemigo(posicionesEnemigos[cont], 200,regionEnemigo, actividadJuego.getVertexBufferObjectManager());
-
+            Enemigo spriteEnemigo = new Enemigo(posicionesEnemigos[cont], 150,regionEnemigo, actividadJuego.getVertexBufferObjectManager(),2);
             Enemigo nuevoEnemigo = spriteEnemigo;
             listaEnemigos.add(nuevoEnemigo);
             spriteFondo.attachChild(nuevoEnemigo);
@@ -408,8 +352,12 @@ public class EscenaCazaJurasica extends EscenaBase {
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 
                 if (juegoCorriendo) {
-                    //dispararProyectil();
+                    if(pSceneTouchEvent.isActionDown()){
 
+                        dispararProyectil();
+                        admMusica.vibrar(100);
+                        admMusica.reproducirMusicaBoton();
+                    }
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
@@ -418,15 +366,93 @@ public class EscenaCazaJurasica extends EscenaBase {
         attachChild(btnDisparar);
     }
 
+    private void actualizarProyectiles(float tiempo) {
 
-    /*
+        // Se visita cada proyectil dentro de la lista, se recorre con el índice
+        // porque se pueden borrar datos
+        for (int i = listaProyectiles.size() - 1; i>=0; i--) {
+            Laser proyectil = listaProyectiles.get(i);
+            proyectil.mover();
+
+            if (proyectil.getX() > ControlJuego.ANCHO_CAMARA) {
+                detachChild(proyectil);
+                listaProyectiles.remove(proyectil);
+                continue;
+            }
+            // Probar si colisionó con un enemigo
+            // Se visita cada proyectil dentro de la lista, se recorre con el índice
+            // porque se pueden borrar datos
+            for (int k = listaEnemigos.size() - 1; k >= 0; k--) {
+                Enemigo enemigo = listaEnemigos.get(k);
+                if (proyectil.collidesWith(enemigo)) {
+                    // Lo destruye
+                    crearVida(enemigo);
+                    enemigo.detachSelf();
+                    listaEnemigos.remove(enemigo);
+                    // desaparece el proyectil
+                    detachChild(proyectil);
+                    listaProyectiles.remove(proyectil);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void actualizarVidas(float tiempo) {
+
+        // Se visita cada proyectil dentro de la lista, se recorre con el índice
+        // porque se pueden borrar datos
+
+        for (int i = listaVidasEncontradas.size() - 1; i>=0; i--) {
+            Vida vida = listaVidasEncontradas.get(i);
+
+            if (vida.collidesWith(spritePersonaje)) {
+
+                if(cantidadVida<2){
+
+                    if(cantidadVida==0){
+                        spriteVidas[1]= cargarSprite(1050, 780, vidas);
+                        attachChild(spriteVidas[1]);
+                        cantidadVida++;
+
+                    }
+                    else if(cantidadVida==1){
+                        spriteVidas[0]= cargarSprite(1000, 780, vidas);
+                        attachChild(spriteVidas[0]);
+                        cantidadVida++;
+                    }
+                }
+
+                vida.detachSelf();
+                listaVidasEncontradas.remove(vida);
+                break;
+            }
+
+        }
+    }
+
+
     private void dispararProyectil() {
         // Crearlo
-        Sprite spriteProyectil = cargarSprite(spritePersonaje.getX(), spritePersonaje.getY(), regionProyectil);
+        Laser spriteProyectil = new Laser(spritePersonaje.getX(),  spritePersonaje.getY(),regionProyectil, actividadJuego.getVertexBufferObjectManager(),personajeVolteandoDerecha);
+
+        if(personajeVolteandoDerecha==false){
+            spriteProyectil.setRotation(-180);
+        }
         attachChild(spriteProyectil);   // Lo agrega a la escena
         listaProyectiles.add(spriteProyectil);  // Lo agrega a la lista
     }
-    */
+
+    private void crearVida(Enemigo enemigoDestruido) {
+
+        // Crearlo
+        Vida spriteVida = new Vida(enemigoDestruido.getX(), 200,regionVida, actividadJuego.getVertexBufferObjectManager());
+        spriteFondo.attachChild(spriteVida);
+        listaVidasEncontradas.add(spriteVida);  // Lo agrega a la lista
+    }
+
+
+
 
 
 

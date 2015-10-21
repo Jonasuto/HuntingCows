@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.KeyEvent;
 import android.widget.Toast;
+
+import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -29,6 +31,8 @@ public class ControlJuego extends SimpleBaseGameActivity
     public static final int ALTO_CAMARA = 800;
     // La cámara
     protected Camera camara;
+
+    public Engine ingeniero = this.getEngine();
     // El administrador de escenas (se encarga de cambiar las escenas)
 
     private mx.itesm.rmroman.proyectobasegpo01.AdministradorEscenas admEscenas;

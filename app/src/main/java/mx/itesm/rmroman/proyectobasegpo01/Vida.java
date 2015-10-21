@@ -12,10 +12,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class Vida extends Sprite {
 
-    private boolean limiteIzquierda=false;
-    MoveByModifier movimiento;
-
-
     public Vida(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager) {
         super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
     }

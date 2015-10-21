@@ -19,19 +19,41 @@ import java.util.Random;
 
 public class Enemigo extends Sprite {
 
+
+    /*
+
+    comportamiento
+
+    0= empieza caminanado a la izquierda
+    1= a la derecha
+    2= se queda parado brincando
+    3= brinca con giro
+
+     */
     private int limiteDerecho;
     private boolean personajeSaltando = false;
     private int pasos=0;
     private boolean voltear=true;
+    private Random regaloAleatorio;
+    private int regalo=0;
 
-    private Random entero = new Random();
-
-
-    public Enemigo(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager) {
+    public Enemigo(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager,int comportamiento) {
         super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-        limiteDerecho=entero.nextInt(3);
+        limiteDerecho=comportamiento;
+        regalo=0;
+
     }
 
+
+    public void setLimiteDerecho(int decision){
+
+        this.limiteDerecho=decision;
+    }
+
+    public int getRegalo(){
+
+        return 0;
+    }
 
     public void mover(){
         if(limiteDerecho==0){
@@ -64,6 +86,13 @@ public class Enemigo extends Sprite {
                 this.resetRotationCenter();
                 voltear=true;
             }
+        }
+        else if(limiteDerecho==2){
+
+        }
+
+        else{
+
         }
 
     }
