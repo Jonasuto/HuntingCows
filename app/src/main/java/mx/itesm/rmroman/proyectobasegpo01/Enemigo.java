@@ -31,6 +31,7 @@ public class Enemigo extends Sprite {
     private boolean voltear=true;
     private int pasos=0;
     private boolean brinco;
+    private boolean rotacion;
 
     private boolean brincando=false;
 
@@ -39,14 +40,19 @@ public class Enemigo extends Sprite {
     private Random regaloAleatorio=new Random();
     private int regalo=0;
 
-    public Enemigo(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager,int comportamiento,boolean brinco) {
+    public Enemigo(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager,int comportamiento,boolean brinco,boolean rotacion) {
         super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
         limiteDerecho=comportamiento;
         regalo=regaloAleatorio.nextInt(5);
         this.brinco=brinco;
+        this.rotacion=rotacion;
+
 
     }
 
+    public boolean getRotacion(){
+        return rotacion;
+    }
 
     public void setLimiteDerecho(int decision){
 

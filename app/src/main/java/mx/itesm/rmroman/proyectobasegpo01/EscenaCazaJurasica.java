@@ -28,6 +28,7 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionControlSalto;
     private ITextureRegion regionBase;
     private ITextureRegion regionNave;
+    private ITextureRegion regionHoyoNegro;
 
     private float[] posicionesEnemigos;
 
@@ -63,6 +64,8 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     // Sprite para el fondo
     private Sprite spriteFondo;
+    private Sprite spriteFondo2;
+    private Sprite spriteHoyoNegro;
     private Sprite spriteFondoPausa;
 
     private ButtonSprite btnSaltar;
@@ -94,7 +97,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         // Pausa
         regionBtnPausa = cargarImagen("Imagenes/btnPausa.png");
         regionPausa = cargarImagen("Imagenes/pausa.png");
-
+        regionHoyoNegro= cargarImagen("Imagenes/hoyoNegro.png");
         regionProyectil = cargarImagen("Imagenes/laser.png");
 
     }
@@ -112,6 +115,9 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2 , regionFondo);
         attachChild(spriteFondo);
 
+        spriteFondo2 = cargarSprite(7000, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo.attachChild(spriteFondo2);
+
         spriteVidas= new Sprite[3];
 
         spriteNave=cargarSprite(200, 270, regionNave);
@@ -125,6 +131,9 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         spriteVidas[2]= cargarSprite(1100, 780, vidas);
         attachChild(spriteVidas[2]);
+
+        spriteHoyoNegro= cargarSprite(8000, 400, regionHoyoNegro);
+        spriteFondo.attachChild(spriteHoyoNegro);
 
         spritePersonaje = new Jugador(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/4-100,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonaje.animate(200);
@@ -199,6 +208,10 @@ public class EscenaCazaJurasica extends EscenaBase {
         Log.i("fondo", spriteFondo.getX() + "");
 
 
+        if(spritePersonaje.collidesWith(spriteHoyoNegro)){
+            onBackKeyPressed();
+        }
+
         actualizarProyectiles(pSecondsElapsed);
 
         actualizarVidas(pSecondsElapsed);
@@ -209,22 +222,45 @@ public class EscenaCazaJurasica extends EscenaBase {
 
 
             if(enemigo.getBrinco()==true){
-                if (enemigo.getBrincando()==false) {
-                    enemigo.setBrincando(true);
-                    // Animar sprite central
-                    JumpModifier salto = new JumpModifier(1, enemigo.getX(), enemigo.getX(),
-                            enemigo.getY(), enemigo.getY(), -400);
-                    RotationModifier rotacion = new RotationModifier(1, 360, 0);
-                    ParallelEntityModifier paralelo = new ParallelEntityModifier(salto, rotacion) {
-                        @Override
-                        protected void onModifierFinished(IEntity pItem) {
-                            enemigo.setBrincando(false);
-                            unregisterEntityModifier(this);
-                            super.onModifierFinished(pItem);
-                        }
-                    };
-                    enemigo.registerEntityModifier(paralelo);
+
+                if(enemigo.getRotacion()){
+                    if (enemigo.getBrincando()==false) {
+                        enemigo.setBrincando(true);
+                        // Animar sprite central
+                        JumpModifier salto = new JumpModifier(1, enemigo.getX(), enemigo.getX(),
+                                enemigo.getY(), enemigo.getY(), -400);
+                        RotationModifier rotacion = new RotationModifier(1, 360, 0);
+                        ParallelEntityModifier paralelo = new ParallelEntityModifier(salto, rotacion) {
+                            @Override
+                            protected void onModifierFinished(IEntity pItem) {
+                                enemigo.setBrincando(false);
+                                unregisterEntityModifier(this);
+                                super.onModifierFinished(pItem);
+                            }
+                        };
+                        enemigo.registerEntityModifier(paralelo);
+                    }
                 }
+
+
+                else{
+                    if (enemigo.getBrincando()==false) {
+                        enemigo.setBrincando(true);
+                        // Animar sprite central
+                        JumpModifier salto = new JumpModifier(1, enemigo.getX(), enemigo.getX(),
+                                enemigo.getY(), enemigo.getY(), -400);
+                        ParallelEntityModifier paralelo = new ParallelEntityModifier(salto) {
+                            @Override
+                            protected void onModifierFinished(IEntity pItem) {
+                                enemigo.setBrincando(false);
+                                unregisterEntityModifier(this);
+                                super.onModifierFinished(pItem);
+                            }
+                        };
+                        enemigo.registerEntityModifier(paralelo);
+                    }
+                }
+
             }
 
             else{
@@ -330,8 +366,9 @@ public class EscenaCazaJurasica extends EscenaBase {
 
             boolean brinca = true;
             int camina =1;
+            boolean rotacion=false;
 
-            Enemigo spriteEnemigo = new Enemigo(posicionesEnemigos[cont], 150,regionEnemigo, actividadJuego.getVertexBufferObjectManager(),camina,brinca);
+            Enemigo spriteEnemigo = new Enemigo(posicionesEnemigos[cont], 150,regionEnemigo, actividadJuego.getVertexBufferObjectManager(),camina,brinca,rotacion);
             Enemigo nuevoEnemigo = spriteEnemigo;
             listaEnemigos.add(nuevoEnemigo);
             spriteFondo.attachChild(nuevoEnemigo);
