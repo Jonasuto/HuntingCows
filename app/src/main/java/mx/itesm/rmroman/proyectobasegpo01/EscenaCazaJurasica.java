@@ -196,7 +196,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         }
 
 
-        Log.i("vidas",cantidadVida+"");
+        Log.i("vidas", cantidadVida + "");
 
 
         actualizarProyectiles(pSecondsElapsed);
@@ -206,6 +206,8 @@ public class EscenaCazaJurasica extends EscenaBase {
         for (int i= listaEnemigos.size()-1; i>=0; i--) {
 
             Enemigo enemigo = listaEnemigos.get(i);
+
+            enemigo.mover(pSecondsElapsed);
 
             if (spritePersonaje.collidesWith(enemigo)) {
 
@@ -288,11 +290,11 @@ public class EscenaCazaJurasica extends EscenaBase {
     private void posicionarEnemigos(){
 
         posicionesEnemigos= new float[10];
-        posicionesEnemigos[0]=2000;
-        posicionesEnemigos[1]=2500;
-        posicionesEnemigos[2]=3000;
-        posicionesEnemigos[3]=3500;
-        posicionesEnemigos[4]=4000 ;
+        posicionesEnemigos[0]=2500;
+        posicionesEnemigos[1]=3000;
+        posicionesEnemigos[2]=3500;
+        posicionesEnemigos[3]=4000;
+        posicionesEnemigos[4]=4250 ;
         posicionesEnemigos[5]=4500 ;
         posicionesEnemigos[6]=5000 ;
         posicionesEnemigos[7]=5500 ;
@@ -386,7 +388,11 @@ public class EscenaCazaJurasica extends EscenaBase {
                 Enemigo enemigo = listaEnemigos.get(k);
                 if (proyectil.collidesWith(enemigo)) {
                     // Lo destruye
-                    crearVida(enemigo);
+
+                    if(enemigo.getRegalo()==1 || enemigo.getRegalo()==3){
+                        crearVida(enemigo);
+                    }
+
                     enemigo.detachSelf();
                     listaEnemigos.remove(enemigo);
                     // desaparece el proyectil
@@ -414,11 +420,14 @@ public class EscenaCazaJurasica extends EscenaBase {
                         spriteVidas[1]= cargarSprite(1050, 780, vidas);
                         attachChild(spriteVidas[1]);
                         cantidadVida++;
+                        spritePersonaje.setSize(spritePersonaje.getWidth() + 20, spritePersonaje.getHeight() + 20);
+
 
                     }
                     else if(cantidadVida==1){
                         spriteVidas[0]= cargarSprite(1000, 780, vidas);
                         attachChild(spriteVidas[0]);
+                        spritePersonaje.setSize(spritePersonaje.getWidth() + 20, spritePersonaje.getHeight() + 20);
                         cantidadVida++;
                     }
                 }
