@@ -27,15 +27,12 @@ public class Enemigo extends Sprite {
 
 
     private int limiteDerecho;
-    private boolean vaPaBajo =false;
     private boolean voltear=true;
     private int pasos=0;
     private boolean brinco;
     private boolean rotacion;
 
     private boolean brincando=false;
-
-    private int alturaBrinco=0;
 
     private Random regaloAleatorio=new Random();
     private int regalo=0;
@@ -84,7 +81,7 @@ public class Enemigo extends Sprite {
                 voltear=false;
             }
 
-            this.setX(this.getX()-3);
+            this.setX(this.getX()-5);
 
             pasos--;
             if(pasos<-40){
@@ -100,31 +97,12 @@ public class Enemigo extends Sprite {
                 voltear=false;
             }
 
-            this.setX(this.getX()+3);
+            this.setX(this.getX()+5);
             pasos++;
             if(pasos>40){
                 limiteDerecho=0;
                 this.resetRotationCenter();
                 voltear=true;
-            }
-        }
-        else if(limiteDerecho==2){
-
-            if(vaPaBajo ==false){
-                this.setY(this.getY()+12);
-                alturaBrinco++;
-
-                if(alturaBrinco>80){
-                    vaPaBajo =true;
-                }
-            }
-            else{
-                this.setY(this.getY()-12);
-                alturaBrinco--;
-
-                if(alturaBrinco<=0){
-                    vaPaBajo =false;
-                }
             }
         }
 

@@ -16,6 +16,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
@@ -29,6 +30,9 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionBase;
     private ITextureRegion regionNave;
     private ITextureRegion regionHoyoNegro;
+    private ITextureRegion regionOvni;
+
+    private Random elQueSigue;
 
     private float[] posicionesEnemigos;
 
@@ -41,6 +45,13 @@ public class EscenaCazaJurasica extends EscenaBase {
     private Sprite[] spriteVidas;
 
     private Sprite spriteNave;
+
+    private Sprite spriteOvni;
+    private Sprite spriteOvni2;
+    private Sprite spriteOvni3;
+    private Sprite spriteOvni4;
+    private Sprite spriteOvni5;
+
 
     private boolean personajeSaltando = false;
 
@@ -65,6 +76,7 @@ public class EscenaCazaJurasica extends EscenaBase {
     // Sprite para el fondo
     private Sprite spriteFondo;
     private Sprite spriteFondo2;
+    private Sprite spriteFondo3;
     private Sprite spriteHoyoNegro;
     private Sprite spriteFondoPausa;
 
@@ -84,6 +96,9 @@ public class EscenaCazaJurasica extends EscenaBase {
     @Override
     public void cargarRecursos() {
 
+
+        elQueSigue=new Random();
+
         cantidadVida =2;
         vidas=cargarImagen("Imagenes/corazon.png");
         regionNave=cargarImagen("Imagenes/nave.png");
@@ -100,6 +115,8 @@ public class EscenaCazaJurasica extends EscenaBase {
         regionHoyoNegro= cargarImagen("Imagenes/hoyoNegro.png");
         regionProyectil = cargarImagen("Imagenes/laser.png");
 
+
+        regionOvni= cargarImagen("Imagenes/naveVaca.png");
     }
 
     @Override
@@ -115,8 +132,33 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2 , regionFondo);
         attachChild(spriteFondo);
 
-        spriteFondo2 = cargarSprite(7000, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo2 = cargarSprite(5970, ControlJuego.ALTO_CAMARA/2 , regionFondo);
         spriteFondo.attachChild(spriteFondo2);
+
+        spriteFondo3 = cargarSprite(8300, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo.attachChild(spriteFondo3);
+
+        spriteOvni=cargarSprite(200, 700, regionOvni);
+        spriteOvni.setSize(spriteOvni.getWidth() - 30, spriteOvni.getHeight() - 30);
+        spriteFondo.attachChild(spriteOvni);
+
+        spriteOvni2=cargarSprite(1000, 700, regionOvni);
+        spriteOvni2.setSize(spriteOvni2.getWidth() - 30, spriteOvni2.getHeight() - 30);
+        spriteOvni2.setRotation(25);
+        spriteFondo.attachChild(spriteOvni2);
+
+        spriteOvni3=cargarSprite(1900, 700, regionOvni);
+        spriteOvni3.setSize(spriteOvni3.getWidth() - 30, spriteOvni3.getHeight() - 30);
+        spriteFondo.attachChild(spriteOvni3);
+
+        spriteOvni4=cargarSprite(2300, 700, regionOvni);
+        spriteOvni4.setSize(spriteOvni4.getWidth() - 30, spriteOvni4.getHeight() - 30);
+        spriteOvni4.setRotation(-25);
+        spriteFondo.attachChild(spriteOvni4);
+
+        spriteOvni5=cargarSprite(2900, 700, regionOvni);
+        spriteOvni5.setSize(spriteOvni5.getWidth() - 30, spriteOvni5.getHeight() - 30);
+        spriteFondo.attachChild(spriteOvni5);
 
         spriteVidas= new Sprite[3];
 
@@ -132,7 +174,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteVidas[2]= cargarSprite(1100, 780, vidas);
         attachChild(spriteVidas[2]);
 
-        spriteHoyoNegro= cargarSprite(8000, 400, regionHoyoNegro);
+        spriteHoyoNegro= cargarSprite(9500, 400, regionHoyoNegro);
         spriteFondo.attachChild(spriteHoyoNegro);
 
         spritePersonaje = new Jugador(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/4-100,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
@@ -332,6 +374,16 @@ public class EscenaCazaJurasica extends EscenaBase {
                         }
                     }
 
+                    else if(spriteFondo.getX()<-7013){
+                        if(pValueX>0){
+                        }
+                        else{
+                            pValueX = pValueX * (-1);
+                            float x = spriteFondo.getX() + 25 * pValueX;
+                            spriteFondo.setX(x);
+                        }
+                    }
+
                     else{
                         pValueX = pValueX * (-1);
                         float x = spriteFondo.getX() + 25 * pValueX;
@@ -364,9 +416,9 @@ public class EscenaCazaJurasica extends EscenaBase {
         for( cont = 0; cont<posicionesEnemigos.length;cont++){
 
 
-            boolean brinca = true;
-            int camina =1;
-            boolean rotacion=false;
+            boolean brinca = elQueSigue.nextBoolean();
+            int camina =elQueSigue.nextInt(3);
+            boolean rotacion=elQueSigue.nextBoolean();
 
             Enemigo spriteEnemigo = new Enemigo(posicionesEnemigos[cont], 150,regionEnemigo, actividadJuego.getVertexBufferObjectManager(),camina,brinca,rotacion);
             Enemigo nuevoEnemigo = spriteEnemigo;
