@@ -13,5 +13,6 @@ public enum TipoEscena {
     ESCENA_CAZA_JURASICA,
     ESCENA_COMIC,
     ESCENA_TRANSICION,
+    ESCENA_CARGANDO,
 
 }

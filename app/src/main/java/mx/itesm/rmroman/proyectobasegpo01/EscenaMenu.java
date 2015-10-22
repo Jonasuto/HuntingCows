@@ -79,6 +79,7 @@ public class EscenaMenu extends EscenaBase
         // Mostrar un recuadro atrás del menú
         // Mostrar opciones de menú
 
+
         admMusica.cargarMusica(0);
         admMusica.cargarMusicaBoton();
 
@@ -174,6 +175,12 @@ public class EscenaMenu extends EscenaBase
                     case OPCION_MUSICA:
                         // Mostrar la escena de AcercaDe
                         admMusica.reproduceio();
+                        if(admMusica.getMusicaEncendida()==true){
+                            admMusica.setMusicaEncendida(false);
+                        }
+                        else{
+                            admMusica.setMusicaEncendida(true);
+                        }
                         break;
 
                     case OPCION_SONIDO:

@@ -215,11 +215,8 @@ public class EscenaCazaJurasica extends EscenaBase {
     @Override
     public void onBackKeyPressed() {
         // Regresar al menú principal
-        admEscenas.liberarEscenaCazaJurasica();
-        admEscenas.crearEscenaMenu();
-        admEscenas.setEscena(mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_MENU);
+        pausarJuego();
     }
-
 
     private void pausarJuego() {
         if (juegoCorriendo) {

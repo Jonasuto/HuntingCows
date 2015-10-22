@@ -1,6 +1,7 @@
 package mx.itesm.rmroman.proyectobasegpo01;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.andengine.audio.music.Music;
@@ -23,6 +24,7 @@ public class AdministradorMusica {
     private Sound musicaBoton;
     private Music musicaTodo;
 
+    private boolean musicaEncendida=true;
 
     public int reproducesiono=1;
     public int nummusica=0;
@@ -41,41 +43,61 @@ public class AdministradorMusica {
 
     public void cargarMusica(int num){
 
-        if(num==0){
+
+        if(musicaEncendida==true) {
+
+            if (num == 0) {
+                try {
+                    musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
+                            actividadJuego, "Musica/MenuTheme/theme3.mp3");
+                } catch (IOException e) {
+                    Log.i("cargarSonidos", "No se puede cargar demo.ogg");
+                }
+
+                musicaTodo.setLooping(false);
+
+                reproducirMusica();
+                reproducesiono = 1;
+            } else if (num == 1) {
+                try {
+                    musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
+                            actividadJuego, "Musica/MenuTheme/acercaDeTheme.wav");
+                } catch (IOException e) {
+                    Log.i("cargarSonidos", "No se puede cargar demo.ogg");
+                }
+                musicaTodo.setLooping(false);
+                reproducirMusica();
+            } else if (num == 2) {
+                try {
+                    musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
+                            actividadJuego, "Musica/themeNivel1.wav");
+                } catch (IOException e) {
+                    Log.i("cargarSonidos", "No se puede cargar demo.ogg");
+                }
+                musicaTodo.setLooping(false);
+                reproducirMusica();
+            }
+        }
+
+        else{
             try {
                 musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Musica/MenuTheme/theme3.mp3");
+                        actividadJuego, "Musica/silencio.wav");
             } catch (IOException e) {
                 Log.i("cargarSonidos", "No se puede cargar demo.ogg");
             }
-
-            musicaTodo.setLooping(true);
-
-            reproducirMusica();
-            reproducesiono = 1;
-        }
-
-        else if(num==1){
-            try {
-                musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Musica/MenuTheme/acercaDeTheme.wav");
-            } catch (IOException e) {
-                Log.i("cargarSonidos", "No se puede cargar demo.ogg");
-            }
-            musicaTodo.setLooping(true);
+            musicaTodo.setLooping(false);
             reproducirMusica();
         }
-        else if(num==2){
-            try {
-                musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Musica/themeNivel1.wav");
-            } catch (IOException e) {
-                Log.i("cargarSonidos", "No se puede cargar demo.ogg");
-            }
-            musicaTodo.setLooping(true);
-            reproducirMusica();
-        }
+    }
 
+
+    public void setMusicaEncendida(boolean musicaEncendida){
+        this.musicaEncendida=musicaEncendida;
+    }
+
+    public boolean getMusicaEncendida(){
+        return musicaEncendida;
     }
 
     public void cargarMusicaBoton(){
@@ -139,7 +161,7 @@ public class AdministradorMusica {
                 Log.i("cargarSonidos", "No se puede cargar demo.ogg");
             }
 
-            musicaTodo.setLooping(true);
+            musicaTodo.setLooping(false);
 
             reproducirMusica();
             reproducesiono=1;
@@ -155,15 +177,14 @@ public class AdministradorMusica {
                 Log.i("cargarSonidos", "No se puede cargar demo.ogg");
             }
 
-            musicaTodo.setLooping(true);
+            musicaTodo.setLooping(false);
 
             reproducirMusica();
             reproducesiono=1;
             nummusica=0;
         }
-
-
     }
+
 
     public void liberarMusica(){
 

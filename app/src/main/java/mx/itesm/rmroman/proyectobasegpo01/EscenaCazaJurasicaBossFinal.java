@@ -6,7 +6,7 @@ package mx.itesm.rmroman.proyectobasegpo01;
 public class EscenaCazaJurasicaBossFinal extends EscenaBase{
     @Override
     public void cargarRecursos() {
-        
+
     }
 
     @Override
