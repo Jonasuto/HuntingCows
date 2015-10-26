@@ -177,7 +177,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteHoyoNegro= cargarSprite(9500, 400, regionHoyoNegro);
         spriteFondo.attachChild(spriteHoyoNegro);
 
-        spritePersonaje = new Jugador(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/4-100,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
+        spritePersonaje = new Jugador((ControlJuego.ANCHO_CAMARA/2)-400, ControlJuego.ALTO_CAMARA/4-100,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonaje.animate(200);
         attachChild(spritePersonaje);
 
@@ -215,7 +215,9 @@ public class EscenaCazaJurasica extends EscenaBase {
     @Override
     public void onBackKeyPressed() {
         // Regresar al menú principal
-        pausarJuego();
+        admEscenas.crearEscenaMenu();
+        admEscenas.setEscena(TipoEscena.ESCENA_MENU);
+        admEscenas.liberarEscenaCazaJurasica();
     }
 
     private void pausarJuego() {
@@ -223,7 +225,9 @@ public class EscenaCazaJurasica extends EscenaBase {
             escenaPausa.setChildScene(control);
             setChildScene(escenaPausa,false,true,false);
             juegoCorriendo = false;
-        } else {
+        }
+
+        else {
             clearChildScene();
             EscenaCazaJurasica.this.setChildScene(control);
             juegoCorriendo = true;
@@ -243,12 +247,10 @@ public class EscenaCazaJurasica extends EscenaBase {
             return;
         }
 
-
-        Log.i("fondo", spriteFondo.getX() + "");
-
-
         if(spritePersonaje.collidesWith(spriteHoyoNegro)){
-            onBackKeyPressed();
+            admEscenas.crearEscenaCazaJurasicaBossFinal();
+            admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_BOSS_FINAL);
+            admEscenas.liberarEscenaCazaJurasica();
         }
 
         actualizarProyectiles(pSecondsElapsed);

@@ -23,7 +23,10 @@ public class AdministradorEscenas {
     private mx.itesm.rmroman.proyectobasegpo01.EscenaBase escenaCazaJurasica;
     private mx.itesm.rmroman.proyectobasegpo01.EscenaBase escenaComic;
     private EscenaBase escenaCargando;
-
+    private EscenaBase escenaAjustes;
+    private EscenaBase escenaCazajurasicaBossFinal;
+    private EscenaBase escenaIntroCazaJurasica;
+    private EscenaBase escenaHistoriaCazaJurasica;
 
 
     // El tipo de escena que se está mostrando
@@ -97,6 +100,18 @@ public class AdministradorEscenas {
             case ESCENA_CARGANDO:
                 setEscenaBase(escenaCargando);
                 break;
+            case ESCENA_AJUSTES:
+                setEscenaBase(escenaAjustes);
+                break;
+            case ESCENA_INTRO_CAZA_JURASICA:
+                setEscenaBase(escenaIntroCazaJurasica);
+                break;
+            case ESCENA_CAZA_JURASICA_BOSS_FINAL:
+                setEscenaBase(escenaCazajurasicaBossFinal);
+                break;
+            case ESCENA_HISTORIA_CAZA_JURASICA:
+                setEscenaBase(escenaHistoriaCazaJurasica);
+                break;
         }
     }
 
@@ -110,6 +125,39 @@ public class AdministradorEscenas {
     public void liberarEscenaSplash() {
         escenaSplash.liberarEscena();
         escenaSplash = null;
+    }
+
+    public void crearEscenaHistoriaCazaJurasica() {
+        // Carga los recursos
+        escenaHistoriaCazaJurasica = new mx.itesm.rmroman.proyectobasegpo01.EscenaHistoriaCazaJurasica();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaHistoriaCazaJurasica() {
+        escenaHistoriaCazaJurasica.liberarEscena();
+        escenaHistoriaCazaJurasica = null;
+    }
+
+    public void crearEscenaCazaJurasicaBossFinal() {
+        // Carga los recursos
+        escenaCazajurasicaBossFinal = new mx.itesm.rmroman.proyectobasegpo01.EscenaCazaJurasicaBossFinal();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaCazaJurasicaBossFinal() {
+        escenaCazajurasicaBossFinal.liberarEscena();
+        escenaCazajurasicaBossFinal = null;
+    }
+
+    public void crearEscenaIntroCazaJurasica() {
+        // Carga los recursos
+        escenaIntroCazaJurasica = new mx.itesm.rmroman.proyectobasegpo01.EscenaIntroCazaJurasica();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaIntroCazaJurasica() {
+        escenaIntroCazaJurasica.liberarEscena();
+        escenaIntroCazaJurasica = null;
     }
 
     public void crearEscenaSplashHuntingCows() {
@@ -195,6 +243,17 @@ public class AdministradorEscenas {
     public void liberarEscenaCargando() {
         escenaCargando.liberarEscena();
         escenaCargando = null;
+    }
+
+    public void crearEscenaAjustes() {
+        // Carga los recursos
+        escenaAjustes = new EscenaAjustes();
+    }
+
+    //*** Libera la escena de cargando
+    public void liberarEscenaAjustes() {
+        escenaAjustes.liberarEscena();
+        escenaAjustes = null;
     }
 
 

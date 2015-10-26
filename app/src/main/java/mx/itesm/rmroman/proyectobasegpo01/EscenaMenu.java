@@ -173,19 +173,14 @@ public class EscenaMenu extends EscenaBase
                         break;
 
                     case OPCION_MUSICA:
-                        // Mostrar la escena de AcercaDe
-                        admMusica.reproduceio();
-                        if(admMusica.getMusicaEncendida()==true){
-                            admMusica.setMusicaEncendida(false);
-                        }
-                        else{
-                            admMusica.setMusicaEncendida(true);
-                        }
+                        admEscenas.liberarEscenaMenu();
+                        admEscenas.crearEscenaAjustes();
+                        admEscenas.setEscena(TipoEscena.ESCENA_AJUSTES);
+
                         break;
 
                     case OPCION_SONIDO:
                         // Mostrar la escena de AcercaDe
-                        admMusica.setMusicaTodo();
                         break;
 
                     case OPCION_BOTON_ROJO:

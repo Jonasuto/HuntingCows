@@ -27,8 +27,6 @@ public class AdministradorMusica {
     private boolean musicaEncendida=true;
 
     public int reproducesiono=1;
-    public int nummusica=0;
-
 
 
     public static AdministradorMusica getInstance() {
@@ -49,37 +47,41 @@ public class AdministradorMusica {
             if (num == 0) {
                 try {
                     musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                            actividadJuego, "Musica/MenuTheme/theme3.mp3");
+                            actividadJuego, "Musica/MenuTheme/theme.wav");
                 } catch (IOException e) {
                     Log.i("cargarSonidos", "No se puede cargar demo.ogg");
                 }
 
-                musicaTodo.setLooping(false);
+                musicaTodo.setLooping(true);
 
                 reproducirMusica();
                 reproducesiono = 1;
-            } else if (num == 1) {
+            }
+
+            else if (num == 1) {
                 try {
                     musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
                             actividadJuego, "Musica/MenuTheme/acercaDeTheme.wav");
                 } catch (IOException e) {
                     Log.i("cargarSonidos", "No se puede cargar demo.ogg");
                 }
-                musicaTodo.setLooping(false);
+                musicaTodo.setLooping(true);
                 reproducirMusica();
-            } else if (num == 2) {
+            }
+
+            else if (num == 2) {
                 try {
                     musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
                             actividadJuego, "Musica/themeNivel1.wav");
                 } catch (IOException e) {
                     Log.i("cargarSonidos", "No se puede cargar demo.ogg");
                 }
-                musicaTodo.setLooping(false);
+                musicaTodo.setLooping(true);
                 reproducirMusica();
             }
         }
 
-        else{
+        else {
             try {
                 musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
                         actividadJuego, "Musica/silencio.wav");
@@ -92,8 +94,9 @@ public class AdministradorMusica {
     }
 
 
-    public void setMusicaEncendida(boolean musicaEncendida){
+    public void setMusicaEncendida(boolean musicaEncendida,int NumEscena){
         this.musicaEncendida=musicaEncendida;
+        cargarMusica(NumEscena);
     }
 
     public boolean getMusicaEncendida(){
@@ -127,7 +130,9 @@ public class AdministradorMusica {
 
     public void reproducirMusicaBoton(){
 
-        musicaBoton.play();
+        if(musicaEncendida==true) {
+            musicaBoton.play();
+        }
     }
 
     public void reproduceio(){
@@ -142,54 +147,8 @@ public class AdministradorMusica {
         }
     }
 
-
-    public Music getMusicaMenu() {
-
-        return musicaTodo;
-    }
-
-    public void setMusicaTodo() {
-
-        musicaTodo.release();
-
-        if(nummusica==0){
-            try {
-                musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Musica/MenuTheme/theme.wav");
-            }
-            catch (IOException e) {
-                Log.i("cargarSonidos", "No se puede cargar demo.ogg");
-            }
-
-            musicaTodo.setLooping(false);
-
-            reproducirMusica();
-            reproducesiono=1;
-            nummusica=1;
-        }
-
-        else{
-            try {
-                musicaTodo = MusicFactory.createMusicFromAsset(engine.getMusicManager(),
-                        actividadJuego, "Musica/MenuTheme/theme3.mp3");
-            }
-            catch (IOException e) {
-                Log.i("cargarSonidos", "No se puede cargar demo.ogg");
-            }
-
-            musicaTodo.setLooping(false);
-
-            reproducirMusica();
-            reproducesiono=1;
-            nummusica=0;
-        }
-    }
-
-
     public void liberarMusica(){
 
         musicaTodo.release();
     }
-
-
 }

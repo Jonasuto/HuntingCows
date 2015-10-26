@@ -66,8 +66,6 @@ public class EscenaSplashHuntingCows extends EscenaBase {
         attachChild(spriteNaveVaca2);
 
         admMusica.cargarMusica(0);
-        admMusica.setMusicaTodo();
-
 
         Sprite spritePress = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-200,
                 regionPress, actividadJuego.getVertexBufferObjectManager()) {

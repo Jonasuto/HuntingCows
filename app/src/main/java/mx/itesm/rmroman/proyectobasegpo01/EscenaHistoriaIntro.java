@@ -121,8 +121,8 @@ public class EscenaHistoriaIntro extends EscenaBase
                         }
                         else{
                             admEscenas.liberarEscenaHistoriaIntro();
-                            admEscenas.crearEscenaCazaJurasica();
-                            admEscenas.setEscena(mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_CAZA_JURASICA);
+                            admEscenas.crearEscenaIntroCazaJurasica();
+                            admEscenas.setEscena(TipoEscena.ESCENA_INTRO_CAZA_JURASICA);
                         }
 
 
@@ -143,8 +143,8 @@ public class EscenaHistoriaIntro extends EscenaBase
                     case OPCION_FINAL:
 
                         admEscenas.liberarEscenaHistoriaIntro();
-                        admEscenas.crearEscenaCazaJurasica();
-                        admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA);
+                        admEscenas.crearEscenaIntroCazaJurasica();
+                        admEscenas.setEscena(TipoEscena.ESCENA_INTRO_CAZA_JURASICA);
 
                         return true;
 

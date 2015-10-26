@@ -81,7 +81,7 @@ public class Enemigo extends Sprite {
                 voltear=false;
             }
 
-            this.setX(this.getX()-5);
+            this.setX(this.getX()-8);
 
             pasos--;
             if(pasos<-40){
@@ -97,7 +97,7 @@ public class Enemigo extends Sprite {
                 voltear=false;
             }
 
-            this.setX(this.getX()+5);
+            this.setX(this.getX()+8);
             pasos++;
             if(pasos>40){
                 limiteDerecho=0;
