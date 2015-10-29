@@ -1,7 +1,5 @@
 package mx.itesm.rmroman.proyectobasegpo01;
 
-import android.util.Log;
-
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.entity.IEntity;
@@ -91,19 +89,19 @@ public class EscenaCazaJurasicaBossFinal extends EscenaBase {
 
         elQueSigue=new Random();
         cantidadVida =2;
-        vidas=cargarImagen("Imagenes/corazon.png");
-        regionFondo = cargarImagen("Imagenes/Niveles/fondo2Boss.jpg");
-        regionFondoPausa = cargarImagen("Imagenes/logoHuntingCows.png");
-        regionBase=cargarImagen("Imagenes/baseJoystick.png");
-        regionControlSalto =cargarImagen("Imagenes/joystick.png");
-        regionEnemigo = cargarImagen("Imagenes/vacaDinosaurio.png");
-        regionVida = cargarImagen("Imagenes/corazon.png");
-        regionPersonajeAnimado = cargarImagenMosaico("Imagenes/kiki.png", 590, 138, 1, 4);
+        vidas=cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
+        regionFondo = cargarImagen("Imagenes/Niveles/CazaJurasica/fondos/fondo2Boss.jpg");
+        regionFondoPausa = cargarImagen("Imagenes/Logos/logoHuntingCows.png");
+        regionBase=cargarImagen("Imagenes/Roman/baseJoystick.png");
+        regionControlSalto =cargarImagen("Imagenes/Roman/joystick.png");
+        regionEnemigo = cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/vacaDinosaurio.png");
+        regionVida = cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
+        regionPersonajeAnimado = cargarImagenMosaico("Imagenes/Roman/kiki.png", 590, 138, 1, 4);
         // Pausa
-        regionBtnPausa = cargarImagen("Imagenes/btnPausa.png");
-        regionPausa = cargarImagen("Imagenes/pausa.png");
-        regionProyectil = cargarImagen("Imagenes/laser.png");
-        regionEnemigoBossFinal=cargarImagen("Imagenes/boss_Jurasico.png");
+        regionBtnPausa = cargarImagen("Imagenes/Niveles/CazaJurasica/btnPausa.png");
+        regionPausa = cargarImagen("Imagenes/Ajustes/pausa.png");
+        regionProyectil = cargarImagen("Imagenes/Roman/laser.png");
+        regionEnemigoBossFinal=cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/boss_Jurasico.png");
 
     }
 

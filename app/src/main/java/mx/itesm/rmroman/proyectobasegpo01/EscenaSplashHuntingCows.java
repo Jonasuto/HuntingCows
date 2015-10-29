@@ -1,10 +1,5 @@
 package mx.itesm.rmroman.proyectobasegpo01;
-import android.util.Log;
 
-import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.JumpModifier;
-import org.andengine.entity.modifier.ParallelEntityModifier;
-import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
@@ -40,7 +35,7 @@ public class EscenaSplashHuntingCows extends EscenaBase {
         regionFondo = cargarImagen("Imagenes/fondo_hunting.jpg");
         regionLogo = cargarImagen("Imagenes/titulo.png");
         regionPress = cargarImagen("Imagenes/press.png");
-        regionNaveVaca = cargarImagen("Imagenes/naveVaca.png");
+        regionNaveVaca = cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/naveVaca.png");
 
     }
 

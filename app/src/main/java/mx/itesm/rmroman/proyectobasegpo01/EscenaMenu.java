@@ -5,7 +5,6 @@ import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
-import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -55,14 +54,14 @@ public class EscenaMenu extends EscenaBase
         // Fondo
         regionFondo = cargarImagen("Imagenes/MenuInicio/fondoMenu.jpg");
         // Botones del menú
-        regionBtnAcercaDe = cargarImagen("Imagenes/MenuInicio/btnAcercaDe.png");
-        regionBtnJugar = cargarImagen("Imagenes/MenuInicio/boton_azulnave.png");
-        regionBtnRojo = cargarImagen("Imagenes/MenuInicio/btnRojo.png");
-        regionBtnMusica = cargarImagen("Imagenes/MenuInicio/musica.png");
-        regionBtnSonido = cargarImagen("Imagenes/MenuInicio/sonido.jpg");
-        regionBtnArcade = cargarImagen("Imagenes/MenuInicio/boton_rojoarcade.png");
-        regionBtnComic = cargarImagen("Imagenes/MenuInicio/boton_blancocomic.png");
-        regionBtnContinuarJuego = cargarImagen("Imagenes/MenuInicio/boton_verdeplaneta.png");
+        regionBtnAcercaDe = cargarImagen("Imagenes/MenuInicio/botonesMenu/btnAcercaDe.png");
+        regionBtnJugar = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_azulnave.png");
+        regionBtnRojo = cargarImagen("Imagenes/MenuInicio/botonesMenu/btnRojo.png");
+        regionBtnMusica = cargarImagen("Imagenes/MenuInicio/botonesMenu/musica.png");
+        regionBtnSonido = cargarImagen("Imagenes/MenuInicio/botonesMenu/sonido.jpg");
+        regionBtnArcade = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_rojoarcade.png");
+        regionBtnComic = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_blancocomic.png");
+        regionBtnContinuarJuego = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_verdeplaneta.png");
 
     }
 

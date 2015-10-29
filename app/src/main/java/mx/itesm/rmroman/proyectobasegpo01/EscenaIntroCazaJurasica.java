@@ -48,15 +48,15 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
 
     @Override
     public void cargarRecursos() {
-        regionNave=cargarImagen("Imagenes/nave2.png");
+        regionNave=cargarImagen("Imagenes/Roman/nave2.png");
         regionFondo = cargarImagen("Imagenes/fondo_hunting.jpg");
-        regionFondoPausa = cargarImagen("Imagenes/logoHuntingCows.png");
-        regionBase=cargarImagen("Imagenes/baseJoystick.png");
-        regionControlSalto =cargarImagen("Imagenes/joystick.png");
-        regionBtnPausa = cargarImagen("Imagenes/btnPausa.png");
-        regionPausa = cargarImagen("Imagenes/pausa.png");
-        regionHoyoNegro = cargarImagen("Imagenes/MenuInicio/boton_verdeplaneta.png");
-        regionProyectil = cargarImagen("Imagenes/laser.png");
+        regionFondoPausa = cargarImagen("Imagenes/Logos/logoHuntingCows.png");
+        regionBase=cargarImagen("Imagenes/Roman/baseJoystick.png");
+        regionControlSalto =cargarImagen("Imagenes/Roman/joystick.png");
+        regionBtnPausa = cargarImagen("Imagenes/Niveles/CazaJurasica/btnPausa.png");
+        regionPausa = cargarImagen("Imagenes/Ajustes/pausa.png");
+        regionHoyoNegro = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_verdeplaneta.png");
+        regionProyectil = cargarImagen("Imagenes/Roman/laser.png");
     }
 
     @Override
