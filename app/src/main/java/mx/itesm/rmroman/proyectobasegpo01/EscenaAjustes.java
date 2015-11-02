@@ -20,28 +20,47 @@ public class EscenaAjustes extends EscenaBase {
     private ITextureRegion regionMenuOffon;
     private ITextureRegion regionMenuOnoff;
     private ITextureRegion regionMenuOnon;
-    private boolean musicaEncendida=true;
+    private ITextureRegion regionMenuMusica;
+    private ITextureRegion regionMenuContinuar;
+    private ITextureRegion regionIrAMenu;
+    private ITextureRegion regionOvni;
+
+    private boolean musicaEncendida;
 
     private Sprite spriteMenuPausa;
     private Sprite spriteFondo; //(el fondo de la escena, estático)
     private Sprite spritebtnOn;
     private Sprite spritebtnOff;
+    private Sprite spritebtnMusica;
+    private Sprite spritebtnContinuar;
+    private Sprite spritebtnIrAMenu;
+
+    private int cambiar=0;
 
 
     @Override
     public void cargarRecursos() {
         regionFondo = cargarImagen("Imagenes/MenuInicio/fondoMenu.jpg");
 
-        regionMenuPausa = cargarImagen("Imagenes/Ajustes/pausa.png");
+        regionMenuPausa = cargarImagen("Imagenes/Ajustes2/pausa_fondo.png");
+        regionMenuOffoff=cargarImagen("Imagenes/Ajustes2/music_off_OFF.png");
+        regionMenuOffon=cargarImagen("Imagenes/Ajustes2/music_off_ON.png");
+        regionMenuOnoff=cargarImagen("Imagenes/Ajustes2/music_on_OFF.png");
+        regionMenuOnon=cargarImagen("Imagenes/Ajustes2/music_on_ON.png");
+        regionIrAMenu=cargarImagen("Imagenes/Ajustes2/pausa_menu.png");
+        regionMenuMusica=cargarImagen("Imagenes/Ajustes2/pausa_musica.png");
+        regionMenuContinuar=cargarImagen("Imagenes/Ajustes2/pausa_continue.png");
 
-        regionMenuOffoff=cargarImagen("Imagenes/Ajustes/off_apagado.png");
-        regionMenuOffon=cargarImagen("Imagenes/Ajustes/off_encendido.png");
-        regionMenuOnoff=cargarImagen("Imagenes/Ajustes/on_apagado.png");
-        regionMenuOnon=cargarImagen("Imagenes/Ajustes/on_encendido.png");
+        regionOvni= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/naveVaca.png");
+
     }
 
     @Override
     public void crearEscena() {
+
+
+        musicaEncendida=admMusica.getMusicaEncendida();
+
         // Creamos el sprite de manera óptima
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondo);
 
@@ -53,52 +72,87 @@ public class EscenaAjustes extends EscenaBase {
         spriteMenuPausa=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionMenuPausa);
         attachChild(spriteMenuPausa);
 
-        spritebtnOff=cargarSprite(ControlJuego.ANCHO_CAMARA /2 +155, ControlJuego.ALTO_CAMARA / 2-45, regionMenuOffoff);
-        attachChild(spritebtnOff);
+        spritebtnMusica=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-45, regionMenuMusica);
+        attachChild(spritebtnMusica);
 
-        spritebtnOn=cargarSprite(ControlJuego.ANCHO_CAMARA / 2+45, ControlJuego.ALTO_CAMARA / 2-45, regionMenuOnon);
-        attachChild(spritebtnOn);
+        spritebtnContinuar=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2+300, regionMenuContinuar);
+        attachChild(spritebtnContinuar);
 
-        Sprite spriteOff = new Sprite(ControlJuego.ANCHO_CAMARA / 2 + 155,ControlJuego.ALTO_CAMARA / 2 - 45,
+        spritebtnIrAMenu=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-300, regionIrAMenu);
+        attachChild(spritebtnIrAMenu);
+
+        if (musicaEncendida == true) {
+            spritebtnOff = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 155, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOffoff);
+            attachChild(spritebtnOff);
+
+            spritebtnOn = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 45, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOnon);
+            attachChild(spritebtnOn);
+        }
+
+        else {
+            spritebtnOff = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 155, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOffon);
+            attachChild(spritebtnOff);
+
+            spritebtnOn = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 45, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOnoff);
+            attachChild(spritebtnOn);
+        }
+
+
+
+
+        Sprite spriteOffFinal = new Sprite(ControlJuego.ANCHO_CAMARA / 2 + 155,ControlJuego.ALTO_CAMARA / 2 - 45,
                 regionMenuOffoff, actividadJuego.getVertexBufferObjectManager()) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                if (pSceneTouchEvent.isActionDown()) {
-                    spritebtnOff.detachSelf();
-                    spritebtnOn.detachSelf();
+                if (pSceneTouchEvent.isActionUp()) {
 
-                    spritebtnOff=cargarSprite(ControlJuego.ANCHO_CAMARA /2 +155, ControlJuego.ALTO_CAMARA / 2-45, regionMenuOffon);
-                    attachChild(spritebtnOff);
 
-                    spritebtnOn=cargarSprite(ControlJuego.ANCHO_CAMARA / 2+45, ControlJuego.ALTO_CAMARA / 2-45, regionMenuOnoff);
-                    attachChild(spritebtnOn);
+                    if(musicaEncendida==true && cambiar==0){
+
+
+                        spritebtnOff.detachSelf();
+                        spritebtnOn.detachSelf();
+
+                        admMusica.vibrar(100);
+
+                        admMusica.setMusicaEncendida(false,-1);
+                        musicaEncendida=false;
+
+                        cambiar=1;
+                    }
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
-        attachChild(spriteOff);
-        registerTouchArea(spriteOff);
+        spriteOffFinal.setAlpha(0.2f);
+        attachChild(spriteOffFinal);
+        registerTouchArea(spriteOffFinal);
 
 
-        Sprite spriteOn = new Sprite(ControlJuego.ANCHO_CAMARA / 2+45, ControlJuego.ALTO_CAMARA / 2-45,
-                regionMenuOnon, actividadJuego.getVertexBufferObjectManager()) {
+        Sprite spriteOnFinal = new Sprite(ControlJuego.ANCHO_CAMARA / 2+45, ControlJuego.ALTO_CAMARA / 2-45,
+                regionMenuOnoff, actividadJuego.getVertexBufferObjectManager()) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                if (pSceneTouchEvent.isActionDown()) {
-                    spritebtnOff.detachSelf();
-                    spritebtnOn.detachSelf();
+                if (pSceneTouchEvent.isActionUp()) {
+                    if(musicaEncendida==false && cambiar==0){
 
-                    spritebtnOff=cargarSprite(ControlJuego.ANCHO_CAMARA /2 +155, ControlJuego.ALTO_CAMARA / 2-45, regionMenuOffoff);
-                    attachChild(spritebtnOff);
+                        admMusica.vibrar(100);
 
-                    spritebtnOn=cargarSprite(ControlJuego.ANCHO_CAMARA / 2+45, ControlJuego.ALTO_CAMARA / 2-45, regionMenuOnon);
-                    attachChild(spritebtnOn);
+                        spritebtnOn.detachSelf();
+                        spritebtnOff.detachSelf();
+
+                        admMusica.setMusicaEncendida(true,-1);
+                        musicaEncendida=true;
+
+                        cambiar=1;
+                    }
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
-        attachChild(spriteOn);
-        registerTouchArea(spriteOn);
+        spriteOnFinal.setAlpha(0.2f);
+        attachChild(spriteOnFinal);
+        registerTouchArea(spriteOnFinal);
     }
 
 
@@ -127,6 +181,32 @@ public class EscenaAjustes extends EscenaBase {
 
     @Override
     public void liberarRecursos() {
+
+    }
+
+    protected void onManagedUpdate(float pSecondsElapsed) {
+        super.onManagedUpdate(pSecondsElapsed);
+
+
+        if(cambiar==1) {
+
+            if (musicaEncendida == true) {
+                spritebtnOff = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 155, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOffoff);
+                attachChild(spritebtnOff);
+
+                spritebtnOn = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 45, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOnon);
+                attachChild(spritebtnOn);
+            } else {
+                spritebtnOff = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 155, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOffon);
+                attachChild(spritebtnOff);
+
+                spritebtnOn = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 45, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOnoff);
+                attachChild(spritebtnOn);
+            }
+
+
+            cambiar=0;
+        }
 
     }
 

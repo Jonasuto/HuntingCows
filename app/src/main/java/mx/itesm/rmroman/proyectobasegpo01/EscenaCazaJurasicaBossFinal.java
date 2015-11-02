@@ -27,11 +27,15 @@ public class EscenaCazaJurasicaBossFinal extends EscenaBase {
     private ITextureRegion regionControlSalto;
     private ITextureRegion regionBase;
     private ITextureRegion regionEnemigoBossFinal;
+    private Random aleatorio;
 
     private Random elQueSigue;
 
     private float[] posicionesEnemigos;
 
+    private boolean temblor;
+
+    private boolean paArribaEnemigo;
     private ArrayList<Enemigo> listaEnemigos;
 
     private ITextureRegion regionEnemigo;
@@ -54,6 +58,8 @@ public class EscenaCazaJurasicaBossFinal extends EscenaBase {
 
 
     private boolean juegoCorriendo = true;
+
+    private boolean superSalto;
 
 
     private CameraScene escenaPausa;
@@ -81,12 +87,14 @@ public class EscenaCazaJurasicaBossFinal extends EscenaBase {
 
     private ArrayList<Vida> listaVidasEncontradas;
 
+    private int contadorTiempo;
 
 
     @Override
     public void cargarRecursos() {
 
 
+        contadorTiempo=0;
         elQueSigue=new Random();
         cantidadVida =2;
         vidas=cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
@@ -108,6 +116,14 @@ public class EscenaCazaJurasicaBossFinal extends EscenaBase {
     @Override
     public void crearEscena() {
 
+
+        superSalto=false;
+
+        paArribaEnemigo=false;
+
+        temblor = false;
+
+        aleatorio= new Random();
 
         listaProyectiles = new ArrayList<>();
 
@@ -223,21 +239,67 @@ public class EscenaCazaJurasicaBossFinal extends EscenaBase {
             return;
         }
 
-        if (spriteEnemigoBossFinal.getBrincando()==false) {
-            spriteEnemigoBossFinal.setBrincando(true);
-            // Animar sprite central
-            JumpModifier salto = new JumpModifier(1, spriteEnemigoBossFinal.getX(), spriteEnemigoBossFinal.getX(),
-                    spriteEnemigoBossFinal.getY(), spriteEnemigoBossFinal.getY(), -400);
-            ParallelEntityModifier paralelo = new ParallelEntityModifier(salto) {
-                @Override
-                protected void onModifierFinished(IEntity pItem) {
-                    spriteEnemigoBossFinal.setBrincando(false);
-                    unregisterEntityModifier(this);
-                    super.onModifierFinished(pItem);
-                }
-            };
-            spriteEnemigoBossFinal.registerEntityModifier(paralelo);
+        if(temblor==true){
+
         }
+
+
+            if (spriteEnemigoBossFinal.getBrincando() == false) {
+
+
+                if(contadorTiempo<10) {
+                    contadorTiempo+=aleatorio.nextInt(5);
+                    spriteEnemigoBossFinal.setBrincando(true);
+                    // Animar sprite central
+                    JumpModifier salto = new JumpModifier(1, spriteEnemigoBossFinal.getX(), spriteEnemigoBossFinal.getX(),
+                            spriteEnemigoBossFinal.getY(), spriteEnemigoBossFinal.getY(), -400);
+                    ParallelEntityModifier paralelo = new ParallelEntityModifier(salto) {
+                        @Override
+                        protected void onModifierFinished(IEntity pItem) {
+                            spriteEnemigoBossFinal.setBrincando(false);
+                            unregisterEntityModifier(this);
+                            super.onModifierFinished(pItem);
+                        }
+                    };
+                    spriteEnemigoBossFinal.registerEntityModifier(paralelo);
+
+                }
+
+                else{
+
+                    contadorTiempo=0;
+                    superSalto=true;
+                    spriteEnemigoBossFinal.setBrincando(true);
+                    paArribaEnemigo=true;
+
+                }
+
+
+            }
+
+
+        if(superSalto==true ){
+            if(spriteEnemigoBossFinal.getY()<1950 && paArribaEnemigo==true){
+                spriteEnemigoBossFinal.setY(spriteEnemigoBossFinal.getY()+55);
+            }
+            else{
+                paArribaEnemigo=false;
+            }
+
+            if(paArribaEnemigo==false){
+                if(spriteEnemigoBossFinal.getY()>200){
+                    spriteEnemigoBossFinal.setY(spriteEnemigoBossFinal.getY()-55);
+                }
+                else{
+                    superSalto=false;
+                    admMusica.vibrar(100);
+                    spriteEnemigoBossFinal.setBrincando(false);
+                    temblor=true;
+                }
+            }
+        }
+
+
 
         actualizarProyectiles(pSecondsElapsed);
 
@@ -254,7 +316,7 @@ public class EscenaCazaJurasicaBossFinal extends EscenaBase {
     @Override
     public void liberarRecursos() {
 
-        admMusica.liberarMusica();
+            admMusica.liberarMusica();
         actividadJuego.getEngine().disableAccelerationSensor(actividadJuego);
         regionFondo.getTexture().unload();
         regionFondo=null;

@@ -28,6 +28,7 @@ public class AdministradorEscenas {
     private EscenaBase escenaIntroCazaJurasica;
     private EscenaBase escenaHistoriaCazaJurasica;
 
+    private boolean cazaJurasicaDesbloqueado=false;
 
     // El tipo de escena que se está mostrando
     private mx.itesm.rmroman.proyectobasegpo01.TipoEscena tipoEscenaActual = mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_SPLASH;
@@ -46,6 +47,14 @@ public class AdministradorEscenas {
     public static AdministradorEscenas getInstance() {
 
         return INSTANCE;
+    }
+
+    public boolean getcazaJurasicaDesbloqueado(){
+        return cazaJurasicaDesbloqueado;
+    }
+
+    public void setcazaJurasicaDesbloqueado(boolean desbloqueo){
+        this.cazaJurasicaDesbloqueado=desbloqueo;
     }
 
     // Regresa el tipo de la escena actual

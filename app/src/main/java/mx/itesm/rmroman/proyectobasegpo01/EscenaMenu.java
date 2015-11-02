@@ -52,7 +52,12 @@ public class EscenaMenu extends EscenaBase
 
     public void cargarRecursos() {
         // Fondo
-        regionFondo = cargarImagen("Imagenes/MenuInicio/fondoMenu.jpg");
+        if(admEscenas.getcazaJurasicaDesbloqueado()==false) {
+            regionFondo = cargarImagen("Imagenes/MenuInicio/fondoMenu.jpg");
+        }
+        else{
+            regionFondo = cargarImagen("Imagenes/MenuInicio/fondoDesbloqueado.jpg");
+        }
         // Botones del menú
         regionBtnAcercaDe = cargarImagen("Imagenes/MenuInicio/botonesMenu/btnAcercaDe.png");
         regionBtnJugar = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_azulnave.png");
@@ -138,14 +143,28 @@ public class EscenaMenu extends EscenaBase
         menu.setBackgroundEnabled(false);   // Completamente transparentee
 
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
-        opcionAcercaDe.setPosition(300, -320);
-        opcionJugar.setPosition(340, 190);
-        opcionBotonRojo.setPosition(520, -340);
-        opcionMusica.setPosition(-570, 310);
-        opcionSonido.setPosition(-450, 310);
-        opcionBotonArcade.setPosition(-480, -60);
-        opcionBotonComics.setPosition(-300, 95);
-        opcionContinuarJuego.setPosition(410, -60);
+
+        if(admEscenas.getcazaJurasicaDesbloqueado()==true) {
+
+            opcionAcercaDe.setPosition(-570, -320);
+            opcionJugar.setPosition(360, 220);
+            opcionBotonRojo.setPosition(520, -340);
+            opcionMusica.setPosition(-570, 310);
+            opcionSonido.setPosition(-450, 310);
+            opcionBotonArcade.setPosition(210, -60);
+            opcionBotonComics.setPosition(90, 95);
+            opcionContinuarJuego.setPosition(430, -60);
+        }
+        else{
+            opcionAcercaDe.setPosition(300, -320);
+            opcionJugar.setPosition(340, 190);
+            opcionBotonRojo.setPosition(520, -340);
+            opcionMusica.setPosition(-570, 310);
+            opcionSonido.setPosition(-450, 310);
+            opcionBotonArcade.setPosition(-480, -60);
+            opcionBotonComics.setPosition(-300, 95);
+            opcionContinuarJuego.setPosition(410, -60);
+        }
 
         // Registra el Listener para atender las opciones
         menu.setOnMenuItemClickListener(new MenuScene.IOnMenuItemClickListener() {
@@ -184,7 +203,7 @@ public class EscenaMenu extends EscenaBase
 
                     case OPCION_BOTON_ROJO:
                         // Mostrar la escena de AcercaDe
-                        admMusica.vibrar(250);
+                        admMusica.vibrar(90);
                         admMusica.reproducirMusicaBoton();
 
                         break;

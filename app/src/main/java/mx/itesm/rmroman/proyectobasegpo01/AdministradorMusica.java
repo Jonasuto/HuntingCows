@@ -95,11 +95,33 @@ public class AdministradorMusica {
 
 
     public void setMusicaEncendida(boolean musicaEncendida,int NumEscena){
-        this.musicaEncendida=musicaEncendida;
-        cargarMusica(NumEscena);
+
+        if(musicaEncendida==false && NumEscena != (-1) ){
+            this.musicaEncendida=musicaEncendida;
+            this.liberarMusica();
+        }
+
+        else if(musicaEncendida==false && NumEscena==(-1)){
+            this.musicaEncendida=musicaEncendida;
+        }
+
+        if(musicaEncendida==true && NumEscena != (-1) ){
+            this.musicaEncendida=musicaEncendida;
+            cargarMusica(NumEscena);
+        }
+
+        else if(musicaEncendida==true && NumEscena==(-1)){
+            this.musicaEncendida=musicaEncendida;
+        }
+
+
+
+
+
     }
 
     public boolean getMusicaEncendida(){
+
         return musicaEncendida;
     }
 
@@ -117,8 +139,11 @@ public class AdministradorMusica {
     }
 
     public void vibrar(int i){
-        Vibrator vibrador=(Vibrator)actividadJuego.getSystemService(Context.VIBRATOR_SERVICE);
-        vibrador.vibrate(i);
+
+        if(musicaEncendida==true) {
+            Vibrator vibrador = (Vibrator) actividadJuego.getSystemService(Context.VIBRATOR_SERVICE);
+            vibrador.vibrate(i);
+        }
     }
 
 

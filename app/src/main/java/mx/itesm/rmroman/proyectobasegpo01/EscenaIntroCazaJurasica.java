@@ -2,12 +2,15 @@ package mx.itesm.rmroman.proyectobasegpo01;
 
 import android.util.Log;
 
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
 import java.util.ArrayList;
@@ -27,7 +30,6 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
     private Sprite spriteNave;
     private AnalogOnScreenControl control;
     private boolean juegoCorriendo = true;
-
 
     private CameraScene escenaPausa;
     private ITextureRegion regionPausa;
@@ -82,6 +84,9 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.isActionDown()) {
                     pausarJuego();
+                    if(admMusica.getMusicaEncendida()==true) {
+                        admMusica.reproduceio();
+                    }
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
