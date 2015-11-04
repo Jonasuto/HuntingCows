@@ -5,6 +5,7 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.util.adt.color.Color;
 
 /**
  * La escena de espera
@@ -18,10 +19,17 @@ public class EscenaCargando extends EscenaBase
     // Sprites sobre la escena
     private Sprite spriteFondo;
 
+    private int decision;
+
+    public EscenaCargando(int numero) {
+        decision=numero;
+    }
+
     // Carga todos los recursos para ESTA ESCENA.
     @Override
     public void cargarRecursos() {
-        regionFondo = cargarImagen("cargando/espera.png");
+
+        regionFondo = cargarImagen("Imagenes/espera.png");
     }
 
     // Arma la escena que se presentará en pantalla
@@ -46,10 +54,17 @@ public class EscenaCargando extends EscenaBase
                     public void onTimePassed(TimerHandler pTimerHandler) {
                         actividadJuego.getEngine().unregisterUpdateHandler(pTimerHandler); // Invalida el timer
 
-                            admEscenas.crearEscenaComic();
-                            admEscenas.setEscena(TipoEscena.ESCENA_COMIC);
+                        if(decision ==0) {
+                            admEscenas.crearEscenaHistoriaIntro();
+                            admEscenas.setEscena(TipoEscena.ESCENA_HISTORIA_INTRO);
                             admEscenas.liberarEscenaCargando();
+                        }
 
+                        else if(decision==1){
+                            admEscenas.liberarEscenaCargando();
+                            admEscenas.crearEscenaCazaJurasica();
+                            admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA);
+                        }
 
                     }
                 }));

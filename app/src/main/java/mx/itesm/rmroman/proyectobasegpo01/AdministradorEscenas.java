@@ -243,9 +243,9 @@ public class AdministradorEscenas {
 
 
     //*** Crea la escena de cargando
-    public void crearEscenaCargando() {
+    public void crearEscenaCargando(int numero) {
         // Carga los recursos
-        escenaCargando = new EscenaCargando();
+        escenaCargando = new EscenaCargando(numero);
     }
 
     //*** Libera la escena de cargando

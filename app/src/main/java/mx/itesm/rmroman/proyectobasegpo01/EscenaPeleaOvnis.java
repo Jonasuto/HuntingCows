@@ -256,7 +256,7 @@ public class EscenaPeleaOvnis extends EscenaBase {
 
     private void dispararProyectil() {
         // Crearlo
-        Laser spriteProyectil = new Laser(spriteNave.getX(),  spriteNave.getY(),regionProyectil, actividadJuego.getVertexBufferObjectManager(),true);
+        Laser spriteProyectil = new Laser(spriteNave.getX(),  spriteNave.getY(),regionProyectil, actividadJuego.getVertexBufferObjectManager(),true,false);
         attachChild(spriteProyectil);   // Lo agrega a la escena
         listaProyectiles.add(spriteProyectil);  // Lo agrega a la lista
     }

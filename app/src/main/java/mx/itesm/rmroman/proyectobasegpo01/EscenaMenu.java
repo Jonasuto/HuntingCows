@@ -185,8 +185,8 @@ public class EscenaMenu extends EscenaBase
                     case OPCION_JUGAR:
                         // Mostrar la escena de AcercaDe
                         admEscenas.liberarEscenaMenu();
-                        admEscenas.crearEscenaHistoriaIntro();
-                        admEscenas.setEscena(mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_HISTORIA_INTRO);
+                        admEscenas.crearEscenaCargando(0);
+                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
 
                         break;
 

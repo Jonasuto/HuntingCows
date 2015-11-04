@@ -40,8 +40,11 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionNave;
     private ITextureRegion regionHoyoNegro;
     private ITextureRegion regionOvni;
+    private ITextureRegion regionPua;
 
     private Random elQueSigue;
+
+    private int reloj;
 
     private boolean enElAire=false;
     private boolean gravedad=false;
@@ -49,8 +52,22 @@ public class EscenaCazaJurasica extends EscenaBase {
     private boolean nubecita=false;
     private boolean brincaSobrepalmera=false;
 
-    private float[] posicionesEnemigos;
-    private float[] posicionesPisosFlotantes;
+    private float[] posicionesEnemigosx;
+    private float[] posicionesEnemigosy;
+
+    private float[] posicionesPisosFlotantesX;
+    private float[] posicionesPisosFlotantesY;
+
+    private float[] posicionesMonedasX;
+    private float[] posicionesMonedasY;
+
+    private boolean[] brinca;
+    private int[] camina;
+    private boolean[] rota;
+    private boolean[] rotaCamina;
+    private int[] numPasos;
+    private boolean[] disparar;
+
 
     private Text txtMarcador; // Por ahora con valorMarcador
     private IFont fontMonster;
@@ -65,7 +82,7 @@ public class EscenaCazaJurasica extends EscenaBase {
     private static final int NUM_MONEDAS = 30;
 
     private ArrayList<Enemigo> listaEnemigos;
-    private ArrayList<Sprite> listapisosFlotantes;
+    private Sprite[] listaPisos;
 
     private ITextureRegion regionEnemigo;
     private ITextureRegion regionVida;
@@ -83,12 +100,9 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private float poderDeSalto;
 
-    private Sprite spriteOvni;
     private Sprite spriteOvni2;
-    private Sprite spriteOvni3;
-    private Sprite spriteOvni4;
-    private Sprite spriteOvni5;
     private Sprite spriteNavecita;
+    private Sprite spritePua;
 
     private int contadorTiempo;
 
@@ -96,9 +110,16 @@ public class EscenaCazaJurasica extends EscenaBase {
     private AnalogOnScreenControl control;
 
     private Jugador spritePersonaje;
+    private Jugador spritePersonajeizquierda;
+    private Jugador spritePersonajeDerecha;
+
     private Enemigo spriteEnemigo;
 
     private boolean juegoCorriendo = true;
+
+    private Sprite pisoActual;
+
+    private ArrayList<Laser> listaProyectilesEnemigo;
 
 
     private CameraScene escenaPausa;
@@ -106,6 +127,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
 
     private TiledTextureRegion regionPersonajeAnimado;
+    private TiledTextureRegion regionPersonajeAnimadoIzquierda;
 
     private boolean personajeVolteandoDerecha=true;
 
@@ -113,14 +135,11 @@ public class EscenaCazaJurasica extends EscenaBase {
     // Sprite para el fondo
     private Sprite spriteFondo;
     private Sprite spriteFondo2;
+    private Sprite spriteFondo4;
     private Sprite spriteFondo3;
     private Sprite spriteHoyoNegro;
     private Sprite spriteFondoPausa;
 
-    private Sprite spritePiso0;
-    private Sprite spritePiso1;
-    private Sprite spritePiso2;
-    private Sprite spritePiso3;
 
     private ButtonSprite btnSaltar;
     private ButtonSprite btnDisparar;
@@ -134,9 +153,6 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private ArrayList<Vida> listaVidasEncontradas;
 
-
-
-    //_______
 
     private ITextureRegion regionMenuPausa;
     private ITextureRegion regionMenuOffoff;
@@ -164,9 +180,9 @@ public class EscenaCazaJurasica extends EscenaBase {
 
 
         elQueSigue=new Random();
-        poderDeSalto=5.1f;
+        poderDeSalto=4.1f;
 
-        cantidadVida =2;
+        cantidadVida = 2;
 
         estoySobreUnaPalmera=false;
 
@@ -183,6 +199,8 @@ public class EscenaCazaJurasica extends EscenaBase {
         regionEnemigo = cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/vacaDinosaurio.png");
         regionVida = cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
         regionPersonajeAnimado = cargarImagenMosaico("Imagenes/Roman/prueba.png", 1000, 200, 1, 9);
+        regionPersonajeAnimadoIzquierda = cargarImagenMosaico("Imagenes/Roman/pruebaiz.png", 1000, 200, 1, 9);
+
         // Pausa
         regionBtnPausa = cargarImagen("Imagenes/Niveles/CazaJurasica/btnPausa.png");
         regionHoyoNegro= cargarImagen("Imagenes/hoyoNegro.png");
@@ -191,8 +209,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
 
         regionOvni= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/naveVaca.png");
-
-
+        regionPua= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/pua.png");
 
         regionMenuPausa = cargarImagen("Imagenes/Ajustes2/pausa_fondo.png");
         regionMenuOffoff=cargarImagen("Imagenes/Ajustes2/music_off_OFF.png");
@@ -207,48 +224,34 @@ public class EscenaCazaJurasica extends EscenaBase {
     @Override
     public void crearEscena() {
 
-
+        reloj=0;
 
         contadorTiempo=0;
 
         listaProyectiles = new ArrayList<>();
 
-        listaEnemigos = new ArrayList<>();
+        listaProyectilesEnemigo = new ArrayList<>();
 
-        listapisosFlotantes = new ArrayList<>();
+        listaEnemigos = new ArrayList<>();
 
         listaVidasEncontradas = new ArrayList<>();
 
-        spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2+300, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo = cargarSprite(2046, ControlJuego.ALTO_CAMARA/2 , regionFondo);
         attachChild(spriteFondo);
 
-        spriteFondo2 = cargarSprite(5970, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo2 = cargarSprite(6000, ControlJuego.ALTO_CAMARA/2 , regionFondo);
         spriteFondo.attachChild(spriteFondo2);
 
-        spriteFondo3 = cargarSprite(8300, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo3 = cargarSprite(9954, ControlJuego.ALTO_CAMARA/2 , regionFondo);
         spriteFondo.attachChild(spriteFondo3);
 
-        spriteOvni=cargarSprite(200, 700, regionOvni);
-        spriteOvni.setSize(spriteOvni.getWidth() - 30, spriteOvni.getHeight() - 30);
-        spriteFondo.attachChild(spriteOvni);
+        spriteFondo4 = cargarSprite(13908, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo.attachChild(spriteFondo4);
 
         spriteOvni2=cargarSprite(1000, 300, regionOvni);
         spriteOvni2.setSize(spriteOvni2.getWidth() - 30, spriteOvni2.getHeight() - 30);
         spriteOvni2.setRotation(25);
         spriteFondo.attachChild(spriteOvni2);
-
-        spriteOvni3=cargarSprite(1900, 700, regionOvni);
-        spriteOvni3.setSize(spriteOvni3.getWidth() - 30, spriteOvni3.getHeight() - 30);
-        spriteFondo.attachChild(spriteOvni3);
-
-        spriteOvni4=cargarSprite(2300, 700, regionOvni);
-        spriteOvni4.setSize(spriteOvni4.getWidth() - 30, spriteOvni4.getHeight() - 30);
-        spriteOvni4.setRotation(-25);
-        spriteFondo.attachChild(spriteOvni4);
-
-        spriteOvni5=cargarSprite(2900, 700, regionOvni);
-        spriteOvni5.setSize(spriteOvni5.getWidth() - 30, spriteOvni5.getHeight() - 30);
-        spriteFondo.attachChild(spriteOvni5);
 
         spriteVidas= new Sprite[3];
 
@@ -256,16 +259,16 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         numeroDeBalas=9;
 
-        spriteNave=cargarSprite(200, 270, regionNave);
+        spriteNave=cargarSprite(280, 270, regionNave);
         spriteFondo.attachChild(spriteNave);
 
-        spriteVidas[0]= cargarSprite(1000, 780, vidas);
+        spriteVidas[0]= cargarSprite(1100, 750, vidas);
         attachChild(spriteVidas[0]);
 
-        spriteVidas[1]= cargarSprite(1050, 780, vidas);
+        spriteVidas[1]= cargarSprite(1150, 750, vidas);
         attachChild(spriteVidas[1]);
 
-        spriteVidas[2]= cargarSprite(1100, 780, vidas);
+        spriteVidas[2]= cargarSprite(1200, 750, vidas);
         attachChild(spriteVidas[2]);
 
 
@@ -305,19 +308,25 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteBalas[8].setSize(spriteBalas[8].getWidth() - 20, spriteBalas[8].getHeight() - 20);
         attachChild(spriteBalas[8]);
 
-        spriteBalas[9]= cargarSprite(1100, 150, regionProyectil);
+        spriteBalas[9] = cargarSprite(1100, 150, regionProyectil);
         spriteBalas[9].setSize(spriteBalas[9].getWidth() - 20, spriteBalas[9].getHeight() - 20);
         attachChild(spriteBalas[9]);
 
 
-
+        pisoActual= cargarSprite(10, 1500 , regionPisoFlotante);
+        spriteFondo.attachChild(pisoActual);
 
 
         spriteHoyoNegro= cargarSprite(9500, 400, regionHoyoNegro);
         spriteFondo.attachChild(spriteHoyoNegro);
 
-        spritePersonaje = new Jugador((ControlJuego.ANCHO_CAMARA/2)-200, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
-        spritePersonaje.animate(70);
+        spritePersonajeizquierda = new Jugador((ControlJuego.ANCHO_CAMARA/2)-200, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeAnimadoIzquierda, actividadJuego.getVertexBufferObjectManager());
+        spritePersonajeizquierda.animate(70);
+
+        spritePersonajeDerecha = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
+        spritePersonajeDerecha.animate(70);
+
+        spritePersonaje=spritePersonajeDerecha;
         attachChild(spritePersonaje);
 
         spriteNavecita=null;
@@ -595,28 +604,44 @@ public class EscenaCazaJurasica extends EscenaBase {
         }
 
 
+        for (int i= listaPisos.length-1; i>=0; i--) {
 
-            if(chocoConElPiso()==true && nubecita==false){
+            final Sprite piso = listaPisos[i];
 
-                estoySobreUnaPalmera=true;
+            if (spritePersonaje.collidesWith(piso) && spritePersonaje.getY()-130>piso.getY()) {
 
-                if(brincaSobrepalmera==false){
 
-                    enElAire=false;
-                    paArriba=false;
-                    gravedad=true;
-                    spritePersonaje.setY(spritePiso0.getY()+70);
-                }
-                else{
-                    enElAire=true;
-                    paArriba=true;
-                    gravedad=false;
+                pisoActual.setPosition(piso);
+
+
+                if (nubecita == false) {
+
+                    estoySobreUnaPalmera = true;
+
+                    if (brincaSobrepalmera == false) {
+
+                        enElAire = false;
+                        paArriba = false;
+                        gravedad = true;
+                        spritePersonaje.setY(piso.getY()+150);
+                    } else {
+
+                        enElAire = true;
+                        paArriba = true;
+                        gravedad = false;
+                    }
                 }
             }
+
             else{
-                estoySobreUnaPalmera=false;
-            }
 
+                if(spritePersonaje.collidesWith(pisoActual)==false){
+
+                    estoySobreUnaPalmera = false;
+                    pisoActual.setPosition(10,1500);
+                }
+            }
+        }
 
         DecimalFormat df = new DecimalFormat("##.##"); // Para formatear 2 decimales
         txtMarcador.setText(df.format(valorMarcador));
@@ -633,10 +658,13 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         actualizarMonedas();
 
+        actualizarProyectilesEnemigo();
+
         if(nubecita==true){
             spriteNavecita.setPosition(spritePersonaje.getX(), spritePersonaje.getY());
         }
 
+        /*
 
         if(spritePersonaje.collidesWith(spriteHoyoNegro)){
             admEscenas.setcazaJurasicaDesbloqueado(true);
@@ -644,6 +672,7 @@ public class EscenaCazaJurasica extends EscenaBase {
             admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_BOSS_FINAL);
             admEscenas.liberarEscenaCazaJurasica();
         }
+        */
 
 
         if(gravedad==true && nubecita==false){
@@ -664,7 +693,7 @@ public class EscenaCazaJurasica extends EscenaBase {
                 }
                 if(spritePersonaje.getY()<=ControlJuego.ALTO_CAMARA/4-20){
                     enElAire=false;
-                    poderDeSalto=5f;
+                    poderDeSalto=4.1f;
                 }
 
             }
@@ -674,11 +703,18 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         actualizarVidas(pSecondsElapsed);
 
+        reloj+=1;
+
         for (int i= listaEnemigos.size()-1; i>=0; i--) {
 
             final Enemigo enemigo = listaEnemigos.get(i);
 
-
+            if(enemigo.getPuedeDisparar()==true){
+                if(reloj==100) {
+                    dispararEnemigo(enemigo);
+                    reloj=0;
+                }
+            }
             if(enemigo.getBrinco()==true){
 
                 if(enemigo.getRotacion()){
@@ -741,38 +777,19 @@ public class EscenaCazaJurasica extends EscenaBase {
                     if(nubecita==true){
                         spriteNavecita.detachSelf();
                         nubecita=false;
+                        poderDeSalto=4.1f;
+                        enElAire=true;
+                        paArriba=true;
+                        gravedad=false;
                     }
 
                     else {
                         spriteVidas[2 - cantidadVida].detachSelf();
-                        spritePersonaje.setSize(spritePersonaje.getWidth() - 20, spritePersonaje.getHeight() - 20);
                         cantidadVida--;
                     }
 
                 }
             }
-        }
-    }
-
-
-    private boolean chocoConElPiso(){
-        if(spritePersonaje.collidesWith(spritePiso0) || spritePersonaje.collidesWith(spritePiso1) || spritePersonaje.collidesWith(spritePiso2) || spritePersonaje.collidesWith(spritePiso3)){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    private void agregarMonedas() {
-        // Agrega monedas a lo largo del mundo
-        listaMonedas = new ArrayList<>(NUM_MONEDAS);
-        for (int i=0; i<NUM_MONEDAS; i++) {
-            float x = (float)(Math.random()*(regionFondo.getWidth()-ControlJuego.ANCHO_CAMARA))+ControlJuego.ANCHO_CAMARA/2;
-            float y = (float)(Math.random()*(ControlJuego.ALTO_CAMARA-regionPersonajeAnimado.getHeight()))+regionPersonajeAnimado.getHeight()/2;
-            Sprite lechita = new Sprite(x,y,regionLechitas,actividadJuego.getVertexBufferObjectManager());
-            spriteFondo.attachChild(lechita);
-            listaMonedas.add(lechita);
         }
     }
 
@@ -786,6 +803,58 @@ public class EscenaCazaJurasica extends EscenaBase {
         tipoLetra.prepareLetters("InicoFnalMed 01234567890.".toCharArray());
 
         return tipoLetra;
+    }
+
+    private void actualizarProyectilesEnemigo() {
+        // Se visita cada proyectil dentro de la lista, se recorre con el índice
+        // porque se pueden borrar datos
+        for (int i = listaProyectilesEnemigo.size() - 1; i >= 0; i--) {
+
+            Laser proyectil = listaProyectilesEnemigo.get(i);
+            proyectil.mover();
+            if (proyectil.getY() < 200 ) {
+                proyectil.detachSelf();
+                listaProyectilesEnemigo.remove(proyectil);
+                continue;
+            }
+            if (proyectil.collidesWith(spritePersonaje)) {
+                // Baja puntos/vida
+                if(cantidadVida-1<0){
+                    admEscenas.crearEscenaMenu();
+                    admEscenas.setEscena(TipoEscena.ESCENA_MENU);
+                    admEscenas.liberarEscenaCazaJurasica();
+                }
+
+                else{
+                    proyectil.detachSelf();
+                    listaProyectilesEnemigo.remove(proyectil);
+                    admMusica.vibrar(200);
+
+
+                    if(nubecita==true){
+                        spriteNavecita.detachSelf();
+                        nubecita=false;
+                        poderDeSalto=4.1f;
+                        enElAire=true;
+                        paArriba=true;
+                        gravedad=false;
+                    }
+
+                    else {
+                        spriteVidas[2 - cantidadVida].detachSelf();
+                        cantidadVida--;
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void dispararEnemigo(Enemigo enemigo) {
+        // Crearlo
+        Laser spriteProyectil = new Laser(enemigo.getX(),  enemigo.getY(),regionProyectil, actividadJuego.getVertexBufferObjectManager(),personajeVolteandoDerecha,true);
+        spriteFondo.attachChild(spriteProyectil);   // Lo agrega a la escena
+        listaProyectilesEnemigo.add(spriteProyectil);  // Lo agrega a la lista
     }
 
     @Override
@@ -845,14 +914,28 @@ public class EscenaCazaJurasica extends EscenaBase {
                     }
 
 
-                        if (pValueX > 0) {
-                            personajeVolteandoDerecha = true;
-                        } else if (pValueX < 0) {
-                            personajeVolteandoDerecha = false;
+                    if (pValueX > 0) {
+                        personajeVolteandoDerecha = true;
+                        if(spritePersonaje!=spritePersonajeDerecha){
+                            spritePersonajeDerecha.setPosition(spritePersonaje);
+                            spritePersonaje.detachSelf();
+                            spritePersonaje=spritePersonajeDerecha;
+                            attachChild(spritePersonaje);
                         }
+                    }
+
+                    else if (pValueX < 0) {
+                        personajeVolteandoDerecha = false;
+                        if(spritePersonaje!=spritePersonajeizquierda){
+                            spritePersonajeizquierda.setPosition(spritePersonaje);
+                            spritePersonaje.detachSelf();
+                            spritePersonaje=spritePersonajeizquierda;
+                            attachChild(spritePersonaje);
+                        }
+                    }
 
 
-                        if (spriteFondo.getX() > 2000) {
+                        if (spriteFondo.getX() > 2008) {
                             if (pValueX < 0) {
                             } else {
                                 pValueX = pValueX * (-1);
@@ -860,7 +943,7 @@ public class EscenaCazaJurasica extends EscenaBase {
                                 spriteFondo.setX(x);
                             }
                         }
-                        else if (spriteFondo.getX() < -7013) {
+                        else if (spriteFondo.getX() < -12620) {
                             if (pValueX > 0) {
                             } else {
                                 pValueX = pValueX * (-1);
@@ -882,51 +965,359 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private void posicionarEnemigos(){
 
-        posicionesEnemigos= new float[10];
-        posicionesEnemigos[0]=2500;
-        posicionesEnemigos[1]=3000;
-        posicionesEnemigos[2]=3500;
-        posicionesEnemigos[3]=4000;
-        posicionesEnemigos[4]=4250 ;
-        posicionesEnemigos[5]=4500 ;
-        posicionesEnemigos[6]=5000 ;
-        posicionesEnemigos[7]=5500 ;
-        posicionesEnemigos[8]=6000 ;
-        posicionesEnemigos[9]=7000 ;
+        int maxima=12;
 
+        posicionesEnemigosx = new float[maxima];
+        posicionesEnemigosy = new float[maxima];
+        brinca = new boolean[maxima];
+        camina = new int[maxima];
+        rota = new boolean[maxima];
+        numPasos = new int[maxima];
+        rotaCamina = new boolean[maxima];
+        disparar = new boolean[maxima];
+
+        posicionesEnemigosx[0]=2710;
+        posicionesEnemigosx[1]=3180;
+        posicionesEnemigosx[2]=4350;
+        posicionesEnemigosx[3]=5340;
+        posicionesEnemigosx[4]=6680;
+        posicionesEnemigosx[5]=7140;
+        posicionesEnemigosx[6]=8640;
+        posicionesEnemigosx[7]=8640;
+        posicionesEnemigosx[8]=10500;
+        posicionesEnemigosx[9]=11200;
+        posicionesEnemigosx[10]=11900;
+        posicionesEnemigosx[11]=12140;
+
+        posicionesEnemigosy[0]=150;
+        posicionesEnemigosy[1]=625;
+        posicionesEnemigosy[2]=150;
+        posicionesEnemigosy[3]=645;
+        posicionesEnemigosy[4]=150;
+        posicionesEnemigosy[5]=750;
+        posicionesEnemigosy[6]=130;
+        posicionesEnemigosy[7]=130;
+        posicionesEnemigosy[8]=130;
+        posicionesEnemigosy[9]=525;
+        posicionesEnemigosy[10]=750;
+        posicionesEnemigosy[11]=150;
+
+        brinca[0]=false;
+        brinca[1]=false;
+        brinca[2]=true;
+        brinca[3]=false;
+        brinca[4]=false;
+        brinca[5]=false;
+        brinca[6]=false;
+        brinca[7]=false;
+        brinca[8]=true;
+        brinca[9]=false;
+        brinca[10]=false;
+        brinca[11]=false;
+
+        camina[0]=1;
+        camina[1]=0;
+        camina[2]=3;
+        camina[3]=1;
+        camina[4]=0;
+        camina[5]=1;
+        camina[6]=1;
+        camina[7]=0;
+        camina[8]=3;
+        camina[9]=1;
+        camina[10]=0;
+        camina[11]=1;
+
+        rota[0]=false;
+        rota[1]=false;
+        rota[2]=true;
+        rota[3]=false;
+        rota[4]=false;
+        rota[5]=false;
+        rota[6]=false;
+        rota[7]=false;
+        rota[8]=true;
+        rota[9]=false;
+        rota[10]=false;
+        rota[11]=true;
+
+        numPasos[0]=40;
+        numPasos[1]=10;
+        numPasos[2]=10;
+        numPasos[3]=40;
+        numPasos[4]=50;
+        numPasos[5]=50;
+        numPasos[6]=65;
+        numPasos[7]=65;
+        numPasos[8]=5;
+        numPasos[9]=35;
+        numPasos[10]=95;
+        numPasos[11]=45;
+
+        rotaCamina[0]=true;
+        rotaCamina[1]=true;
+        rotaCamina[2]=true;
+        rotaCamina[3]=true;
+        rotaCamina[4]=true;
+        rotaCamina[5]=true;
+        rotaCamina[6]=false;
+        rotaCamina[7]=false;
+        rotaCamina[8]=false;
+        rotaCamina[9]=false;
+        rotaCamina[10]=true;
+        rotaCamina[11]=true;
+
+        disparar[0]=false;
+        disparar[1]=false;
+        disparar[2]=false;
+        disparar[3]=false;
+        disparar[4]=false;
+        disparar[5]=true;
+        disparar[6]=false;
+        disparar[7]=false;
+        disparar[8]=false;
+        disparar[9]=false;
+        disparar[10]=true;
+        disparar[11]=false;
 
         int cont;
-        for( cont = 0; cont<posicionesEnemigos.length;cont++){
-
-
-            boolean brinca = elQueSigue.nextBoolean();
-            int camina =elQueSigue.nextInt(3);
-            boolean rotacion=elQueSigue.nextBoolean();
-
-            Enemigo spriteEnemigo = new Enemigo(posicionesEnemigos[cont], 150,regionEnemigo, actividadJuego.getVertexBufferObjectManager(),camina,brinca,rotacion);
-            Enemigo nuevoEnemigo = spriteEnemigo;
-            listaEnemigos.add(nuevoEnemigo);
-            spriteFondo.attachChild(nuevoEnemigo);
-
+        for( cont = 0; cont< posicionesEnemigosx.length;cont++){
+            if(cont==5 || cont==10) {
+                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionOvni, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont]);
+                Enemigo nuevoEnemigo = spriteEnemigo;
+                listaEnemigos.add(nuevoEnemigo);
+                spriteFondo.attachChild(nuevoEnemigo);
+            }
+            else if(cont==6 || cont==7 || cont==9){
+                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionPua, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont]);
+                Enemigo nuevoEnemigo = spriteEnemigo;
+                listaEnemigos.add(nuevoEnemigo);
+                spriteFondo.attachChild(nuevoEnemigo);
+            }
+            else{
+                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionEnemigo, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont]);
+                Enemigo nuevoEnemigo = spriteEnemigo;
+                listaEnemigos.add(nuevoEnemigo);
+                spriteFondo.attachChild(nuevoEnemigo);
+            }
         }
     }
 
 
+
     private void posicionarPisosFlotantes(){
 
+        int maxima=30;
 
-            spritePiso0 = cargarSprite(1000, 300 , regionPisoFlotante);
-            spriteFondo.attachChild(spritePiso0);
+        posicionesPisosFlotantesX= new float[maxima];
+        posicionesPisosFlotantesY= new float[maxima];
+        listaPisos = new Sprite[maxima];
 
-        spritePiso1 = cargarSprite(3000, 300 , regionPisoFlotante);
-        spriteFondo.attachChild(spritePiso1);
+        posicionesPisosFlotantesX[0]=2000;
+        posicionesPisosFlotantesX[1]=2750;
+        posicionesPisosFlotantesX[2]=3190;
+        posicionesPisosFlotantesX[3]=3520;
+        posicionesPisosFlotantesX[4]=4000;
+        posicionesPisosFlotantesX[5]=5210;
+        posicionesPisosFlotantesX[6]=5470;
+        //Piramide
+        posicionesPisosFlotantesX[7]=7170;
+        posicionesPisosFlotantesX[8]=7430;
+        posicionesPisosFlotantesX[9]=7690;
+        posicionesPisosFlotantesX[10]=7950;
+        posicionesPisosFlotantesX[11]=7430;
+        posicionesPisosFlotantesX[12]=7690;
+        posicionesPisosFlotantesX[13]=7950;
+        posicionesPisosFlotantesX[14]=7690;
+        posicionesPisosFlotantesX[15]=7950;
+        posicionesPisosFlotantesX[16]=7950;
+        posicionesPisosFlotantesX[17]=10110;
+        posicionesPisosFlotantesX[18]=9850;
+        posicionesPisosFlotantesX[19]=9590;
+        posicionesPisosFlotantesX[20]=9330;
+        posicionesPisosFlotantesX[21]=9850;
+        posicionesPisosFlotantesX[22]=9590;
+        posicionesPisosFlotantesX[23]=9330;
+        posicionesPisosFlotantesX[24]=9590;
+        posicionesPisosFlotantesX[25]=9330;
+        posicionesPisosFlotantesX[26]=9330;
+        posicionesPisosFlotantesX[27]=8640;
+        posicionesPisosFlotantesX[28]=10960;
+        posicionesPisosFlotantesX[29]=11220;
 
-        spritePiso2 = cargarSprite(5000, 300 , regionPisoFlotante);
-        spriteFondo.attachChild(spritePiso2);
 
-        spritePiso3 = cargarSprite(7000, 300 , regionPisoFlotante);
-        spriteFondo.attachChild(spritePiso3);
+        posicionesPisosFlotantesY[0]=330;
+        posicionesPisosFlotantesY[1]=460;
+        posicionesPisosFlotantesY[2]=490;
+        posicionesPisosFlotantesY[3]=220;
+        posicionesPisosFlotantesY[4]=580;
+        posicionesPisosFlotantesY[5]=510;
+        posicionesPisosFlotantesY[6]=510;
 
+        //piramide
+        posicionesPisosFlotantesY[7]=174;
+        posicionesPisosFlotantesY[8]=174;
+        posicionesPisosFlotantesY[9]=174;
+        posicionesPisosFlotantesY[10]=174;
+        posicionesPisosFlotantesY[11]=270;
+        posicionesPisosFlotantesY[12]=270;
+        posicionesPisosFlotantesY[13]=270;
+        posicionesPisosFlotantesY[14]=368;
+        posicionesPisosFlotantesY[15]=368;
+        posicionesPisosFlotantesY[16]=464;
+        posicionesPisosFlotantesY[17]=174;
+        posicionesPisosFlotantesY[18]=174;
+        posicionesPisosFlotantesY[19]=174;
+        posicionesPisosFlotantesY[20]=174;
+        posicionesPisosFlotantesY[21]=270;
+        posicionesPisosFlotantesY[22]=270;
+        posicionesPisosFlotantesY[23]=270;
+        posicionesPisosFlotantesY[24]=368;
+        posicionesPisosFlotantesY[25]=368;
+        posicionesPisosFlotantesY[26]=464;
+        posicionesPisosFlotantesY[27]=600;
+        posicionesPisosFlotantesY[28]=410;
+        posicionesPisosFlotantesY[29]=410;
+
+
+
+        int cont;
+
+        for( cont = 0; cont< posicionesPisosFlotantesX.length;cont++){
+
+            Sprite spritePiso = cargarSprite(posicionesPisosFlotantesX[cont], posicionesPisosFlotantesY[cont] , regionPisoFlotante);
+            listaPisos[cont]=(spritePiso);
+            spriteFondo.attachChild(spritePiso);
+        }
+    }
+
+    private void agregarMonedas() {
+        // Agrega monedas a lo largo del mundo
+        listaMonedas = new ArrayList<>();
+
+        int maxima=53;
+
+        posicionesMonedasX= new float[maxima];
+        posicionesMonedasY= new float[maxima];
+
+        posicionesMonedasX[0]=2000;
+        posicionesMonedasX[1]=2750;
+        posicionesMonedasX[2]=3190;
+        posicionesMonedasX[3]=2920;
+        posicionesMonedasX[4]=4000;
+        posicionesMonedasX[5]=5340;
+        posicionesMonedasX[6]=5160;
+        posicionesMonedasX[7]=5520;
+        posicionesMonedasX[8]=5340;
+        posicionesMonedasX[9]=6680;
+        posicionesMonedasX[10]=6800;
+        posicionesMonedasX[11]=6920;
+        posicionesMonedasX[12]=7040;
+        posicionesMonedasX[13]=8190;
+        posicionesMonedasX[14]=8310;
+        posicionesMonedasX[15]=8430;
+        posicionesMonedasX[16]=8550;
+        posicionesMonedasX[17]=8670;
+        posicionesMonedasX[18]=8790;
+        posicionesMonedasX[19]=8910;
+        posicionesMonedasX[20]=9030;
+        posicionesMonedasX[21]=9150;
+        posicionesMonedasX[22]=8190;
+        posicionesMonedasX[23]=8310;
+        posicionesMonedasX[24]=8430;
+        posicionesMonedasX[25]=8550;
+        posicionesMonedasX[26]=8670;
+        posicionesMonedasX[27]=8790;
+        posicionesMonedasX[28]=8910;
+        posicionesMonedasX[29]=9030;
+        posicionesMonedasX[30]=9150;
+        posicionesMonedasX[31]=8190;
+        posicionesMonedasX[32]=8310;
+        posicionesMonedasX[33]=8430;
+        posicionesMonedasX[34]=8550;
+        posicionesMonedasX[35]=8670;
+        posicionesMonedasX[36]=8790;
+        posicionesMonedasX[37]=8910;
+        posicionesMonedasX[38]=9030;
+        posicionesMonedasX[39]=9150;
+        posicionesMonedasX[40]=10600;
+        posicionesMonedasX[41]=10720;
+        posicionesMonedasX[42]=10840;
+        posicionesMonedasX[43]=10960;
+        posicionesMonedasX[44]=11080;
+        posicionesMonedasX[45]=11200;
+        posicionesMonedasX[46]=11320;
+        posicionesMonedasX[47]=11440;
+        posicionesMonedasX[48]=11080;
+        posicionesMonedasX[49]=11900;
+        posicionesMonedasX[50]=12140;
+        posicionesMonedasX[51]=12020;
+        posicionesMonedasX[52]=12020;
+
+
+        posicionesMonedasY[0]=440;
+        posicionesMonedasY[1]=580;
+        posicionesMonedasY[2]=610;
+        posicionesMonedasY[3]=170;
+        posicionesMonedasY[4]=700;
+        posicionesMonedasY[5]=620;
+        posicionesMonedasY[6]=680;
+        posicionesMonedasY[7]=680;
+        posicionesMonedasY[8]=750;
+        posicionesMonedasY[9]=520;
+        posicionesMonedasY[10]=400;
+        posicionesMonedasY[11]=280;
+        posicionesMonedasY[12]=160;
+        posicionesMonedasY[13]=170;
+        posicionesMonedasY[14]=170;
+        posicionesMonedasY[15]=170;
+        posicionesMonedasY[16]=170;
+        posicionesMonedasY[17]=170;
+        posicionesMonedasY[18]=170;
+        posicionesMonedasY[19]=170;
+        posicionesMonedasY[20]=170;
+        posicionesMonedasY[21]=170;
+        posicionesMonedasY[22]=270;
+        posicionesMonedasY[23]=270;
+        posicionesMonedasY[24]=270;
+        posicionesMonedasY[25]=270;
+        posicionesMonedasY[26]=270;
+        posicionesMonedasY[27]=270;
+        posicionesMonedasY[28]=270;
+        posicionesMonedasY[29]=270;
+        posicionesMonedasY[30]=270;
+        posicionesMonedasY[31]=370;
+        posicionesMonedasY[32]=370;
+        posicionesMonedasY[33]=370;
+        posicionesMonedasY[34]=370;
+        posicionesMonedasY[35]=370;
+        posicionesMonedasY[36]=370;
+        posicionesMonedasY[37]=370;
+        posicionesMonedasY[38]=370;
+        posicionesMonedasY[39]=370;
+        posicionesMonedasY[40]=170;
+        posicionesMonedasY[41]=290;
+        posicionesMonedasY[42]=410;
+        posicionesMonedasY[43]=530;
+        posicionesMonedasY[44]=530;
+        posicionesMonedasY[45]=410;
+        posicionesMonedasY[46]=290;
+        posicionesMonedasY[47]=170;
+        posicionesMonedasY[48]=675;
+        posicionesMonedasY[49]=480;
+        posicionesMonedasY[50]=480;
+        posicionesMonedasY[51]=600;
+        posicionesMonedasY[52]=360;
+
+
+
+        for (int i=0; i<posicionesMonedasX.length; i++) {
+            float x = posicionesMonedasX[i];
+            float y = posicionesMonedasY[i];
+            Sprite lechita = new Sprite(x,y,regionLechitas,actividadJuego.getVertexBufferObjectManager());
+            spriteFondo.attachChild(lechita);
+            listaMonedas.add(lechita);
+        }
     }
 
     private void agregarBotonSalto() {
@@ -944,7 +1335,7 @@ public class EscenaCazaJurasica extends EscenaBase {
                             nubecita=false;
                         }
 
-                        poderDeSalto=5f;
+                        poderDeSalto=4.1f;
                         enElAire=true;
                         paArriba=true;
                         gravedad=false;
@@ -1070,14 +1461,10 @@ public class EscenaCazaJurasica extends EscenaBase {
                         spriteVidas[1]= cargarSprite(1050, 780, vidas);
                         attachChild(spriteVidas[1]);
                         cantidadVida++;
-                        spritePersonaje.setSize(spritePersonaje.getWidth() + 20, spritePersonaje.getHeight() + 20);
-
-
                     }
                     else if(cantidadVida==1){
                         spriteVidas[0]= cargarSprite(1000, 780, vidas);
                         attachChild(spriteVidas[0]);
-                        spritePersonaje.setSize(spritePersonaje.getWidth() + 20, spritePersonaje.getHeight() + 20);
                         cantidadVida++;
                     }
                 }
@@ -1093,7 +1480,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private void dispararProyectil() {
         // Crearlo
-        Laser spriteProyectil = new Laser(spritePersonaje.getX(),  spritePersonaje.getY(),regionProyectil, actividadJuego.getVertexBufferObjectManager(),personajeVolteandoDerecha);
+        Laser spriteProyectil = new Laser(spritePersonaje.getX(),  spritePersonaje.getY(),regionProyectil, actividadJuego.getVertexBufferObjectManager(),personajeVolteandoDerecha,false);
 
         if(personajeVolteandoDerecha==false){
             spriteProyectil.setRotation(-180);
@@ -1102,10 +1489,11 @@ public class EscenaCazaJurasica extends EscenaBase {
         listaProyectiles.add(spriteProyectil);  // Lo agrega a la lista
     }
 
+
     private void crearVida(Enemigo enemigoDestruido) {
 
         // Crearlo
-        Vida spriteVida = new Vida(enemigoDestruido.getX(), 200,regionVida, actividadJuego.getVertexBufferObjectManager());
+        Vida spriteVida = new Vida(enemigoDestruido.getX(), enemigoDestruido.getY(),regionVida, actividadJuego.getVertexBufferObjectManager());
         spriteFondo.attachChild(spriteVida);
         listaVidasEncontradas.add(spriteVida);  // Lo agrega a la lista
     }

@@ -138,7 +138,7 @@ public class EscenaCazaJurasicaBossFinal extends EscenaBase {
 
         spriteVidasEnemigo= new Sprite[8];
 
-        spriteEnemigoBossFinal = new Enemigo(1400, 200,regionEnemigoBossFinal, actividadJuego.getVertexBufferObjectManager(),3,true,true);
+        spriteEnemigoBossFinal = new Enemigo(1400, 200,regionEnemigoBossFinal, actividadJuego.getVertexBufferObjectManager(),3,true,true,40,false,false);
         spriteFondo.attachChild(spriteEnemigoBossFinal);
 
 
@@ -505,7 +505,7 @@ public class EscenaCazaJurasicaBossFinal extends EscenaBase {
 
     private void dispararProyectil() {
         // Crearlo
-        Laser spriteProyectil = new Laser(spritePersonaje.getX(),  spritePersonaje.getY(),regionProyectil, actividadJuego.getVertexBufferObjectManager(),personajeVolteandoDerecha);
+        Laser spriteProyectil = new Laser(spritePersonaje.getX(),  spritePersonaje.getY(),regionProyectil, actividadJuego.getVertexBufferObjectManager(),personajeVolteandoDerecha,false);
 
         if(personajeVolteandoDerecha==false){
             spriteProyectil.setRotation(-180);

@@ -1,4 +1,7 @@
 package mx.itesm.rmroman.proyectobasegpo01;
+import android.view.MotionEvent;
+import android.view.View;
+
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
@@ -113,8 +116,8 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
                         }
                         else{
                             admEscenas.liberarEscenaHistoriaCazaJurasica();
-                            admEscenas.crearEscenaCazaJurasica();
-                            admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA);
+                            admEscenas.crearEscenaCargando(1);
+                            admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
                         }
 
 
@@ -135,8 +138,8 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
                     case OPCION_FINAL:
 
                         admEscenas.liberarEscenaHistoriaCazaJurasica();
-                        admEscenas.crearEscenaCazaJurasica();
-                        admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA);
+                        admEscenas.crearEscenaCargando(1);
+                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
 
                         return true;
 

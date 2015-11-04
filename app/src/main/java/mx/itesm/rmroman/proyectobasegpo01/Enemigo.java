@@ -31,24 +31,33 @@ public class Enemigo extends Sprite {
     private int pasos=0;
     private boolean brinco;
     private boolean rotacion;
+    private int limitePasos;
+    private boolean rotaCuandoCamina;
+    private boolean puedeDisparar;
 
     private boolean brincando=false;
 
     private Random regaloAleatorio=new Random();
     private int regalo=0;
 
-    public Enemigo(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager,int comportamiento,boolean brinco,boolean rotacion) {
+    public Enemigo(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager,int comportamiento,boolean brinco,boolean rotacion, int limitePasos,boolean rotaCuandoCamina,boolean puedeDisparar) {
         super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
         limiteDerecho=comportamiento;
         regalo=regaloAleatorio.nextInt(5);
         this.brinco=brinco;
         this.rotacion=rotacion;
-
+        this.limitePasos=limitePasos;
+        this.rotaCuandoCamina=rotaCuandoCamina;
+        this.puedeDisparar=puedeDisparar;
 
     }
 
     public boolean getRotacion(){
         return rotacion;
+    }
+
+    public boolean getPuedeDisparar(){
+        return puedeDisparar;
     }
 
     public void setLimiteDerecho(int decision){
@@ -77,14 +86,16 @@ public class Enemigo extends Sprite {
         if(limiteDerecho==0){
 
             if(voltear==true){
-                this.setRotation(-25);
+                if(rotaCuandoCamina==true) {
+                    this.setRotation(-20);
+                }
                 voltear=false;
             }
 
-            this.setX(this.getX()-8);
+            this.setX(this.getX()-6);
 
             pasos--;
-            if(pasos<-40){
+            if(pasos<-limitePasos){
                 limiteDerecho=1;
                 this.resetRotationCenter();
                 voltear=true;
@@ -93,13 +104,15 @@ public class Enemigo extends Sprite {
         else if(limiteDerecho==1){
 
             if(voltear==true){
-                this.setRotation(25);
+                if(rotaCuandoCamina==true) {
+                    this.setRotation(20);
+                }
                 voltear=false;
             }
 
-            this.setX(this.getX()+8);
+            this.setX(this.getX()+6);
             pasos++;
-            if(pasos>40){
+            if(pasos>limitePasos){
                 limiteDerecho=0;
                 this.resetRotationCenter();
                 voltear=true;
