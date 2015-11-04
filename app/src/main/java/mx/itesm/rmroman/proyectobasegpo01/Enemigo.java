@@ -34,13 +34,16 @@ public class Enemigo extends Sprite {
     private int limitePasos;
     private boolean rotaCuandoCamina;
     private boolean puedeDisparar;
+    private boolean noPuedeSerDestruido;
+
+    private int disparara;
 
     private boolean brincando=false;
 
     private Random regaloAleatorio=new Random();
     private int regalo=0;
 
-    public Enemigo(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager,int comportamiento,boolean brinco,boolean rotacion, int limitePasos,boolean rotaCuandoCamina,boolean puedeDisparar) {
+    public Enemigo(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager,int comportamiento,boolean brinco,boolean rotacion, int limitePasos,boolean rotaCuandoCamina,boolean puedeDisparar,boolean noPuedeSerDestruido) {
         super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
         limiteDerecho=comportamiento;
         regalo=regaloAleatorio.nextInt(5);
@@ -49,7 +52,12 @@ public class Enemigo extends Sprite {
         this.limitePasos=limitePasos;
         this.rotaCuandoCamina=rotaCuandoCamina;
         this.puedeDisparar=puedeDisparar;
+        this.noPuedeSerDestruido=noPuedeSerDestruido;
 
+    }
+
+    public boolean getNoPuedeSerDestruido(){
+        return noPuedeSerDestruido;
     }
 
     public boolean getRotacion(){
@@ -60,8 +68,12 @@ public class Enemigo extends Sprite {
         return puedeDisparar;
     }
 
-    public void setLimiteDerecho(int decision){
+    public int getDisparara(){
+        disparara= regaloAleatorio.nextInt(70);
+        return disparara;
+    }
 
+    public void setLimiteDerecho(int decision){
         this.limiteDerecho=decision;
     }
 

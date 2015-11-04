@@ -1,7 +1,5 @@
 package mx.itesm.rmroman.proyectobasegpo01;
 
-import android.util.Log;
-
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
@@ -41,6 +39,7 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionHoyoNegro;
     private ITextureRegion regionOvni;
     private ITextureRegion regionPua;
+    private ITextureRegion regionPicos;
 
     private Random elQueSigue;
 
@@ -67,6 +66,7 @@ public class EscenaCazaJurasica extends EscenaBase {
     private boolean[] rotaCamina;
     private int[] numPasos;
     private boolean[] disparar;
+    private boolean[] noPuedeSerDestruido;
 
 
     private Text txtMarcador; // Por ahora con valorMarcador
@@ -88,6 +88,8 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionVida;
 
     private int numeroDeBalas;
+
+    private Random aleatorio;
 
     private ITextureRegion vidas;
     private Sprite[] spriteVidas;
@@ -210,6 +212,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         regionOvni= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/naveVaca.png");
         regionPua= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/pua.png");
+        regionPicos= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/picos.png");
 
         regionMenuPausa = cargarImagen("Imagenes/Ajustes2/pausa_fondo.png");
         regionMenuOffoff=cargarImagen("Imagenes/Ajustes2/music_off_OFF.png");
@@ -319,6 +322,8 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         spriteHoyoNegro= cargarSprite(9500, 400, regionHoyoNegro);
         spriteFondo.attachChild(spriteHoyoNegro);
+
+        aleatorio= new Random();
 
         spritePersonajeizquierda = new Jugador((ControlJuego.ANCHO_CAMARA/2)-200, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeAnimadoIzquierda, actividadJuego.getVertexBufferObjectManager());
         spritePersonajeizquierda.animate(70);
@@ -703,17 +708,16 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         actualizarVidas(pSecondsElapsed);
 
-        reloj+=1;
-
         for (int i= listaEnemigos.size()-1; i>=0; i--) {
 
             final Enemigo enemigo = listaEnemigos.get(i);
 
             if(enemigo.getPuedeDisparar()==true){
-                if(reloj==100) {
+
+                if(enemigo.getDisparara()==1){
                     dispararEnemigo(enemigo);
-                    reloj=0;
                 }
+
             }
             if(enemigo.getBrinco()==true){
 
@@ -764,9 +768,9 @@ public class EscenaCazaJurasica extends EscenaBase {
             if (spritePersonaje.collidesWith(enemigo)) {
 
                 if(cantidadVida -1<0){
+                    admEscenas.liberarEscenaCazaJurasica();
                     admEscenas.crearEscenaMenu();
                     admEscenas.setEscena(TipoEscena.ESCENA_MENU);
-                    admEscenas.liberarEscenaCazaJurasica();
                 }
                 else{
                     enemigo.detachSelf();
@@ -820,12 +824,13 @@ public class EscenaCazaJurasica extends EscenaBase {
             if (proyectil.collidesWith(spritePersonaje)) {
                 // Baja puntos/vida
                 if(cantidadVida-1<0){
+                    admEscenas.liberarEscenaCazaJurasica();
                     admEscenas.crearEscenaMenu();
                     admEscenas.setEscena(TipoEscena.ESCENA_MENU);
-                    admEscenas.liberarEscenaCazaJurasica();
                 }
 
                 else{
+
                     proyectil.detachSelf();
                     listaProyectilesEnemigo.remove(proyectil);
                     admMusica.vibrar(200);
@@ -841,8 +846,15 @@ public class EscenaCazaJurasica extends EscenaBase {
                     }
 
                     else {
-                        spriteVidas[2 - cantidadVida].detachSelf();
-                        cantidadVida--;
+                        if(2-cantidadVida>=0) {
+                            spriteVidas[2 - cantidadVida].detachSelf();
+                            cantidadVida--;
+                        }
+                        else{
+                            admEscenas.liberarEscenaCazaJurasica();
+                            admEscenas.crearEscenaMenu();
+                            admEscenas.setEscena(TipoEscena.ESCENA_MENU);
+                        }
                     }
 
                 }
@@ -965,7 +977,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private void posicionarEnemigos(){
 
-        int maxima=12;
+        int maxima=23;
 
         posicionesEnemigosx = new float[maxima];
         posicionesEnemigosy = new float[maxima];
@@ -975,6 +987,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         numPasos = new int[maxima];
         rotaCamina = new boolean[maxima];
         disparar = new boolean[maxima];
+        noPuedeSerDestruido =new boolean[maxima];
 
         posicionesEnemigosx[0]=2710;
         posicionesEnemigosx[1]=3180;
@@ -988,6 +1001,17 @@ public class EscenaCazaJurasica extends EscenaBase {
         posicionesEnemigosx[9]=11200;
         posicionesEnemigosx[10]=11900;
         posicionesEnemigosx[11]=12140;
+        posicionesEnemigosx[12]=12600;
+        posicionesEnemigosx[13]=13400;
+        posicionesEnemigosx[14]=13400;
+        posicionesEnemigosx[15]=13390;
+        posicionesEnemigosx[16]=13500;
+        posicionesEnemigosx[17]=13700;
+        posicionesEnemigosx[18]=13900;
+        posicionesEnemigosx[19]=14100;
+        posicionesEnemigosx[20]=13700;
+        posicionesEnemigosx[21]=13900;
+        posicionesEnemigosx[22]=14100;
 
         posicionesEnemigosy[0]=150;
         posicionesEnemigosy[1]=625;
@@ -1001,6 +1025,17 @@ public class EscenaCazaJurasica extends EscenaBase {
         posicionesEnemigosy[9]=525;
         posicionesEnemigosy[10]=750;
         posicionesEnemigosy[11]=150;
+        posicionesEnemigosy[12]=130;
+        posicionesEnemigosy[13]=456;
+        posicionesEnemigosy[14]=456;
+        posicionesEnemigosy[15]=680;
+        posicionesEnemigosy[16]=130;
+        posicionesEnemigosy[17]=130;
+        posicionesEnemigosy[18]=130;
+        posicionesEnemigosy[19]=130;
+        posicionesEnemigosy[20]=180;
+        posicionesEnemigosy[21]=180;
+        posicionesEnemigosy[22]=180;
 
         brinca[0]=false;
         brinca[1]=false;
@@ -1014,6 +1049,17 @@ public class EscenaCazaJurasica extends EscenaBase {
         brinca[9]=false;
         brinca[10]=false;
         brinca[11]=false;
+        brinca[12]=false;
+        brinca[13]=false;
+        brinca[14]=false;
+        brinca[15]=false;
+        brinca[16]=false;
+        brinca[17]=false;
+        brinca[18]=false;
+        brinca[19]=false;
+        brinca[20]=false;
+        brinca[21]=false;
+        brinca[22]=false;
 
         camina[0]=1;
         camina[1]=0;
@@ -1027,6 +1073,17 @@ public class EscenaCazaJurasica extends EscenaBase {
         camina[9]=1;
         camina[10]=0;
         camina[11]=1;
+        camina[12]=0;
+        camina[13]=0;
+        camina[14]=1;
+        camina[15]=0;
+        camina[16]=3;
+        camina[17]=3;
+        camina[18]=3;
+        camina[19]=3;
+        camina[20]=3;
+        camina[21]=3;
+        camina[22]=3;
 
         rota[0]=false;
         rota[1]=false;
@@ -1040,6 +1097,17 @@ public class EscenaCazaJurasica extends EscenaBase {
         rota[9]=false;
         rota[10]=false;
         rota[11]=true;
+        rota[12]=false;
+        rota[13]=false;
+        rota[14]=false;
+        rota[15]=false;
+        rota[16]=false;
+        rota[17]=false;
+        rota[18]=false;
+        rota[19]=false;
+        rota[20]=false;
+        rota[21]=false;
+        rota[22]=false;
 
         numPasos[0]=40;
         numPasos[1]=10;
@@ -1053,6 +1121,17 @@ public class EscenaCazaJurasica extends EscenaBase {
         numPasos[9]=35;
         numPasos[10]=95;
         numPasos[11]=45;
+        numPasos[12]=35;
+        numPasos[13]=45;
+        numPasos[14]=45;
+        numPasos[15]=25;
+        numPasos[16]=35;
+        numPasos[17]=45;
+        numPasos[18]=45;
+        numPasos[19]=25;
+        numPasos[20]=25;
+        numPasos[21]=25;
+        numPasos[22]=25;
 
         rotaCamina[0]=true;
         rotaCamina[1]=true;
@@ -1066,6 +1145,17 @@ public class EscenaCazaJurasica extends EscenaBase {
         rotaCamina[9]=false;
         rotaCamina[10]=true;
         rotaCamina[11]=true;
+        rotaCamina[12]=false;
+        rotaCamina[13]=true;
+        rotaCamina[14]=true;
+        rotaCamina[15]=false;
+        rotaCamina[16]=false;
+        rotaCamina[17]=false;
+        rotaCamina[18]=false;
+        rotaCamina[19]=false;
+        rotaCamina[20]=false;
+        rotaCamina[21]=false;
+        rotaCamina[22]=false;
 
         disparar[0]=false;
         disparar[1]=false;
@@ -1079,23 +1169,64 @@ public class EscenaCazaJurasica extends EscenaBase {
         disparar[9]=false;
         disparar[10]=true;
         disparar[11]=false;
+        disparar[12]=false;
+        disparar[13]=false;
+        disparar[14]=false;
+        disparar[15]=false;
+        disparar[16]=false;
+        disparar[17]=false;
+        disparar[18]=false;
+        disparar[19]=false;
+        disparar[20]=false;
+        disparar[21]=false;
+        disparar[22]=false;
+
+        noPuedeSerDestruido[0]=false;
+        noPuedeSerDestruido[1]=false;
+        noPuedeSerDestruido[2]=false;
+        noPuedeSerDestruido[3]=false;
+        noPuedeSerDestruido[4]=false;
+        noPuedeSerDestruido[5]=false;
+        noPuedeSerDestruido[6]=false;
+        noPuedeSerDestruido[7]=false;
+        noPuedeSerDestruido[8]=false;
+        noPuedeSerDestruido[9]=false;
+        noPuedeSerDestruido[10]=false;
+        noPuedeSerDestruido[11]=false;
+        noPuedeSerDestruido[12]=false;
+        noPuedeSerDestruido[13]=false;
+        noPuedeSerDestruido[14]=false;
+        noPuedeSerDestruido[15]=false;
+        noPuedeSerDestruido[16]=true;
+        noPuedeSerDestruido[17]=true;
+        noPuedeSerDestruido[18]=true;
+        noPuedeSerDestruido[19]=true;
+        noPuedeSerDestruido[20]=true;
+        noPuedeSerDestruido[21]=true;
+        noPuedeSerDestruido[22]=true;
 
         int cont;
         for( cont = 0; cont< posicionesEnemigosx.length;cont++){
             if(cont==5 || cont==10) {
-                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionOvni, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont]);
+                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionOvni, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
                 Enemigo nuevoEnemigo = spriteEnemigo;
                 listaEnemigos.add(nuevoEnemigo);
                 spriteFondo.attachChild(nuevoEnemigo);
             }
-            else if(cont==6 || cont==7 || cont==9){
-                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionPua, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont]);
+            else if(cont==6 || cont==7 || cont==9 || cont==12 || cont==15){
+                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionPua, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
+                Enemigo nuevoEnemigo = spriteEnemigo;
+                listaEnemigos.add(nuevoEnemigo);
+                spriteFondo.attachChild(nuevoEnemigo);
+            }
+            else if(cont==16 || cont==17 || cont==18 || cont==19 || cont==20 || cont==21 || cont==22){
+                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionPicos, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
                 Enemigo nuevoEnemigo = spriteEnemigo;
                 listaEnemigos.add(nuevoEnemigo);
                 spriteFondo.attachChild(nuevoEnemigo);
             }
             else{
-                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionEnemigo, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont]);
+                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionEnemigo, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
                 Enemigo nuevoEnemigo = spriteEnemigo;
                 listaEnemigos.add(nuevoEnemigo);
                 spriteFondo.attachChild(nuevoEnemigo);
@@ -1107,7 +1238,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private void posicionarPisosFlotantes(){
 
-        int maxima=30;
+        int maxima=36;
 
         posicionesPisosFlotantesX= new float[maxima];
         posicionesPisosFlotantesY= new float[maxima];
@@ -1144,6 +1275,12 @@ public class EscenaCazaJurasica extends EscenaBase {
         posicionesPisosFlotantesX[27]=8640;
         posicionesPisosFlotantesX[28]=10960;
         posicionesPisosFlotantesX[29]=11220;
+        posicionesPisosFlotantesX[30]=13000;
+        posicionesPisosFlotantesX[31]=13260;
+        posicionesPisosFlotantesX[32]=13520;
+        posicionesPisosFlotantesX[33]=13780;
+        posicionesPisosFlotantesX[34]=13260;
+        posicionesPisosFlotantesX[35]=13520;
 
 
         posicionesPisosFlotantesY[0]=330;
@@ -1178,7 +1315,12 @@ public class EscenaCazaJurasica extends EscenaBase {
         posicionesPisosFlotantesY[27]=600;
         posicionesPisosFlotantesY[28]=410;
         posicionesPisosFlotantesY[29]=410;
-
+        posicionesPisosFlotantesY[30]=330;
+        posicionesPisosFlotantesY[31]=330;
+        posicionesPisosFlotantesY[32]=330;
+        posicionesPisosFlotantesY[33]=330;
+        posicionesPisosFlotantesY[34]=580;
+        posicionesPisosFlotantesY[35]=580;
 
 
         int cont;
@@ -1195,7 +1337,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         // Agrega monedas a lo largo del mundo
         listaMonedas = new ArrayList<>();
 
-        int maxima=53;
+        int maxima=60;
 
         posicionesMonedasX= new float[maxima];
         posicionesMonedasY= new float[maxima];
@@ -1253,6 +1395,13 @@ public class EscenaCazaJurasica extends EscenaBase {
         posicionesMonedasX[50]=12140;
         posicionesMonedasX[51]=12020;
         posicionesMonedasX[52]=12020;
+        posicionesMonedasX[53]=13000;
+        posicionesMonedasX[54]=13260;
+        posicionesMonedasX[55]=13520;
+        posicionesMonedasX[56]=13780;
+        posicionesMonedasX[57]=13260;
+        posicionesMonedasX[58]=13520;
+        posicionesMonedasX[59]=12740;
 
 
         posicionesMonedasY[0]=440;
@@ -1308,6 +1457,13 @@ public class EscenaCazaJurasica extends EscenaBase {
         posicionesMonedasY[50]=480;
         posicionesMonedasY[51]=600;
         posicionesMonedasY[52]=360;
+        posicionesMonedasY[53]=450;
+        posicionesMonedasY[54]=450;
+        posicionesMonedasY[55]=450;
+        posicionesMonedasY[56]=450;
+        posicionesMonedasY[57]=700;
+        posicionesMonedasY[58]=700;
+        posicionesMonedasY[59]=450;
 
 
 
@@ -1430,16 +1586,19 @@ public class EscenaCazaJurasica extends EscenaBase {
                 if (proyectil.collidesWith(enemigo)) {
                     // Lo destruye
 
-                    if(enemigo.getRegalo()==1 || enemigo.getRegalo()==3){
-                        crearVida(enemigo);
-                    }
+                    if(enemigo.getNoPuedeSerDestruido()==false){
+                        if (enemigo.getRegalo() == 1 || enemigo.getRegalo() == 3) {
+                            crearVida(enemigo);
+                        }
 
-                    enemigo.detachSelf();
-                    listaEnemigos.remove(enemigo);
+                        enemigo.detachSelf();
+                        listaEnemigos.remove(enemigo);
+                    }
                     // desaparece el proyectil
                     detachChild(proyectil);
                     listaProyectiles.remove(proyectil);
                     break;
+
                 }
             }
         }

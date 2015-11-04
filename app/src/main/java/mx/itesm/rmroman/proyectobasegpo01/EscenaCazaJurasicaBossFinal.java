@@ -138,7 +138,7 @@ public class EscenaCazaJurasicaBossFinal extends EscenaBase {
 
         spriteVidasEnemigo= new Sprite[8];
 
-        spriteEnemigoBossFinal = new Enemigo(1400, 200,regionEnemigoBossFinal, actividadJuego.getVertexBufferObjectManager(),3,true,true,40,false,false);
+        spriteEnemigoBossFinal = new Enemigo(1400, 200,regionEnemigoBossFinal, actividadJuego.getVertexBufferObjectManager(),3,true,true,40,false,false,false);
         spriteFondo.attachChild(spriteEnemigoBossFinal);
 
 
