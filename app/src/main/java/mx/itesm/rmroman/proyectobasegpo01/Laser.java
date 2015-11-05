@@ -32,10 +32,10 @@ public class Laser extends Sprite {
 
         if(disparoOvni==false) {
             if (volteandoDerecha == true) {
-                this.setX(this.getX() + 20);
+                this.setX(this.getX() + 30);
             } else {
                 this.setRotation(-180);
-                this.setX(this.getX() - 20);
+                this.setX(this.getX() - 30);
             }
         }
 

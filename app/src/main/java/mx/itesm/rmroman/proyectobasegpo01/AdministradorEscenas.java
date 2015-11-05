@@ -14,8 +14,6 @@ public class AdministradorEscenas {
 
     // Declara las distintas escenas que forman el juego
     private mx.itesm.rmroman.proyectobasegpo01.EscenaBase escenaSplash;
-
-
     private mx.itesm.rmroman.proyectobasegpo01.EscenaBase escenaMenu;
     private mx.itesm.rmroman.proyectobasegpo01.EscenaBase escenaAcercaDe;
     private mx.itesm.rmroman.proyectobasegpo01.EscenaBase escenaHistoriaIntro;
@@ -27,6 +25,8 @@ public class AdministradorEscenas {
     private EscenaBase escenaCazajurasicaBossFinal;
     private EscenaBase escenaIntroCazaJurasica;
     private EscenaBase escenaHistoriaCazaJurasica;
+    private EscenaBase escenaPerdiste;
+    private EscenaBase escenaGanaste;
 
     private boolean cazaJurasicaDesbloqueado=false;
 
@@ -121,6 +121,12 @@ public class AdministradorEscenas {
             case ESCENA_HISTORIA_CAZA_JURASICA:
                 setEscenaBase(escenaHistoriaCazaJurasica);
                 break;
+            case ESCENA_PERDISTE:
+                setEscenaBase(escenaPerdiste);
+                break;
+            case ESCENA_GANASTE:
+                setEscenaBase(escenaGanaste);
+                break;
         }
     }
 
@@ -134,6 +140,28 @@ public class AdministradorEscenas {
     public void liberarEscenaSplash() {
         escenaSplash.liberarEscena();
         escenaSplash = null;
+    }
+
+    public void crearEscenaGanaste() {
+        // Carga los recursos
+        escenaGanaste = new mx.itesm.rmroman.proyectobasegpo01.EscenaGanaste();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaGanaste() {
+        escenaGanaste.liberarEscena();
+        escenaGanaste = null;
+    }
+
+    public void crearEscenaPerdiste() {
+        // Carga los recursos
+        escenaPerdiste = new mx.itesm.rmroman.proyectobasegpo01.EscenaPerdiste();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaPerdiste() {
+        escenaPerdiste.liberarEscena();
+        escenaPerdiste = null;
     }
 
     public void crearEscenaHistoriaCazaJurasica() {

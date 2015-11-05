@@ -19,7 +19,7 @@ public class EscenaGanaste extends EscenaBase
     @Override
     public void cargarRecursos() {
 
-        regionFondo = cargarImagen("Imagenes/Logos/logoTec.png");
+        regionFondo = cargarImagen("Imagenes/victoria.jpg");
     }
 
     // Arma la escena que se presentará en pantalla
@@ -33,6 +33,8 @@ public class EscenaGanaste extends EscenaBase
         SpriteBackground fondo = new SpriteBackground(0.28f, 0.63f, 0.92f,spriteFondo);
         setBackground(fondo);
         setBackgroundEnabled(true);
+
+        admMusica.cargarMusica(3);
     }
 
     // La escena se debe actualizar en este método que se repite "varias" veces por segundo
@@ -45,18 +47,21 @@ public class EscenaGanaste extends EscenaBase
 
     @Override
     public void onBackKeyPressed() {
-
+        admEscenas.liberarEscenaGanaste();
+        admEscenas.crearEscenaMenu();
+        admEscenas.setEscena(mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_MENU);
     }
 
     @Override
     public TipoEscena getTipoEscena() {
 
-        return TipoEscena.ESCENA_SPLASH;
+        return TipoEscena.ESCENA_GANASTE;
     }
 
     // Libera la escena misma del engine
     @Override
     public void liberarEscena() {
+        admMusica.liberarMusica();
         this.detachSelf();      // La escena se deconecta del engine
         this.dispose();         // Libera la memoria
 

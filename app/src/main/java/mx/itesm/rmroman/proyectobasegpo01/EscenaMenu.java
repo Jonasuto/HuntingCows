@@ -22,7 +22,6 @@ public class EscenaMenu extends EscenaBase
     private ITextureRegion regionBtnJugar;
     private ITextureRegion regionBtnRojo;
     private ITextureRegion regionBtnMusica;
-    private ITextureRegion regionBtnSonido;
     private ITextureRegion regionBtnContinuarJuego;
     private ITextureRegion regionBtnComic;
     private ITextureRegion regionBtnArcade;
@@ -40,7 +39,6 @@ public class EscenaMenu extends EscenaBase
     private final int OPCION_JUGAR = 1;
     private final int OPCION_BOTON_ROJO = 2;
     private final int OPCION_MUSICA = 3;
-    private final int OPCION_SONIDO = 4;
     private final int OPCION_COMICS = 5;
     private final int OPCION_ARCADE = 6;
     private final int OPCION_CONTINUAR_JUEGO = 7;
@@ -63,7 +61,6 @@ public class EscenaMenu extends EscenaBase
         regionBtnJugar = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_azulnave.png");
         regionBtnRojo = cargarImagen("Imagenes/MenuInicio/botonesMenu/btnRojo.png");
         regionBtnMusica = cargarImagen("Imagenes/MenuInicio/botonesMenu/musica.png");
-        regionBtnSonido = cargarImagen("Imagenes/MenuInicio/botonesMenu/sonido.jpg");
         regionBtnArcade = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_rojoarcade.png");
         regionBtnComic = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_blancocomic.png");
         regionBtnContinuarJuego = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_verdeplaneta.png");
@@ -109,9 +106,6 @@ public class EscenaMenu extends EscenaBase
         IMenuItem opcionBotonRojo = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_BOTON_ROJO,
                 regionBtnRojo, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
-        IMenuItem opcionSonido = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_SONIDO,
-                regionBtnSonido, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
-
         IMenuItem opcionMusica = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_MUSICA,
                 regionBtnMusica, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
@@ -129,7 +123,6 @@ public class EscenaMenu extends EscenaBase
         menu.addMenuItem(opcionAcercaDe);
         menu.addMenuItem(opcionJugar);
         menu.addMenuItem(opcionBotonRojo);
-        menu.addMenuItem(opcionSonido);
         menu.addMenuItem(opcionMusica);
         menu.addMenuItem(opcionBotonArcade);
         menu.addMenuItem(opcionBotonComics);
@@ -150,7 +143,6 @@ public class EscenaMenu extends EscenaBase
             opcionJugar.setPosition(360, 220);
             opcionBotonRojo.setPosition(520, -340);
             opcionMusica.setPosition(-570, 310);
-            opcionSonido.setPosition(-450, 310);
             opcionBotonArcade.setPosition(210, -60);
             opcionBotonComics.setPosition(90, 95);
             opcionContinuarJuego.setPosition(430, -60);
@@ -160,9 +152,8 @@ public class EscenaMenu extends EscenaBase
             opcionJugar.setPosition(340, 190);
             opcionBotonRojo.setPosition(520, -340);
             opcionMusica.setPosition(-570, 310);
-            opcionSonido.setPosition(-450, 310);
-            opcionBotonArcade.setPosition(-480, -60);
-            opcionBotonComics.setPosition(-300, 95);
+            opcionBotonArcade.setPosition(-480, 10);
+            opcionBotonComics.setPosition(-320, 226);
             opcionContinuarJuego.setPosition(410, -60);
         }
 
@@ -195,10 +186,6 @@ public class EscenaMenu extends EscenaBase
                         admEscenas.crearEscenaAjustes();
                         admEscenas.setEscena(TipoEscena.ESCENA_AJUSTES);
 
-                        break;
-
-                    case OPCION_SONIDO:
-                        // Mostrar la escena de AcercaDe
                         break;
 
                     case OPCION_BOTON_ROJO:

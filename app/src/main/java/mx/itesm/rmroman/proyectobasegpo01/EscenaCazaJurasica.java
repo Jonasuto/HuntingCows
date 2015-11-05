@@ -251,9 +251,8 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteFondo4 = cargarSprite(13908, ControlJuego.ALTO_CAMARA/2 , regionFondo);
         spriteFondo.attachChild(spriteFondo4);
 
-        spriteOvni2=cargarSprite(1000, 300, regionOvni);
+        spriteOvni2=cargarSprite(10185, 300, regionOvni);
         spriteOvni2.setSize(spriteOvni2.getWidth() - 30, spriteOvni2.getHeight() - 30);
-        spriteOvni2.setRotation(25);
         spriteFondo.attachChild(spriteOvni2);
 
         spriteVidas= new Sprite[3];
@@ -320,7 +319,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteFondo.attachChild(pisoActual);
 
 
-        spriteHoyoNegro= cargarSprite(9500, 400, regionHoyoNegro);
+        spriteHoyoNegro= cargarSprite(14700, 400, regionHoyoNegro);
         spriteFondo.attachChild(spriteHoyoNegro);
 
         aleatorio= new Random();
@@ -669,16 +668,14 @@ public class EscenaCazaJurasica extends EscenaBase {
             spriteNavecita.setPosition(spritePersonaje.getX(), spritePersonaje.getY());
         }
 
-        /*
+
 
         if(spritePersonaje.collidesWith(spriteHoyoNegro)){
             admEscenas.setcazaJurasicaDesbloqueado(true);
-            admEscenas.crearEscenaCazaJurasicaBossFinal();
-            admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_BOSS_FINAL);
             admEscenas.liberarEscenaCazaJurasica();
+            admEscenas.crearEscenaGanaste();
+            admEscenas.setEscena(TipoEscena.ESCENA_GANASTE);
         }
-        */
-
 
         if(gravedad==true && nubecita==false){
             if(spritePersonaje.getY()>ControlJuego.ALTO_CAMARA/4-20 && estoySobreUnaPalmera==false){
@@ -769,8 +766,8 @@ public class EscenaCazaJurasica extends EscenaBase {
 
                 if(cantidadVida -1<0){
                     admEscenas.liberarEscenaCazaJurasica();
-                    admEscenas.crearEscenaMenu();
-                    admEscenas.setEscena(TipoEscena.ESCENA_MENU);
+                    admEscenas.crearEscenaPerdiste();
+                    admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                 }
                 else{
                     enemigo.detachSelf();
@@ -788,8 +785,15 @@ public class EscenaCazaJurasica extends EscenaBase {
                     }
 
                     else {
-                        spriteVidas[2 - cantidadVida].detachSelf();
-                        cantidadVida--;
+                        if(2 - cantidadVida>=0) {
+                            spriteVidas[2 - cantidadVida].detachSelf();
+                            cantidadVida--;
+                        }
+                        else{
+                            admEscenas.liberarEscenaCazaJurasica();
+                            admEscenas.crearEscenaPerdiste();
+                            admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
+                        }
                     }
 
                 }
@@ -825,8 +829,8 @@ public class EscenaCazaJurasica extends EscenaBase {
                 // Baja puntos/vida
                 if(cantidadVida-1<0){
                     admEscenas.liberarEscenaCazaJurasica();
-                    admEscenas.crearEscenaMenu();
-                    admEscenas.setEscena(TipoEscena.ESCENA_MENU);
+                    admEscenas.crearEscenaPerdiste();
+                    admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                 }
 
                 else{
@@ -1617,12 +1621,12 @@ public class EscenaCazaJurasica extends EscenaBase {
                 if(cantidadVida<2){
 
                     if(cantidadVida==0){
-                        spriteVidas[1]= cargarSprite(1050, 780, vidas);
+                        spriteVidas[1]= cargarSprite(1150, 750, vidas);
                         attachChild(spriteVidas[1]);
                         cantidadVida++;
                     }
                     else if(cantidadVida==1){
-                        spriteVidas[0]= cargarSprite(1000, 780, vidas);
+                        spriteVidas[0]= cargarSprite(1100, 750, vidas);
                         attachChild(spriteVidas[0]);
                         cantidadVida++;
                     }

@@ -19,7 +19,7 @@ public class EscenaPerdiste extends EscenaBase
     @Override
     public void cargarRecursos() {
 
-        regionFondo = cargarImagen("Imagenes/Logos/logoTec.png");
+        regionFondo = cargarImagen("Imagenes/perdiste.jpg");
     }
 
     // Arma la escena que se presentará en pantalla
@@ -45,13 +45,15 @@ public class EscenaPerdiste extends EscenaBase
 
     @Override
     public void onBackKeyPressed() {
-
+        admEscenas.liberarEscenaPerdiste();
+        admEscenas.crearEscenaMenu();
+        admEscenas.setEscena(mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_MENU);
     }
 
     @Override
     public TipoEscena getTipoEscena() {
 
-        return TipoEscena.ESCENA_SPLASH;
+        return TipoEscena.ESCENA_PERDISTE;
     }
 
     // Libera la escena misma del engine

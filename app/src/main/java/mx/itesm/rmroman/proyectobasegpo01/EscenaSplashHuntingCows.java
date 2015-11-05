@@ -12,17 +12,14 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 public class EscenaSplashHuntingCows extends EscenaBase {
 
     private ITextureRegion regionFondo;
-    private ITextureRegion regionLogo;
     private ITextureRegion regionPress;
-    private ITextureRegion regionNaveVaca;
 
 
     // Sprites sobre la escena
     private Sprite spriteFondo;
     private Sprite spriteLogo;
     private ButtonSprite spritePress;
-    private Sprite spriteNaveVaca1;
-    private Sprite spriteNaveVaca2;
+
 
     private boolean tocar= false;
 
@@ -32,10 +29,8 @@ public class EscenaSplashHuntingCows extends EscenaBase {
     @Override
     public void cargarRecursos() {
 
-        regionFondo = cargarImagen("Imagenes/fondo_hunting.jpg");
-        regionLogo = cargarImagen("Imagenes/titulo.png");
+        regionFondo = cargarImagen("Imagenes/fondoSplashHunt.jpg");
         regionPress = cargarImagen("Imagenes/press.png");
-        regionNaveVaca = cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/naveVaca.png");
 
     }
 
@@ -50,15 +45,6 @@ public class EscenaSplashHuntingCows extends EscenaBase {
         SpriteBackground fondo = new SpriteBackground(0.28f, 0.63f, 0.92f,spriteFondo);
         setBackground(fondo);
         setBackgroundEnabled(true);
-
-        spriteLogo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionLogo);
-        attachChild(spriteLogo);
-
-        spriteNaveVaca1 = cargarSprite(ControlJuego.ANCHO_CAMARA / 2-350, ControlJuego.ALTO_CAMARA / 2, regionNaveVaca);
-        attachChild(spriteNaveVaca1);
-
-        spriteNaveVaca2 = cargarSprite(ControlJuego.ANCHO_CAMARA / 2+400, ControlJuego.ALTO_CAMARA / 2, regionNaveVaca);
-        attachChild(spriteNaveVaca2);
 
         admMusica.cargarMusica(0);
 

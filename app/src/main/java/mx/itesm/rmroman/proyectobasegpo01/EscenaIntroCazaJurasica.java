@@ -12,6 +12,7 @@ import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 
 import java.util.ArrayList;
 
@@ -22,12 +23,10 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
 
 
     private ITextureRegion regionFondo;
-    private ITextureRegion regionNave;
     private ITextureRegion regionBase;
     private ITextureRegion regionFondoPausa;
     private ITextureRegion regionControlSalto;
     private ITextureRegion regionHoyoNegro;
-    private Sprite spriteNave;
     private AnalogOnScreenControl control;
     private boolean juegoCorriendo = true;
 
@@ -38,6 +37,12 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
     private Sprite spriteFondo;
     private Sprite btnDisparar;
 
+    private Jugador spriteNaveParado;
+    private Jugador spriteNaveActual;
+
+    private TiledTextureRegion regionNavenimadoParado;
+
+    private boolean personajeParado=true;
 
     private Sprite spriteHoyoNegro;
 
@@ -50,7 +55,6 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
 
     @Override
     public void cargarRecursos() {
-        regionNave=cargarImagen("Imagenes/Roman/nave2.png");
         regionFondo = cargarImagen("Imagenes/fondo_hunting.jpg");
         regionFondoPausa = cargarImagen("Imagenes/Logos/logoHuntingCows.png");
         regionBase=cargarImagen("Imagenes/Roman/baseJoystick.png");
@@ -59,6 +63,8 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
         regionPausa = cargarImagen("Imagenes/Ajustes/pausa.png");
         regionHoyoNegro = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_verdeplaneta.png");
         regionProyectil = cargarImagen("Imagenes/Roman/laser.png");
+
+        regionNavenimadoParado = cargarImagenMosaico("Imagenes/Roman/naveStand.png", 800, 267, 1, 2);
     }
 
     @Override
@@ -67,8 +73,11 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2 , regionFondo);
         attachChild(spriteFondo);
 
-        spriteNave=cargarSprite(100, 270, regionNave);
-        spriteFondo.attachChild(spriteNave);
+        spriteNaveParado = new Jugador((ControlJuego.ANCHO_CAMARA/2)-200, (ControlJuego.ALTO_CAMARA/4)-20,regionNavenimadoParado, actividadJuego.getVertexBufferObjectManager());
+        spriteNaveParado.animate(30);
+
+        spriteNaveActual=spriteNaveParado;
+        attachChild(spriteNaveActual);
 
         spriteHoyoNegro= cargarSprite(1100, 400, regionHoyoNegro);
         spriteFondo.attachChild(spriteHoyoNegro);
@@ -131,10 +140,7 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
             return;
         }
 
-        Log.i("estoy",spriteNave.getX()+"   "+spriteNave.getY());
-
-
-        if(spriteNave.collidesWith(spriteHoyoNegro)){
+        if(spriteNaveActual.collidesWith(spriteHoyoNegro)){
             admEscenas.liberarEscenaIntroCazaJurasica();
             admEscenas.crearEscenaHistoriaCazaJurasica();
             admEscenas.setEscena(TipoEscena.ESCENA_HISTORIA_CAZA_JURASICA);
@@ -174,44 +180,44 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
                 if(juegoCorriendo){
 
 
-                    if(spriteNave.getX()>1200){
+                    if(spriteNaveActual.getX()>1200){
                         if(pValueX>0){
                         }
                         else{
-                            float x = spriteNave.getX() + 15 * pValueX;
-                            spriteNave.setX(x);
+                            float x = spriteNaveActual.getX() + 15 * pValueX;
+                            spriteNaveActual.setX(x);
                         }
-                    } else if(spriteNave.getX()<160){
+                    } else if(spriteNaveActual.getX()<160){
                         if(pValueX<0){
                         }
                         else{
-                            float x = spriteNave.getX() + 15 * pValueX;
-                            spriteNave.setX(x);
+                            float x = spriteNaveActual.getX() + 15 * pValueX;
+                            spriteNaveActual.setX(x);
                         }
                     }
 
-                    else if(spriteNave.getY()<0){
+                    else if(spriteNaveActual.getY()<0){
                         if(pValueY<0){
                         }
                         else{
-                            float y = spriteNave.getY() + 15 * pValueY;
-                            spriteNave.setY(y);
+                            float y = spriteNaveActual.getY() + 15 * pValueY;
+                            spriteNaveActual.setY(y);
                         }
                     }
 
-                    else if(spriteNave.getY()>800){
+                    else if(spriteNaveActual.getY()>800){
                         if(pValueY>0){
                         }
                         else{
-                            float y = spriteNave.getY() + 15 * pValueY;
-                            spriteNave.setY(y);
+                            float y = spriteNaveActual.getY() + 15 * pValueY;
+                            spriteNaveActual.setY(y);
                         }
                     }
 
                     else{
-                        float x = spriteNave.getX() + 15 * pValueX;
-                        float y = spriteNave.getY() + 15 * pValueY;
-                        spriteNave.setPosition(x,y);
+                        float x = spriteNaveActual.getX() + 15 * pValueX;
+                        float y = spriteNaveActual.getY() + 15 * pValueY;
+                        spriteNaveActual.setPosition(x,y);
                     }
                 }
             }
@@ -261,7 +267,7 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
 
     private void dispararProyectil() {
         // Crearlo
-        Laser spriteProyectil = new Laser(spriteNave.getX(),  spriteNave.getY(),regionProyectil, actividadJuego.getVertexBufferObjectManager(),true,false);
+        Laser spriteProyectil = new Laser(spriteNaveActual.getX(),  spriteNaveActual.getY(),regionProyectil, actividadJuego.getVertexBufferObjectManager(),true,false);
         attachChild(spriteProyectil);   // Lo agrega a la escena
         listaProyectiles.add(spriteProyectil);  // Lo agrega a la lista
     }
