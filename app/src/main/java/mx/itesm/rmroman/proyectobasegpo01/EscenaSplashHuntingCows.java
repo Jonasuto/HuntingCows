@@ -48,7 +48,7 @@ public class EscenaSplashHuntingCows extends EscenaBase {
 
         admMusica.cargarMusica(0);
 
-        Sprite spritePress = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-200,
+        Sprite spritePress = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-300,
                 regionPress, actividadJuego.getVertexBufferObjectManager()) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {

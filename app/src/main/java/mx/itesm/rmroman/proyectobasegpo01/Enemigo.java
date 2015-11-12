@@ -40,6 +40,8 @@ public class Enemigo extends Sprite {
 
     private boolean brincando=false;
 
+    private boolean persigue;
+
     private Random regaloAleatorio=new Random();
     private int regalo=0;
 
@@ -53,7 +55,7 @@ public class Enemigo extends Sprite {
         this.rotaCuandoCamina=rotaCuandoCamina;
         this.puedeDisparar=puedeDisparar;
         this.noPuedeSerDestruido=noPuedeSerDestruido;
-
+        persigue=false;
     }
 
     public boolean getNoPuedeSerDestruido(){
@@ -62,6 +64,14 @@ public class Enemigo extends Sprite {
 
     public boolean getRotacion(){
         return rotacion;
+    }
+
+    public boolean getPersigue(){
+        return persigue;
+    }
+
+    public void setPersigue(boolean persigue){
+        this.persigue=persigue;
     }
 
     public boolean getPuedeDisparar(){

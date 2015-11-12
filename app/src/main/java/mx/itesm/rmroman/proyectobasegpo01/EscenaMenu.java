@@ -1,5 +1,12 @@
 package mx.itesm.rmroman.proyectobasegpo01;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
@@ -7,6 +14,9 @@ import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
+
+import java.io.IOException;
+import java.util.ResourceBundle;
 
 
 /**
@@ -25,6 +35,10 @@ public class EscenaMenu extends EscenaBase
     private ITextureRegion regionBtnContinuarJuego;
     private ITextureRegion regionBtnComic;
     private ITextureRegion regionBtnArcade;
+
+    private View ver;
+
+    private View v;
 
 
     // Sprites sobre la escena
@@ -65,6 +79,8 @@ public class EscenaMenu extends EscenaBase
         regionBtnComic = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_blancocomic.png");
         regionBtnContinuarJuego = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_verdeplaneta.png");
 
+        v= new View(actividadJuego);
+
     }
 
     @Override
@@ -73,20 +89,17 @@ public class EscenaMenu extends EscenaBase
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondo);
 
         // Crea el fondo de la pantalla
-        SpriteBackground fondo = new SpriteBackground(1,1,1, spriteFondo);
+        SpriteBackground fondo = new SpriteBackground(1, 1, 1, spriteFondo);
         setBackground(fondo);
         setBackgroundEnabled(true);
 
         // Mostrar un recuadro atrás del menú
         // Mostrar opciones de menú
 
-
-        admMusica.cargarMusica(0);
+        admMusica.cargarMusica(4);
         admMusica.cargarMusicaBoton();
 
         agregarMenu();
-
-
     }
 
 
@@ -192,6 +205,9 @@ public class EscenaMenu extends EscenaBase
                         // Mostrar la escena de AcercaDe
                         admMusica.vibrar(90);
                         admMusica.reproducirMusicaBoton();
+                        admEscenas.liberarEscenaMenu();
+                        admEscenas.crearEscenaCazaJurasicaNivel2();
+                        admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_NIVEL_2);
 
                         break;
 
@@ -243,7 +259,6 @@ public class EscenaMenu extends EscenaBase
 
         return mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_MENU;
     }
-
 
     @Override
     public void liberarEscena() {

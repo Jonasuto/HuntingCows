@@ -29,7 +29,7 @@ import java.util.Random;
 /**
  * Created by Campos on 11/10/15.
  */
-public class EscenaCazaJurasica extends EscenaBase {
+public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
     private ITextureRegion regionFondo;
     private ITextureRegion regionFondoPausa;
@@ -68,6 +68,8 @@ public class EscenaCazaJurasica extends EscenaBase {
     private boolean[] disparar;
     private boolean[] noPuedeSerDestruido;
 
+    private int[] comportamientoPiso;
+    private int[] numPasosPiso;
 
     private Text txtMarcador; // Por ahora con valorMarcador
     private IFont fontMonster;
@@ -479,7 +481,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         else {
             clearChildScene();
-            EscenaCazaJurasica.this.setChildScene(control);
+            EscenaCazaJurasicaNivel2.this.setChildScene(control);
             juegoCorriendo = true;
         }
     }
@@ -500,7 +502,7 @@ public class EscenaCazaJurasica extends EscenaBase {
     @Override
     public mx.itesm.rmroman.proyectobasegpo01.TipoEscena getTipoEscena() {
 
-        return mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_CAZA_JURASICA;
+        return TipoEscena.ESCENA_CAZA_JURASICA_NIVEL_2;
     }
 
     protected void onManagedUpdate(float pSecondsElapsed) {
@@ -672,9 +674,9 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         if(spritePersonaje.collidesWith(spriteHoyoNegro)){
             admEscenas.setcazaJurasicaDesbloqueado(true);
-            admEscenas.liberarEscenaCazaJurasica();
-            admEscenas.crearEscenaCazaJurasicaNivel2();
-            admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_NIVEL_2);
+            admEscenas.liberarEscenaCazaJurasicaNivel2();
+            admEscenas.crearEscenaMenu();
+            admEscenas.setEscena(TipoEscena.ESCENA_MENU);
         }
 
         if(gravedad==true && nubecita==false){
@@ -765,7 +767,7 @@ public class EscenaCazaJurasica extends EscenaBase {
             if (spritePersonaje.collidesWith(enemigo)) {
 
                 if(cantidadVida -1<0){
-                    admEscenas.liberarEscenaCazaJurasica();
+                    admEscenas.liberarEscenaCazaJurasicaNivel2();
                     admEscenas.crearEscenaPerdiste();
                     admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                 }
@@ -790,7 +792,7 @@ public class EscenaCazaJurasica extends EscenaBase {
                             cantidadVida--;
                         }
                         else{
-                            admEscenas.liberarEscenaCazaJurasica();
+                            admEscenas.liberarEscenaCazaJurasicaNivel2();
                             admEscenas.crearEscenaPerdiste();
                             admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                         }
@@ -828,7 +830,7 @@ public class EscenaCazaJurasica extends EscenaBase {
             if (proyectil.collidesWith(spritePersonaje)) {
                 // Baja puntos/vida
                 if(cantidadVida-1<0){
-                    admEscenas.liberarEscenaCazaJurasica();
+                    admEscenas.liberarEscenaCazaJurasicaNivel2();
                     admEscenas.crearEscenaPerdiste();
                     admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                 }
@@ -851,7 +853,7 @@ public class EscenaCazaJurasica extends EscenaBase {
                             cantidadVida--;
                         }
                         else{
-                            admEscenas.liberarEscenaCazaJurasica();
+                            admEscenas.liberarEscenaCazaJurasicaNivel2();
                             admEscenas.crearEscenaMenu();
                             admEscenas.setEscena(TipoEscena.ESCENA_MENU);
                         }
@@ -867,6 +869,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         spriteFondo.attachChild(spriteProyectil);   // Lo agrega a la escena
         listaProyectilesEnemigo.add(spriteProyectil);  // Lo agrega a la lista
     }
+
 
     @Override
     public void liberarEscena() {
@@ -935,7 +938,7 @@ public class EscenaCazaJurasica extends EscenaBase {
                 regionBase, regionControlSalto,
                 0.03f, 100, actividadJuego.getVertexBufferObjectManager(), new AnalogOnScreenControl.IAnalogOnScreenControlListener() {
 
-                @Override
+            @Override
             public void onControlClick(AnalogOnScreenControl pAnalogOnScreenControl) {
             }
             @Override
@@ -958,13 +961,13 @@ public class EscenaCazaJurasica extends EscenaBase {
                             if(pValueY>0){
                             }
                             else{
-                                float y = spritePersonaje.getY() + 15 * pValueY;
+                                float y = spritePersonaje.getY() + 20 * pValueY;
                                 spritePersonaje.setY(y);
                             }
                         }
 
                         else{
-                            float y = spritePersonaje.getY() + 15 * pValueY;
+                            float y = spritePersonaje.getY() + 20 * pValueY;
                             spritePersonaje.setY(y);
                         }
 
@@ -991,38 +994,41 @@ public class EscenaCazaJurasica extends EscenaBase {
                         }
                     }
 
+                    if(spritePersonaje.getX()>20008){
+                        if(pValueX>0){
+                        }
+                        else{
+                            float x = spritePersonaje.getX()+22*pValueX;
+                            spritePersonaje.setX(x);
+                        }
+                    }
 
-                        if (spriteFondo.getX() > 2008) {
-                            if (pValueX < 0) {
-                            } else {
-                                pValueX = pValueX * (-1);
-                                float x = spriteFondo.getX() + 25 * pValueX;
-                                spriteFondo.setX(x);
-                            }
+                    else if(spritePersonaje.getX()<610){
+                        if(pValueX<0){
                         }
-                        else if (spriteFondo.getX() < -12620) {
-                            if (pValueX > 0) {
-                            } else {
-                                pValueX = pValueX * (-1);
-                                float x = spriteFondo.getX() + 25 * pValueX;
-                                spriteFondo.setX(x);
-                            }
-                        } else {
-                            pValueX = pValueX * (-1);
-                            float x = spriteFondo.getX() + 25 * pValueX;
-                            spriteFondo.setX(x);
+                        else{
+                            float x = spritePersonaje.getX()+22*pValueX;
+                            spritePersonaje.setX(x);
                         }
+                    }
+
+                    else{
+                        float x = spritePersonaje.getX()+22*pValueX;
+                        spritePersonaje.setX(x);
+                    }
+
+                    actividadJuego.camara.setCenter(spritePersonaje.getX(), ControlJuego.ALTO_CAMARA / 2);
 
                 }
             }
 
         });
-        EscenaCazaJurasica.this.setChildScene(control);
+        EscenaCazaJurasicaNivel2.this.setChildScene(control);
     }
 
     private void posicionarEnemigos(){
 
-        int maxima=23;
+        int maxima=1;
 
         posicionesEnemigosx = new float[maxima];
         posicionesEnemigosy = new float[maxima];
@@ -1035,220 +1041,22 @@ public class EscenaCazaJurasica extends EscenaBase {
         noPuedeSerDestruido =new boolean[maxima];
 
         posicionesEnemigosx[0]=2710;
-        posicionesEnemigosx[1]=3180;
-        posicionesEnemigosx[2]=4350;
-        posicionesEnemigosx[3]=5340;
-        posicionesEnemigosx[4]=6680;
-        posicionesEnemigosx[5]=7140;
-        posicionesEnemigosx[6]=8640;
-        posicionesEnemigosx[7]=8640;
-        posicionesEnemigosx[8]=10500;
-        posicionesEnemigosx[9]=11200;
-        posicionesEnemigosx[10]=11900;
-        posicionesEnemigosx[11]=12140;
-        posicionesEnemigosx[12]=12600;
-        posicionesEnemigosx[13]=13400;
-        posicionesEnemigosx[14]=13400;
-        posicionesEnemigosx[15]=13390;
-        posicionesEnemigosx[16]=13500;
-        posicionesEnemigosx[17]=13700;
-        posicionesEnemigosx[18]=13900;
-        posicionesEnemigosx[19]=14100;
-        posicionesEnemigosx[20]=13700;
-        posicionesEnemigosx[21]=13900;
-        posicionesEnemigosx[22]=14100;
 
         posicionesEnemigosy[0]=150;
-        posicionesEnemigosy[1]=625;
-        posicionesEnemigosy[2]=150;
-        posicionesEnemigosy[3]=645;
-        posicionesEnemigosy[4]=150;
-        posicionesEnemigosy[5]=750;
-        posicionesEnemigosy[6]=130;
-        posicionesEnemigosy[7]=130;
-        posicionesEnemigosy[8]=130;
-        posicionesEnemigosy[9]=525;
-        posicionesEnemigosy[10]=750;
-        posicionesEnemigosy[11]=150;
-        posicionesEnemigosy[12]=130;
-        posicionesEnemigosy[13]=456;
-        posicionesEnemigosy[14]=456;
-        posicionesEnemigosy[15]=680;
-        posicionesEnemigosy[16]=130;
-        posicionesEnemigosy[17]=130;
-        posicionesEnemigosy[18]=130;
-        posicionesEnemigosy[19]=130;
-        posicionesEnemigosy[20]=180;
-        posicionesEnemigosy[21]=180;
-        posicionesEnemigosy[22]=180;
 
         brinca[0]=false;
-        brinca[1]=false;
-        brinca[2]=true;
-        brinca[3]=false;
-        brinca[4]=false;
-        brinca[5]=false;
-        brinca[6]=false;
-        brinca[7]=false;
-        brinca[8]=true;
-        brinca[9]=false;
-        brinca[10]=false;
-        brinca[11]=false;
-        brinca[12]=false;
-        brinca[13]=false;
-        brinca[14]=false;
-        brinca[15]=false;
-        brinca[16]=false;
-        brinca[17]=false;
-        brinca[18]=false;
-        brinca[19]=false;
-        brinca[20]=false;
-        brinca[21]=false;
-        brinca[22]=false;
 
         camina[0]=1;
-        camina[1]=0;
-        camina[2]=3;
-        camina[3]=1;
-        camina[4]=0;
-        camina[5]=1;
-        camina[6]=1;
-        camina[7]=0;
-        camina[8]=3;
-        camina[9]=1;
-        camina[10]=0;
-        camina[11]=1;
-        camina[12]=0;
-        camina[13]=0;
-        camina[14]=1;
-        camina[15]=0;
-        camina[16]=3;
-        camina[17]=3;
-        camina[18]=3;
-        camina[19]=3;
-        camina[20]=3;
-        camina[21]=3;
-        camina[22]=3;
 
         rota[0]=false;
-        rota[1]=false;
-        rota[2]=true;
-        rota[3]=false;
-        rota[4]=false;
-        rota[5]=false;
-        rota[6]=false;
-        rota[7]=false;
-        rota[8]=true;
-        rota[9]=false;
-        rota[10]=false;
-        rota[11]=true;
-        rota[12]=false;
-        rota[13]=false;
-        rota[14]=false;
-        rota[15]=false;
-        rota[16]=false;
-        rota[17]=false;
-        rota[18]=false;
-        rota[19]=false;
-        rota[20]=false;
-        rota[21]=false;
-        rota[22]=false;
 
         numPasos[0]=40;
-        numPasos[1]=10;
-        numPasos[2]=10;
-        numPasos[3]=40;
-        numPasos[4]=50;
-        numPasos[5]=50;
-        numPasos[6]=65;
-        numPasos[7]=65;
-        numPasos[8]=5;
-        numPasos[9]=35;
-        numPasos[10]=95;
-        numPasos[11]=45;
-        numPasos[12]=35;
-        numPasos[13]=45;
-        numPasos[14]=45;
-        numPasos[15]=25;
-        numPasos[16]=35;
-        numPasos[17]=45;
-        numPasos[18]=45;
-        numPasos[19]=25;
-        numPasos[20]=25;
-        numPasos[21]=25;
-        numPasos[22]=25;
 
         rotaCamina[0]=true;
-        rotaCamina[1]=true;
-        rotaCamina[2]=true;
-        rotaCamina[3]=true;
-        rotaCamina[4]=true;
-        rotaCamina[5]=true;
-        rotaCamina[6]=false;
-        rotaCamina[7]=false;
-        rotaCamina[8]=false;
-        rotaCamina[9]=false;
-        rotaCamina[10]=true;
-        rotaCamina[11]=true;
-        rotaCamina[12]=false;
-        rotaCamina[13]=true;
-        rotaCamina[14]=true;
-        rotaCamina[15]=false;
-        rotaCamina[16]=false;
-        rotaCamina[17]=false;
-        rotaCamina[18]=false;
-        rotaCamina[19]=false;
-        rotaCamina[20]=false;
-        rotaCamina[21]=false;
-        rotaCamina[22]=false;
 
         disparar[0]=false;
-        disparar[1]=false;
-        disparar[2]=false;
-        disparar[3]=false;
-        disparar[4]=false;
-        disparar[5]=true;
-        disparar[6]=false;
-        disparar[7]=false;
-        disparar[8]=false;
-        disparar[9]=false;
-        disparar[10]=true;
-        disparar[11]=false;
-        disparar[12]=false;
-        disparar[13]=false;
-        disparar[14]=false;
-        disparar[15]=false;
-        disparar[16]=false;
-        disparar[17]=false;
-        disparar[18]=false;
-        disparar[19]=false;
-        disparar[20]=false;
-        disparar[21]=false;
-        disparar[22]=false;
 
         noPuedeSerDestruido[0]=false;
-        noPuedeSerDestruido[1]=false;
-        noPuedeSerDestruido[2]=false;
-        noPuedeSerDestruido[3]=false;
-        noPuedeSerDestruido[4]=false;
-        noPuedeSerDestruido[5]=false;
-        noPuedeSerDestruido[6]=false;
-        noPuedeSerDestruido[7]=false;
-        noPuedeSerDestruido[8]=false;
-        noPuedeSerDestruido[9]=false;
-        noPuedeSerDestruido[10]=false;
-        noPuedeSerDestruido[11]=false;
-        noPuedeSerDestruido[12]=false;
-        noPuedeSerDestruido[13]=false;
-        noPuedeSerDestruido[14]=false;
-        noPuedeSerDestruido[15]=false;
-        noPuedeSerDestruido[16]=true;
-        noPuedeSerDestruido[17]=true;
-        noPuedeSerDestruido[18]=true;
-        noPuedeSerDestruido[19]=true;
-        noPuedeSerDestruido[20]=true;
-        noPuedeSerDestruido[21]=true;
-        noPuedeSerDestruido[22]=true;
 
         int cont;
         for( cont = 0; cont< posicionesEnemigosx.length;cont++){
@@ -1282,235 +1090,26 @@ public class EscenaCazaJurasica extends EscenaBase {
 
 
     private void posicionarPisosFlotantes(){
-
-        int maxima=36;
-
-        posicionesPisosFlotantesX= new float[maxima];
-        posicionesPisosFlotantesY= new float[maxima];
-        listaPisos = new Sprite[maxima];
-
-        posicionesPisosFlotantesX[0]=2000;
-        posicionesPisosFlotantesX[1]=2750;
-        posicionesPisosFlotantesX[2]=3190;
-        posicionesPisosFlotantesX[3]=3520;
-        posicionesPisosFlotantesX[4]=4000;
-        posicionesPisosFlotantesX[5]=5210;
-        posicionesPisosFlotantesX[6]=5470;
-        //Piramide
-        posicionesPisosFlotantesX[7]=7170;
-        posicionesPisosFlotantesX[8]=7430;
-        posicionesPisosFlotantesX[9]=7690;
-        posicionesPisosFlotantesX[10]=7950;
-        posicionesPisosFlotantesX[11]=7430;
-        posicionesPisosFlotantesX[12]=7690;
-        posicionesPisosFlotantesX[13]=7950;
-        posicionesPisosFlotantesX[14]=7690;
-        posicionesPisosFlotantesX[15]=7950;
-        posicionesPisosFlotantesX[16]=7950;
-        posicionesPisosFlotantesX[17]=10110;
-        posicionesPisosFlotantesX[18]=9850;
-        posicionesPisosFlotantesX[19]=9590;
-        posicionesPisosFlotantesX[20]=9330;
-        posicionesPisosFlotantesX[21]=9850;
-        posicionesPisosFlotantesX[22]=9590;
-        posicionesPisosFlotantesX[23]=9330;
-        posicionesPisosFlotantesX[24]=9590;
-        posicionesPisosFlotantesX[25]=9330;
-        posicionesPisosFlotantesX[26]=9330;
-        posicionesPisosFlotantesX[27]=8640;
-        posicionesPisosFlotantesX[28]=10960;
-        posicionesPisosFlotantesX[29]=11220;
-        posicionesPisosFlotantesX[30]=13000;
-        posicionesPisosFlotantesX[31]=13260;
-        posicionesPisosFlotantesX[32]=13520;
-        posicionesPisosFlotantesX[33]=13780;
-        posicionesPisosFlotantesX[34]=13260;
-        posicionesPisosFlotantesX[35]=13520;
-
-
-        posicionesPisosFlotantesY[0]=330;
-        posicionesPisosFlotantesY[1]=460;
-        posicionesPisosFlotantesY[2]=490;
-        posicionesPisosFlotantesY[3]=220;
-        posicionesPisosFlotantesY[4]=580;
-        posicionesPisosFlotantesY[5]=510;
-        posicionesPisosFlotantesY[6]=510;
-
-        //piramide
-        posicionesPisosFlotantesY[7]=174;
-        posicionesPisosFlotantesY[8]=174;
-        posicionesPisosFlotantesY[9]=174;
-        posicionesPisosFlotantesY[10]=174;
-        posicionesPisosFlotantesY[11]=270;
-        posicionesPisosFlotantesY[12]=270;
-        posicionesPisosFlotantesY[13]=270;
-        posicionesPisosFlotantesY[14]=368;
-        posicionesPisosFlotantesY[15]=368;
-        posicionesPisosFlotantesY[16]=464;
-        posicionesPisosFlotantesY[17]=174;
-        posicionesPisosFlotantesY[18]=174;
-        posicionesPisosFlotantesY[19]=174;
-        posicionesPisosFlotantesY[20]=174;
-        posicionesPisosFlotantesY[21]=270;
-        posicionesPisosFlotantesY[22]=270;
-        posicionesPisosFlotantesY[23]=270;
-        posicionesPisosFlotantesY[24]=368;
-        posicionesPisosFlotantesY[25]=368;
-        posicionesPisosFlotantesY[26]=464;
-        posicionesPisosFlotantesY[27]=600;
-        posicionesPisosFlotantesY[28]=410;
-        posicionesPisosFlotantesY[29]=410;
-        posicionesPisosFlotantesY[30]=330;
-        posicionesPisosFlotantesY[31]=330;
-        posicionesPisosFlotantesY[32]=330;
-        posicionesPisosFlotantesY[33]=330;
-        posicionesPisosFlotantesY[34]=580;
-        posicionesPisosFlotantesY[35]=580;
-
-
-        int cont;
-
-        for( cont = 0; cont< posicionesPisosFlotantesX.length;cont++){
-
-            Sprite spritePiso = cargarSprite(posicionesPisosFlotantesX[cont], posicionesPisosFlotantesY[cont] , regionPisoFlotante);
-            listaPisos[cont]=(spritePiso);
-            spriteFondo.attachChild(spritePiso);
-        }
+        int maxima=5;
+        posicionesPisosFlotantesX= new float [maxima];
+        posicionesPisosFlotantesY=new float[maxima];
+        comportamientoPiso=new int[maxima];
+        numPasosPiso=new int[maxima];
+        listaPisos= new Piso [maxima];
     }
 
     private void agregarMonedas() {
         // Agrega monedas a lo largo del mundo
         listaMonedas = new ArrayList<>();
 
-        int maxima=60;
+        int maxima=1;
 
         posicionesMonedasX= new float[maxima];
         posicionesMonedasY= new float[maxima];
 
         posicionesMonedasX[0]=2000;
-        posicionesMonedasX[1]=2750;
-        posicionesMonedasX[2]=3190;
-        posicionesMonedasX[3]=2920;
-        posicionesMonedasX[4]=4000;
-        posicionesMonedasX[5]=5340;
-        posicionesMonedasX[6]=5160;
-        posicionesMonedasX[7]=5520;
-        posicionesMonedasX[8]=5340;
-        posicionesMonedasX[9]=6680;
-        posicionesMonedasX[10]=6800;
-        posicionesMonedasX[11]=6920;
-        posicionesMonedasX[12]=7040;
-        posicionesMonedasX[13]=8190;
-        posicionesMonedasX[14]=8310;
-        posicionesMonedasX[15]=8430;
-        posicionesMonedasX[16]=8550;
-        posicionesMonedasX[17]=8670;
-        posicionesMonedasX[18]=8790;
-        posicionesMonedasX[19]=8910;
-        posicionesMonedasX[20]=9030;
-        posicionesMonedasX[21]=9150;
-        posicionesMonedasX[22]=8190;
-        posicionesMonedasX[23]=8310;
-        posicionesMonedasX[24]=8430;
-        posicionesMonedasX[25]=8550;
-        posicionesMonedasX[26]=8670;
-        posicionesMonedasX[27]=8790;
-        posicionesMonedasX[28]=8910;
-        posicionesMonedasX[29]=9030;
-        posicionesMonedasX[30]=9150;
-        posicionesMonedasX[31]=8190;
-        posicionesMonedasX[32]=8310;
-        posicionesMonedasX[33]=8430;
-        posicionesMonedasX[34]=8550;
-        posicionesMonedasX[35]=8670;
-        posicionesMonedasX[36]=8790;
-        posicionesMonedasX[37]=8910;
-        posicionesMonedasX[38]=9030;
-        posicionesMonedasX[39]=9150;
-        posicionesMonedasX[40]=10600;
-        posicionesMonedasX[41]=10720;
-        posicionesMonedasX[42]=10840;
-        posicionesMonedasX[43]=10960;
-        posicionesMonedasX[44]=11080;
-        posicionesMonedasX[45]=11200;
-        posicionesMonedasX[46]=11320;
-        posicionesMonedasX[47]=11440;
-        posicionesMonedasX[48]=11080;
-        posicionesMonedasX[49]=11900;
-        posicionesMonedasX[50]=12140;
-        posicionesMonedasX[51]=12020;
-        posicionesMonedasX[52]=12020;
-        posicionesMonedasX[53]=13000;
-        posicionesMonedasX[54]=13260;
-        posicionesMonedasX[55]=13520;
-        posicionesMonedasX[56]=13780;
-        posicionesMonedasX[57]=13260;
-        posicionesMonedasX[58]=13520;
-        posicionesMonedasX[59]=12740;
-
 
         posicionesMonedasY[0]=440;
-        posicionesMonedasY[1]=580;
-        posicionesMonedasY[2]=610;
-        posicionesMonedasY[3]=170;
-        posicionesMonedasY[4]=700;
-        posicionesMonedasY[5]=620;
-        posicionesMonedasY[6]=680;
-        posicionesMonedasY[7]=680;
-        posicionesMonedasY[8]=750;
-        posicionesMonedasY[9]=520;
-        posicionesMonedasY[10]=400;
-        posicionesMonedasY[11]=280;
-        posicionesMonedasY[12]=160;
-        posicionesMonedasY[13]=170;
-        posicionesMonedasY[14]=170;
-        posicionesMonedasY[15]=170;
-        posicionesMonedasY[16]=170;
-        posicionesMonedasY[17]=170;
-        posicionesMonedasY[18]=170;
-        posicionesMonedasY[19]=170;
-        posicionesMonedasY[20]=170;
-        posicionesMonedasY[21]=170;
-        posicionesMonedasY[22]=270;
-        posicionesMonedasY[23]=270;
-        posicionesMonedasY[24]=270;
-        posicionesMonedasY[25]=270;
-        posicionesMonedasY[26]=270;
-        posicionesMonedasY[27]=270;
-        posicionesMonedasY[28]=270;
-        posicionesMonedasY[29]=270;
-        posicionesMonedasY[30]=270;
-        posicionesMonedasY[31]=370;
-        posicionesMonedasY[32]=370;
-        posicionesMonedasY[33]=370;
-        posicionesMonedasY[34]=370;
-        posicionesMonedasY[35]=370;
-        posicionesMonedasY[36]=370;
-        posicionesMonedasY[37]=370;
-        posicionesMonedasY[38]=370;
-        posicionesMonedasY[39]=370;
-        posicionesMonedasY[40]=170;
-        posicionesMonedasY[41]=290;
-        posicionesMonedasY[42]=410;
-        posicionesMonedasY[43]=530;
-        posicionesMonedasY[44]=530;
-        posicionesMonedasY[45]=410;
-        posicionesMonedasY[46]=290;
-        posicionesMonedasY[47]=170;
-        posicionesMonedasY[48]=675;
-        posicionesMonedasY[49]=480;
-        posicionesMonedasY[50]=480;
-        posicionesMonedasY[51]=600;
-        posicionesMonedasY[52]=360;
-        posicionesMonedasY[53]=450;
-        posicionesMonedasY[54]=450;
-        posicionesMonedasY[55]=450;
-        posicionesMonedasY[56]=450;
-        posicionesMonedasY[57]=700;
-        posicionesMonedasY[58]=700;
-        posicionesMonedasY[59]=450;
-
-
 
         for (int i=0; i<posicionesMonedasX.length; i++) {
             float x = posicionesMonedasX[i];

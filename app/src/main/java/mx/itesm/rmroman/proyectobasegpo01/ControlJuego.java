@@ -2,7 +2,10 @@ package mx.itesm.rmroman.proyectobasegpo01;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.andengine.engine.Engine;
@@ -39,6 +42,16 @@ public class ControlJuego extends SimpleBaseGameActivity
     private mx.itesm.rmroman.proyectobasegpo01.AdministradorEscenas admEscenas;
     private mx.itesm.rmroman.proyectobasegpo01.AdministradorMusica admMusica;
 
+    @Override
+    protected void onCreate(Bundle pSavedInstanceState) {
+        super.onCreate(pSavedInstanceState);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
 
     /*
     Se crea la configuración del Engine.
@@ -136,6 +149,4 @@ public class ControlJuego extends SimpleBaseGameActivity
             System.exit(0);
         }
     }
-
-
 }
