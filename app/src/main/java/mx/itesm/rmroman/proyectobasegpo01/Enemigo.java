@@ -35,7 +35,6 @@ public class Enemigo extends Sprite {
     private boolean rotaCuandoCamina;
     private boolean puedeDisparar;
     private boolean noPuedeSerDestruido;
-
     private int disparara;
 
     private boolean brincando=false;

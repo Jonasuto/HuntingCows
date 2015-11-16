@@ -12,6 +12,7 @@ import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.scene.CameraScene;
+import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -184,6 +185,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
     private Sprite spritebtnIrAMenu;
 
     private int cambiar=0;
+    private boolean unicoQuePersigue;
 
 
     @Override
@@ -234,6 +236,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         regionIrAMenu=cargarImagen("Imagenes/Ajustes2/pausa_menu.png");
         regionMenuMusica=cargarImagen("Imagenes/Ajustes2/pausa_musica.png");
         regionMenuContinuar=cargarImagen("Imagenes/Ajustes2/pausa_continue.png");
+        unicoQuePersigue=false;
     }
 
     @Override
@@ -619,7 +622,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
         contadorPersigue+=1;
 
-        if(contadorPersigue>100){
+        if(contadorPersigue>190 && unicoQuePersigue==false){
             Enemigo spriteEnemigo = new Enemigo(30000, 720, regionOvni, actividadJuego.getVertexBufferObjectManager(), 9, false, false, 10,false,true, false);
             Enemigo nuevoEnemigo = spriteEnemigo;
             nuevoEnemigo.setPersigue(true);
@@ -772,8 +775,16 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
             }
             if(enemigo.getPersigue()==true){
 
+                unicoQuePersigue=true;
+                float dx =spritePersonaje.getX()-enemigo.getX();
+                if(dx>20){
+                    enemigo.setX(6+enemigo.getX());
+                }
+                else if(dx<20){
+                    enemigo.setX(enemigo.getX()-6);
+                }
             }
-            /*
+
 
             if (spritePersonaje.collidesWith(enemigo)) {
 
@@ -783,6 +794,9 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                     admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                 }
                 else{
+                    if(enemigo.getPersigue()){
+                        unicoQuePersigue=false;
+                    }
                     enemigo.detachSelf();
                     listaEnemigos.remove(enemigo);
                     admMusica.vibrar(200);
@@ -810,7 +824,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
                 }
             }
-            */
+
 
         }
     }
@@ -1659,6 +1673,9 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                             crearVida(enemigo);
                         }
 
+                        if(enemigo.getPersigue()){
+                            unicoQuePersigue=false;
+                        }
                         enemigo.detachSelf();
                         listaEnemigos.remove(enemigo);
                     }
