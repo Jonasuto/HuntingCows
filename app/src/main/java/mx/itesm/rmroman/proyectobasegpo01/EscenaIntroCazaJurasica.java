@@ -61,9 +61,8 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
         regionControlSalto =cargarImagen("Imagenes/Roman/joystick.png");
         regionBtnPausa = cargarImagen("Imagenes/Niveles/CazaJurasica/btnPausa.png");
         regionPausa = cargarImagen("Imagenes/Ajustes/pausa.png");
-        regionHoyoNegro = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_verdeplaneta.png");
+        regionHoyoNegro = cargarImagen("Imagenes/Planetas/planeta_verde.png");
         regionProyectil = cargarImagen("Imagenes/Roman/laser.png");
-
         regionNavenimadoParado = cargarImagenMosaico("Imagenes/Roman/naveStand.png", 800, 267, 1, 2);
     }
 

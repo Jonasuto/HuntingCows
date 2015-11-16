@@ -1,7 +1,4 @@
 package mx.itesm.rmroman.proyectobasegpo01;
-import android.view.MotionEvent;
-import android.view.View;
-
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
@@ -12,43 +9,47 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 /**
  * Created by rmroman on 11/09/15.
  */
-public class EscenaHistoriaCazaJurasica extends EscenaBase
+public class EscenaArcade extends EscenaBase
 {
     // Regiones para imágenes
 
     private ITextureRegion[] regionSlides;
+    private ITextureRegion[] regionFlechas;
     private ITextureRegion regionSlideActual;
+    private ITextureRegion regionFlechaActual;
     private ITextureRegion regionsiguiente;
     private ITextureRegion regionanterior;
-    private ITextureRegion regionfinal;
 
     private int contadorSlide;
 
-
-
     private final int OPCION_SIGUIENTE = 0;
     private final int OPCION_ANTERIOR = 1;
-    private final int OPCION_FINAL = 2;
 
     private MenuScene menu;
 
 
     // Sprite para el fondo
     private Sprite spriteFondo;
+    private Sprite spriteFlecha;
 
     @Override
     public void cargarRecursos() {
 
-        regionSlides = new ITextureRegion[4];
-        regionSlides[0] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_12.jpg");
-        regionSlides[1] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_13.jpg");
-        regionSlides[2] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_14.jpg");
-        regionSlides[3] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_15.jpg");
+        regionSlides = new ITextureRegion[3];
+        regionSlides[0]=cargarImagen("Imagenes/Arcade/jurassic_level.jpg");
+        regionSlides[1] = cargarImagen("Imagenes/Arcade/pirates_level.jpg");
+        regionSlides[2] = cargarImagen("Imagenes/Arcade/eyptian_level.jpg");
+
+        regionFlechas = new ITextureRegion[3];
+        regionFlechas[0]=cargarImagen("Imagenes/Arcade/play_green.png");
+        regionFlechas[1] = cargarImagen("Imagenes/Arcade/play_blue.png");
+        regionFlechas[2] = cargarImagen("Imagenes/Arcade/play_yellow.png");
 
         regionSlideActual=regionSlides[0];
+        regionFlechaActual=regionFlechas[0];
+
         regionsiguiente = cargarImagen("Imagenes/Historia/comic_next.png");
         regionanterior = cargarImagen("Imagenes/Historia/comic_prev.png");
-        regionfinal = cargarImagen("Imagenes/Historia/comic_skip.png");
         contadorSlide=0;
     }
 
@@ -56,6 +57,11 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
     public void crearEscena() {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
         attachChild(spriteFondo);
+
+        spriteFlecha = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 4, regionFlechaActual);
+        attachChild(spriteFlecha);
+
+
         agregarMenu();
     }
 
@@ -72,14 +78,9 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
         IMenuItem opcionanterior = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_ANTERIOR,
                 regionanterior, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
-        IMenuItem opcionafinal = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_FINAL,
-                regionfinal, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
-
-
         // Agrega las opciones al menú
         menu.addMenuItem(opcionSiguiente);
         menu.addMenuItem(opcionanterior);
-        menu.addMenuItem(opcionafinal);
 
         // que es esto??
 
@@ -92,9 +93,6 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
         opcionSiguiente.setPosition(450, -350);
 
         opcionanterior.setPosition(-450, -350);
-
-        opcionafinal.setPosition(450,350);
-
 
         // Registra el Listener para atender las opciones
         menu.setOnMenuItemClickListener(new MenuScene.IOnMenuItemClickListener() {
@@ -109,16 +107,13 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
                         if (contadorSlide < regionSlides.length-1) {
                             contadorSlide++;
                             regionSlideActual = regionSlides[contadorSlide];
+                            regionFlechaActual = regionFlechas[contadorSlide];
                             spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
                             attachChild(spriteFondo);
+                            spriteFlecha = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 4, regionFlechaActual);
+                            attachChild(spriteFlecha);
                             break;
                         }
-                        else{
-                            admEscenas.liberarEscenaHistoriaCazaJurasica();
-                            admEscenas.crearEscenaCargando(1);
-                            admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
-                        }
-
 
                         return true;
 
@@ -129,19 +124,13 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
                             regionSlideActual = regionSlides[contadorSlide];
                             spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
                             attachChild(spriteFondo);
+                            regionFlechaActual = regionFlechas[contadorSlide];
+                            spriteFlecha = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 4, regionFlechaActual);
+                            attachChild(spriteFlecha);
                             break;
                         }
 
                         return true;
-
-                    case OPCION_FINAL:
-
-                        admEscenas.liberarEscenaHistoriaCazaJurasica();
-                        admEscenas.crearEscenaCargando(1);
-                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
-
-                        return true;
-
                 }
                 return true;
             }
@@ -156,13 +145,13 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
         // Regresar al menú principal
         admEscenas.crearEscenaMenu();
         admEscenas.setEscena(TipoEscena.ESCENA_MENU);
-        admEscenas.liberarEscenaHistoriaIntro();
+        admEscenas.liberarEscenaArcade();
     }
 
     @Override
     public TipoEscena getTipoEscena() {
 
-        return TipoEscena.ESCENA_HISTORIA_CAZA_JURASICA;
+        return TipoEscena.ESCENA_ARCADE;
     }
 
     @Override

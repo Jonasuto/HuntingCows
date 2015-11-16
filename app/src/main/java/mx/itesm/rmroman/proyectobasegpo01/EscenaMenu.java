@@ -16,6 +16,7 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 
@@ -35,6 +36,7 @@ public class EscenaMenu extends EscenaBase
     private ITextureRegion regionBtnContinuarJuego;
     private ITextureRegion regionBtnComic;
     private ITextureRegion regionBtnArcade;
+    private int tipoMenu;
 
     private View ver;
 
@@ -57,6 +59,8 @@ public class EscenaMenu extends EscenaBase
     private final int OPCION_ARCADE = 6;
     private final int OPCION_CONTINUAR_JUEGO = 7;
 
+    private Random aleatorio;
+
 
 
 
@@ -64,20 +68,38 @@ public class EscenaMenu extends EscenaBase
 
     public void cargarRecursos() {
         // Fondo
-        if(admEscenas.getcazaJurasicaDesbloqueado()==false) {
-            regionFondo = cargarImagen("Imagenes/MenuInicio/fondoMenu.jpg");
+
+        aleatorio= new Random();
+
+        int num=aleatorio.nextInt(5);
+
+        if(num==0){
+            regionFondo = cargarImagen("Imagenes/MenuInicio/menus/menu_1.jpg");
+            tipoMenu=1;
+        }
+
+        else if(num==1){
+            regionFondo = cargarImagen("Imagenes/MenuInicio/menus/menu_2.jpg");
+            tipoMenu=2;
+        }
+
+        else if(num==2){
+            regionFondo = cargarImagen("Imagenes/MenuInicio/menus/menu_3.jpg");
+            tipoMenu=3;
         }
         else{
-            regionFondo = cargarImagen("Imagenes/MenuInicio/fondoDesbloqueado.jpg");
+            regionFondo = cargarImagen("Imagenes/MenuInicio/menus/menu_4.jpg");
+            tipoMenu=4;
         }
+
         // Botones del menú
         regionBtnAcercaDe = cargarImagen("Imagenes/MenuInicio/botonesMenu/btnAcercaDe.png");
-        regionBtnJugar = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_azulnave.png");
+        regionBtnJugar = cargarImagen("Imagenes/MenuInicio/botonesMenu/Jugar.png");
         regionBtnRojo = cargarImagen("Imagenes/MenuInicio/botonesMenu/btnRojo.png");
         regionBtnMusica = cargarImagen("Imagenes/MenuInicio/botonesMenu/musica.png");
-        regionBtnArcade = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_rojoarcade.png");
-        regionBtnComic = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_blancocomic.png");
-        regionBtnContinuarJuego = cargarImagen("Imagenes/MenuInicio/botonesMenu/boton_verdeplaneta.png");
+        regionBtnArcade = cargarImagen("Imagenes/MenuInicio/botonesMenu/arcade.png");
+        regionBtnComic = cargarImagen("Imagenes/MenuInicio/botonesMenu/comic.png");
+        regionBtnContinuarJuego = cargarImagen("Imagenes/MenuInicio/botonesMenu/cargar.png");
 
         v= new View(actividadJuego);
 
@@ -150,8 +172,25 @@ public class EscenaMenu extends EscenaBase
 
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
 
-        if(admEscenas.getcazaJurasicaDesbloqueado()==true) {
-
+        if(tipoMenu==4) {
+            opcionAcercaDe.setPosition(540, 320);
+            opcionJugar.setPosition(-320, 226);
+            opcionBotonRojo.setPosition(540, -340);
+            opcionMusica.setPosition(-570, 310);
+            opcionBotonArcade.setPosition(-480, 10);
+            opcionBotonComics.setPosition(-320, -70);
+            opcionContinuarJuego.setPosition(-290, 126);
+        }
+        else if(tipoMenu==2){
+            opcionAcercaDe.setPosition(-570, -320);
+            opcionJugar.setPosition(360, 220);
+            opcionBotonRojo.setPosition(520, -340);
+            opcionMusica.setPosition(-570, 310);
+            opcionBotonArcade.setPosition(430, -60);
+            opcionBotonComics.setPosition(-570, -370);
+            opcionContinuarJuego.setPosition(90, 95);
+        }
+        else{
             opcionAcercaDe.setPosition(-570, -320);
             opcionJugar.setPosition(360, 220);
             opcionBotonRojo.setPosition(520, -340);
@@ -159,15 +198,6 @@ public class EscenaMenu extends EscenaBase
             opcionBotonArcade.setPosition(210, -60);
             opcionBotonComics.setPosition(90, 95);
             opcionContinuarJuego.setPosition(430, -60);
-        }
-        else{
-            opcionAcercaDe.setPosition(300, -320);
-            opcionJugar.setPosition(340, 190);
-            opcionBotonRojo.setPosition(520, -340);
-            opcionMusica.setPosition(-570, 310);
-            opcionBotonArcade.setPosition(-480, 10);
-            opcionBotonComics.setPosition(-320, 226);
-            opcionContinuarJuego.setPosition(410, -60);
         }
 
         // Registra el Listener para atender las opciones
@@ -212,9 +242,9 @@ public class EscenaMenu extends EscenaBase
                         break;
 
                     case OPCION_ARCADE:
-                        // Mostrar la escena de AcercaDe
-                        admMusica.vibrar(250);
-                        admMusica.reproducirMusicaBoton();
+                        admEscenas.liberarEscenaMenu();
+                        admEscenas.crearEscenaArcade();
+                        admEscenas.setEscena(TipoEscena.ESCENA_ARCADE);
                         break;
 
                     case OPCION_COMICS:

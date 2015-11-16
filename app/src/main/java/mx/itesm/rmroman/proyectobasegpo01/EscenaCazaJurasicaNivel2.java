@@ -1,10 +1,13 @@
 package mx.itesm.rmroman.proyectobasegpo01;
 
+import android.util.Log;
+
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.JumpModifier;
+import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
@@ -40,6 +43,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
     private ITextureRegion regionOvni;
     private ITextureRegion regionPua;
     private ITextureRegion regionPicos;
+    private ITextureRegion regionLava;
 
     private Random elQueSigue;
 
@@ -84,7 +88,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
     private static final int NUM_MONEDAS = 30;
 
     private ArrayList<Enemigo> listaEnemigos;
-    private Sprite[] listaPisos;
+    private Piso[] listaPisos;
 
     private ITextureRegion regionEnemigo;
     private ITextureRegion regionVida;
@@ -121,7 +125,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
     private boolean juegoCorriendo = true;
 
-    private Sprite pisoActual;
+    private Piso pisoActual;
 
     private ArrayList<Laser> listaProyectilesEnemigo;
 
@@ -131,7 +135,6 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
 
     private TiledTextureRegion regionPersonajeAnimado;
-    private TiledTextureRegion regionPersonajeAnimadoIzquierda;
 
     private boolean personajeVolteandoDerecha=true;
 
@@ -141,8 +144,12 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
     private Sprite spriteFondo2;
     private Sprite spriteFondo4;
     private Sprite spriteFondo3;
+    private Sprite spriteFondo5;
+    private Sprite spriteFondo6;
     private Sprite spriteHoyoNegro;
     private Sprite spriteFondoPausa;
+
+    private int contadorPersigue;
 
 
     private ButtonSprite btnSaltar;
@@ -184,7 +191,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
 
         elQueSigue=new Random();
-        poderDeSalto=4.1f;
+        poderDeSalto=0;
 
         cantidadVida = 2;
 
@@ -194,6 +201,9 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
         fontMonster = cargarFont("fonts/monster.ttf");
 
+        contadorPersigue=0;
+
+
         vidas=cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
         regionNave=cargarImagen("Imagenes/Roman/nave.png");
         regionFondo = cargarImagen("Imagenes/Niveles/CazaJurasica/fondos/fondo2.jpg");
@@ -202,8 +212,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         regionControlSalto =cargarImagen("Imagenes/Roman/joystick.png");
         regionEnemigo = cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/vacaDinosaurio.png");
         regionVida = cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
-        regionPersonajeAnimado = cargarImagenMosaico("Imagenes/Roman/prueba.png", 1000, 200, 1, 9);
-        regionPersonajeAnimadoIzquierda = cargarImagenMosaico("Imagenes/Roman/pruebaiz.png", 1000, 200, 1, 9);
+        regionPersonajeAnimado = cargarImagenMosaico("Imagenes/Roman/prueba.png", 870, 200, 1, 8);
 
         // Pausa
         regionBtnPausa = cargarImagen("Imagenes/Niveles/CazaJurasica/btnPausa.png");
@@ -215,6 +224,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         regionOvni= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/naveVaca.png");
         regionPua= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/pua.png");
         regionPicos= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/picos.png");
+        regionLava= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/lava.png");
 
         regionMenuPausa = cargarImagen("Imagenes/Ajustes2/pausa_fondo.png");
         regionMenuOffoff=cargarImagen("Imagenes/Ajustes2/music_off_OFF.png");
@@ -229,6 +239,26 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
     @Override
     public void crearEscena() {
 
+        spriteFondo = cargarSprite(1900, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        attachChild(spriteFondo);
+
+        spriteFondo2 = cargarSprite(6000, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo.attachChild(spriteFondo2);
+
+        spriteFondo3 = cargarSprite(9954, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo.attachChild(spriteFondo3);
+
+        spriteFondo4 = cargarSprite(13908, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo.attachChild(spriteFondo4);
+
+        spriteFondo5 = cargarSprite(17862, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo.attachChild(spriteFondo5);
+
+        spriteFondo6 = cargarSprite(21816, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo.attachChild(spriteFondo6);
+
+        agregarHUD();
+
         reloj=0;
 
         contadorTiempo=0;
@@ -241,19 +271,10 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
         listaVidasEncontradas = new ArrayList<>();
 
-        spriteFondo = cargarSprite(2046, ControlJuego.ALTO_CAMARA/2 , regionFondo);
-        attachChild(spriteFondo);
+        posicionarPisosFlotantes();
+        posicionarEnemigos();
 
-        spriteFondo2 = cargarSprite(6000, ControlJuego.ALTO_CAMARA/2 , regionFondo);
-        spriteFondo.attachChild(spriteFondo2);
-
-        spriteFondo3 = cargarSprite(9954, ControlJuego.ALTO_CAMARA/2 , regionFondo);
-        spriteFondo.attachChild(spriteFondo3);
-
-        spriteFondo4 = cargarSprite(13908, ControlJuego.ALTO_CAMARA/2 , regionFondo);
-        spriteFondo.attachChild(spriteFondo4);
-
-        spriteOvni2=cargarSprite(10185, 300, regionOvni);
+        spriteOvni2=cargarSprite(5185, 300, regionOvni);
         spriteOvni2.setSize(spriteOvni2.getWidth() - 30, spriteOvni2.getHeight() - 30);
         spriteFondo.attachChild(spriteOvni2);
 
@@ -263,71 +284,66 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
         numeroDeBalas=9;
 
-        spriteNave=cargarSprite(280, 270, regionNave);
+        spriteNave=cargarSprite(320, 290, regionNave);
         spriteFondo.attachChild(spriteNave);
 
         spriteVidas[0]= cargarSprite(1100, 750, vidas);
-        attachChild(spriteVidas[0]);
+        hud.attachChild(spriteVidas[0]);
 
         spriteVidas[1]= cargarSprite(1150, 750, vidas);
-        attachChild(spriteVidas[1]);
+        hud.attachChild(spriteVidas[1]);
 
         spriteVidas[2]= cargarSprite(1200, 750, vidas);
-        attachChild(spriteVidas[2]);
+        hud.attachChild(spriteVidas[2]);
 
 
         spriteBalas[0]= cargarSprite(1100, 600, regionProyectil);
         spriteBalas[0].setSize(spriteBalas[0].getWidth() - 20, spriteBalas[0].getHeight() - 20);
-        attachChild(spriteBalas[0]);
+        hud.attachChild(spriteBalas[0]);
 
         spriteBalas[1]= cargarSprite(1100, 550, regionProyectil);
         spriteBalas[1].setSize(spriteBalas[1].getWidth() - 20, spriteBalas[1].getHeight() - 20);
-        attachChild(spriteBalas[1]);
+        hud.attachChild(spriteBalas[1]);
 
         spriteBalas[2]= cargarSprite(1100, 500, regionProyectil);
         spriteBalas[2].setSize(spriteBalas[2].getWidth() - 20, spriteBalas[2].getHeight() - 20);
-        attachChild(spriteBalas[2]);
+        hud.attachChild(spriteBalas[2]);
 
         spriteBalas[3]= cargarSprite(1100, 450, regionProyectil);
         spriteBalas[3].setSize(spriteBalas[3].getWidth() - 20, spriteBalas[3].getHeight() - 20);
-        attachChild(spriteBalas[3]);
+        hud.attachChild(spriteBalas[3]);
 
         spriteBalas[4]= cargarSprite(1100, 400, regionProyectil);
         spriteBalas[4].setSize(spriteBalas[4].getWidth() - 20, spriteBalas[4].getHeight() - 20);
-        attachChild(spriteBalas[4]);
+        hud.attachChild(spriteBalas[4]);
 
         spriteBalas[5]= cargarSprite(1100, 350, regionProyectil);
         spriteBalas[5].setSize(spriteBalas[5].getWidth() - 20, spriteBalas[5].getHeight() - 20);
-        attachChild(spriteBalas[5]);
+        hud.attachChild(spriteBalas[5]);
 
         spriteBalas[6]= cargarSprite(1100, 300, regionProyectil);
         spriteBalas[6].setSize(spriteBalas[6].getWidth() - 20, spriteBalas[6].getHeight() - 20);
-        attachChild(spriteBalas[6]);
+        hud.attachChild(spriteBalas[6]);
 
         spriteBalas[7]= cargarSprite(1100, 250, regionProyectil);
         spriteBalas[7].setSize(spriteBalas[7].getWidth() - 20, spriteBalas[7].getHeight() - 20);
-        attachChild(spriteBalas[7]);
+        hud.attachChild(spriteBalas[7]);
 
         spriteBalas[8]= cargarSprite(1100, 200, regionProyectil);
         spriteBalas[8].setSize(spriteBalas[8].getWidth() - 20, spriteBalas[8].getHeight() - 20);
-        attachChild(spriteBalas[8]);
+        hud.attachChild(spriteBalas[8]);
 
         spriteBalas[9] = cargarSprite(1100, 150, regionProyectil);
         spriteBalas[9].setSize(spriteBalas[9].getWidth() - 20, spriteBalas[9].getHeight() - 20);
-        attachChild(spriteBalas[9]);
+        hud.attachChild(spriteBalas[9]);
 
-
-        pisoActual= cargarSprite(10, 1500 , regionPisoFlotante);
-        spriteFondo.attachChild(pisoActual);
-
+        pisoActual= new Piso(10, 1500, regionPisoFlotante,actividadJuego.getVertexBufferObjectManager(),4,0);
+        attachChild(pisoActual);
 
         spriteHoyoNegro= cargarSprite(14700, 400, regionHoyoNegro);
         spriteFondo.attachChild(spriteHoyoNegro);
 
         aleatorio= new Random();
-
-        spritePersonajeizquierda = new Jugador((ControlJuego.ANCHO_CAMARA/2)-200, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeAnimadoIzquierda, actividadJuego.getVertexBufferObjectManager());
-        spritePersonajeizquierda.animate(70);
 
         spritePersonajeDerecha = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonajeDerecha.animate(70);
@@ -338,10 +354,6 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         spriteNavecita=null;
 
         admMusica.cargarMusica(2);
-
-        posicionarEnemigos();
-
-        posicionarPisosFlotantes();
 
         agregarJoystick();
         agregarBotonSalto();
@@ -360,8 +372,8 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
-        attachChild(btnPausa);
-        registerTouchArea(btnPausa);
+        hud.attachChild(btnPausa);
+        hud.registerTouchArea(btnPausa);
 
         musicaEncendida=admMusica.getMusicaEncendida();
 
@@ -424,9 +436,8 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
-        spriteOffFinal.setAlpha(0.2f);
         escenaPausa.attachChild(spriteOffFinal);
-        registerTouchArea(spriteOffFinal);
+        escenaPausa.registerTouchArea(spriteOffFinal);
 
 
 
@@ -451,16 +462,11 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
-        spriteOnFinal.setAlpha(0.2f);
         escenaPausa.attachChild(spriteOnFinal);
-        registerTouchArea(spriteOnFinal);
+        escenaPausa.registerTouchArea(spriteOnFinal);
 
         // Agregar monedas
         agregarMonedas();
-
-        agregarHUD();
-
-
     }
 
     @Override
@@ -544,63 +550,63 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                 if(posicionBala==0) {
                     spriteBalas[0] = cargarSprite(1100, 600, regionProyectil);
                     spriteBalas[0].setSize(spriteBalas[0].getWidth() - 20, spriteBalas[0].getHeight() - 20);
-                    attachChild(spriteBalas[0]);
+                    hud.attachChild(spriteBalas[0]);
                 }
 
 
                 else if(posicionBala==1) {
                     spriteBalas[1] = cargarSprite(1100, 550, regionProyectil);
                     spriteBalas[1].setSize(spriteBalas[1].getWidth() - 20, spriteBalas[1].getHeight() - 20);
-                    attachChild(spriteBalas[1]);
+                    hud.attachChild(spriteBalas[1]);
                 }
 
                 else if(posicionBala==2) {
                     spriteBalas[2] = cargarSprite(1100, 500, regionProyectil);
                     spriteBalas[2].setSize(spriteBalas[2].getWidth() - 20, spriteBalas[2].getHeight() - 20);
-                    attachChild(spriteBalas[2]);
+                    hud.attachChild(spriteBalas[2]);
                 }
 
                 else if(posicionBala==3) {
                     spriteBalas[3] = cargarSprite(1100, 450, regionProyectil);
                     spriteBalas[3].setSize(spriteBalas[3].getWidth() - 20, spriteBalas[3].getHeight() - 20);
-                    attachChild(spriteBalas[3]);
+                    hud.attachChild(spriteBalas[3]);
                 }
 
                 else if(posicionBala==4) {
                     spriteBalas[4] = cargarSprite(1100, 400, regionProyectil);
                     spriteBalas[4].setSize(spriteBalas[4].getWidth() - 20, spriteBalas[4].getHeight() - 20);
-                    attachChild(spriteBalas[4]);
+                    hud.attachChild(spriteBalas[4]);
                 }
 
                 else if(posicionBala==5) {
                     spriteBalas[5] = cargarSprite(1100, 350, regionProyectil);
                     spriteBalas[5].setSize(spriteBalas[5].getWidth() - 20, spriteBalas[5].getHeight() - 20);
-                    attachChild(spriteBalas[5]);
+                    hud.attachChild(spriteBalas[5]);
                 }
 
                 else if(posicionBala==6) {
                     spriteBalas[6] = cargarSprite(1100, 300, regionProyectil);
                     spriteBalas[6].setSize(spriteBalas[6].getWidth() - 20, spriteBalas[6].getHeight() - 20);
-                    attachChild(spriteBalas[6]);
+                    hud.attachChild(spriteBalas[6]);
                 }
 
                 else if(posicionBala==7) {
                     spriteBalas[7] = cargarSprite(1100, 250, regionProyectil);
                     spriteBalas[7].setSize(spriteBalas[7].getWidth() - 20, spriteBalas[7].getHeight() - 20);
-                    attachChild(spriteBalas[7]);
+                    hud.attachChild(spriteBalas[7]);
                 }
 
                 else if(posicionBala==8) {
                     spriteBalas[8] = cargarSprite(1100, 200, regionProyectil);
                     spriteBalas[8].setSize(spriteBalas[8].getWidth() - 20, spriteBalas[8].getHeight() - 20);
-                    attachChild(spriteBalas[8]);
+                    hud.attachChild(spriteBalas[8]);
                 }
 
 
                 else if(posicionBala==9) {
                     spriteBalas[9] = cargarSprite(1100, 150, regionProyectil);
                     spriteBalas[9].setSize(spriteBalas[9].getWidth() - 20, spriteBalas[9].getHeight() - 20);
-                    attachChild(spriteBalas[9]);
+                    hud.attachChild(spriteBalas[9]);
                 }
 
 
@@ -609,16 +615,29 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
             }
         }
 
+        Log.i("estoy",spritePersonaje.getX()+"");
+
+        contadorPersigue+=1;
+
+        if(contadorPersigue>100){
+            Enemigo spriteEnemigo = new Enemigo(30000, 720, regionOvni, actividadJuego.getVertexBufferObjectManager(), 9, false, false, 10,false,true, false);
+            Enemigo nuevoEnemigo = spriteEnemigo;
+            nuevoEnemigo.setPersigue(true);
+            listaEnemigos.add(nuevoEnemigo);
+            attachChild(nuevoEnemigo);
+            contadorPersigue=0;
+        }
 
         for (int i= listaPisos.length-1; i>=0; i--) {
 
-            final Sprite piso = listaPisos[i];
+            final Piso piso = listaPisos[i];
 
-            if (spritePersonaje.collidesWith(piso) && spritePersonaje.getY()-130>piso.getY()) {
+            if (spritePersonaje.collidesWith(piso) && piso.getY()+110<spritePersonaje.getY() && poderDeSalto<0.3) {
 
-
-                pisoActual.setPosition(piso);
-
+                if(piso.getLimiteDerecho()==10){
+                    piso.setBalsa(true);
+                }
+                pisoActual=piso;
 
                 if (nubecita == false) {
 
@@ -629,7 +648,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                         enElAire = false;
                         paArriba = false;
                         gravedad = true;
-                        spritePersonaje.setY(piso.getY()+150);
+                        spritePersonaje.setY(piso.getY()+135);
                     } else {
 
                         enElAire = true;
@@ -642,35 +661,23 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
             else{
 
                 if(spritePersonaje.collidesWith(pisoActual)==false){
-
                     estoySobreUnaPalmera = false;
-                    pisoActual.setPosition(10,1500);
                 }
+            }
+
+            if(piso.getMover()){
+                piso.mover(pSecondsElapsed);
             }
         }
 
         DecimalFormat df = new DecimalFormat("##.##"); // Para formatear 2 decimales
         txtMarcador.setText(df.format(valorMarcador));
 
-        if(spritePersonaje.collidesWith(spriteOvni2)){
-
-            nubecita=true;
-            spriteOvni2.detachSelf();
-            spriteNavecita=cargarSprite(spritePersonaje.getX(), spritePersonaje.getY(), regionOvni);
-            spriteNavecita.setSize(spriteNavecita.getWidth() - 30, spriteNavecita.getHeight() - 30);
-            attachChild(spriteNavecita);
-
-        }
-
         actualizarMonedas();
 
         actualizarProyectilesEnemigo();
 
-        if(nubecita==true){
-            spriteNavecita.setPosition(spritePersonaje.getX(), spritePersonaje.getY());
-        }
-
-
+        /*
 
         if(spritePersonaje.collidesWith(spriteHoyoNegro)){
             admEscenas.setcazaJurasicaDesbloqueado(true);
@@ -678,6 +685,8 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
             admEscenas.crearEscenaMenu();
             admEscenas.setEscena(TipoEscena.ESCENA_MENU);
         }
+
+        */
 
         if(gravedad==true && nubecita==false){
             if(spritePersonaje.getY()>ControlJuego.ALTO_CAMARA/4-20 && estoySobreUnaPalmera==false){
@@ -697,7 +706,6 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                 }
                 if(spritePersonaje.getY()<=ControlJuego.ALTO_CAMARA/4-20){
                     enElAire=false;
-                    poderDeSalto=4.1f;
                 }
 
             }
@@ -759,10 +767,13 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                 }
 
             }
-
             else{
                 enemigo.mover(pSecondsElapsed);
             }
+            if(enemigo.getPersigue()==true){
+
+            }
+            /*
 
             if (spritePersonaje.collidesWith(enemigo)) {
 
@@ -780,7 +791,6 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                     if(nubecita==true){
                         spriteNavecita.detachSelf();
                         nubecita=false;
-                        poderDeSalto=4.1f;
                         enElAire=true;
                         paArriba=true;
                         gravedad=false;
@@ -800,6 +810,8 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
                 }
             }
+            */
+
         }
     }
 
@@ -841,7 +853,6 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                     if(nubecita==true){
                         spriteNavecita.detachSelf();
                         nubecita=false;
-                        poderDeSalto=4.1f;
                         enElAire=true;
                         paArriba=true;
                         gravedad=false;
@@ -899,8 +910,6 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         regionVida=null;
         regionPersonajeAnimado.getTexture().unload();
         regionPersonajeAnimado=null;
-        regionPersonajeAnimadoIzquierda.getTexture().unload();
-        regionPersonajeAnimadoIzquierda=null;
         regionBtnPausa.getTexture().unload();
         regionBtnPausa=null;
         regionHoyoNegro.getTexture().unload();
@@ -975,26 +984,22 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
 
                     if (pValueX > 0) {
-                        personajeVolteandoDerecha = true;
-                        if(spritePersonaje!=spritePersonajeDerecha){
-                            spritePersonajeDerecha.setPosition(spritePersonaje);
-                            spritePersonaje.detachSelf();
-                            spritePersonaje=spritePersonajeDerecha;
-                            attachChild(spritePersonaje);
+                        if(personajeVolteandoDerecha==false) {
+                            personajeVolteandoDerecha = true;
+                            spritePersonaje.setFlippedHorizontal(false);
                         }
                     }
-
                     else if (pValueX < 0) {
-                        personajeVolteandoDerecha = false;
-                        if(spritePersonaje!=spritePersonajeizquierda){
-                            spritePersonajeizquierda.setPosition(spritePersonaje);
-                            spritePersonaje.detachSelf();
-                            spritePersonaje=spritePersonajeizquierda;
-                            attachChild(spritePersonaje);
+                        if(personajeVolteandoDerecha==true) {
+                            personajeVolteandoDerecha = false;
+                            spritePersonaje.setFlippedHorizontal(true);
                         }
                     }
+                    else{
+                        spritePersonaje.animate(70);
+                    }
 
-                    if(spritePersonaje.getX()>20008){
+                    if(spritePersonaje.getX()>200008){
                         if(pValueX>0){
                         }
                         else{
@@ -1003,7 +1008,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                         }
                     }
 
-                    else if(spritePersonaje.getX()<610){
+                    else if(spritePersonaje.getX()<630){
                         if(pValueX<0){
                         }
                         else{
@@ -1028,7 +1033,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
     private void posicionarEnemigos(){
 
-        int maxima=1;
+        int maxima=13;
 
         posicionesEnemigosx = new float[maxima];
         posicionesEnemigosy = new float[maxima];
@@ -1040,49 +1045,167 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         disparar = new boolean[maxima];
         noPuedeSerDestruido =new boolean[maxima];
 
-        posicionesEnemigosx[0]=2710;
+        posicionesEnemigosx[0]=2820;
+        posicionesEnemigosx[1]=3810;
+        posicionesEnemigosx[2]=5510;
+        posicionesEnemigosx[3]=6010;
+        posicionesEnemigosx[4]=9810;
+        posicionesEnemigosx[5]=12220;
+        posicionesEnemigosx[6]=13500;
+        posicionesEnemigosx[7]=14780;
+        posicionesEnemigosx[8]=16060;
+        posicionesEnemigosx[9]=17340;
+        posicionesEnemigosx[10]=18620;
+        posicionesEnemigosx[11]=19900;
+        posicionesEnemigosx[12]=21180;
 
-        posicionesEnemigosy[0]=150;
+        posicionesEnemigosy[0]=334;
+        posicionesEnemigosy[1]=80;
+        posicionesEnemigosy[2]=130;
+        posicionesEnemigosy[3]=130;
+        posicionesEnemigosy[4]=730;
+        posicionesEnemigosy[5]=80;
+        posicionesEnemigosy[6]=80;
+        posicionesEnemigosy[7]=80;
+        posicionesEnemigosy[8]=80;
+        posicionesEnemigosy[9]=80;
+        posicionesEnemigosy[10]=80;
+        posicionesEnemigosy[11]=80;
+        posicionesEnemigosy[12]=80;
 
         brinca[0]=false;
+        brinca[1]=false;
+        brinca[2]=true;
+        brinca[3]=false;
+        brinca[4]=false;
+        brinca[5]=false;
+        brinca[6]=false;
+        brinca[7]=false;
+        brinca[8]=false;
+        brinca[9]=false;
+        brinca[10]=false;
+        brinca[11]=false;
+        brinca[12]=false;
 
         camina[0]=1;
+        camina[1]=4;
+        camina[2]=4;
+        camina[3]=0;
+        camina[4]=1;
+        camina[5]=4;
+        camina[6]=4;
+        camina[7]=4;
+        camina[8]=4;
+        camina[9]=4;
+        camina[10]=4;
+        camina[11]=4;
+        camina[12]=4;
 
         rota[0]=false;
+        rota[1]=false;
+        rota[2]=true;
+        rota[3]=true;
+        rota[4]=false;
+        rota[5]=false;
+        rota[6]=false;
+        rota[7]=false;
+        rota[8]=false;
+        rota[9]=false;
+        rota[10]=false;
+        rota[11]=false;
+        rota[12]=false;
 
-        numPasos[0]=40;
+        numPasos[0]=20;
+        numPasos[1]=1;
+        numPasos[2]=1;
+        numPasos[3]=30;
+        numPasos[4]=30;
+        numPasos[5]=30;
+        numPasos[6]=30;
+        numPasos[7]=30;
+        numPasos[8]=30;
+        numPasos[9]=30;
+        numPasos[10]=30;
+        numPasos[11]=30;
+        numPasos[12]=30;
 
-        rotaCamina[0]=true;
+        rotaCamina[0]=false;
+        rotaCamina[1]=false;
+        rotaCamina[2]=false;
+        rotaCamina[3]=true;
+        rotaCamina[4]=false;
+        rotaCamina[5]=false;
+        rotaCamina[6]=false;
+        rotaCamina[7]=false;
+        rotaCamina[8]=false;
+        rotaCamina[9]=false;
+        rotaCamina[10]=false;
+        rotaCamina[11]=false;
+        rotaCamina[12]=false;
 
         disparar[0]=false;
+        disparar[1]=false;
+        disparar[2]=false;
+        disparar[3]=false;
+        disparar[4]=true;
+        disparar[5]=false;
+        disparar[6]=false;
+        disparar[7]=false;
+        disparar[8]=false;
+        disparar[9]=false;
+        disparar[10]=false;
+        disparar[11]=false;
+        disparar[12]=false;
 
         noPuedeSerDestruido[0]=false;
+        noPuedeSerDestruido[1]=true;
+        noPuedeSerDestruido[2]=false;
+        noPuedeSerDestruido[3]=false;
+        noPuedeSerDestruido[4]=false;
+        noPuedeSerDestruido[5]=true;
+        noPuedeSerDestruido[6]=true;
+        noPuedeSerDestruido[7]=true;
+        noPuedeSerDestruido[8]=true;
+        noPuedeSerDestruido[9]=true;
+        noPuedeSerDestruido[10]=true;
+        noPuedeSerDestruido[11]=true;
+        noPuedeSerDestruido[12]=true;
+
 
         int cont;
         for( cont = 0; cont< posicionesEnemigosx.length;cont++){
-            if(cont==5 || cont==10) {
+            if(cont==1 || cont==5 || cont==6 || cont==7 || cont==8 || cont==9 || cont==10 || cont==11 || cont==12){
+                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionLava, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
+                Enemigo nuevoEnemigo = spriteEnemigo;
+                listaEnemigos.add(nuevoEnemigo);
+                if(cont==6 || cont==8 || cont==10 || cont == 12){
+                    nuevoEnemigo.setFlippedHorizontal(true);
+                }
+                spriteFondo.attachChild(nuevoEnemigo);
+            }
+            else if(cont==4) {
                 Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionOvni, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
                 Enemigo nuevoEnemigo = spriteEnemigo;
                 listaEnemigos.add(nuevoEnemigo);
-                spriteFondo.attachChild(nuevoEnemigo);
+                attachChild(nuevoEnemigo);
             }
-            else if(cont==6 || cont==7 || cont==9 || cont==12 || cont==15){
+            else if(cont==0 || cont==2){
                 Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionPua, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
                 Enemigo nuevoEnemigo = spriteEnemigo;
                 listaEnemigos.add(nuevoEnemigo);
-                spriteFondo.attachChild(nuevoEnemigo);
+                attachChild(nuevoEnemigo);
             }
-            else if(cont==16 || cont==17 || cont==18 || cont==19 || cont==20 || cont==21 || cont==22){
+            else if(cont==-1){
                 Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionPicos, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
                 Enemigo nuevoEnemigo = spriteEnemigo;
                 listaEnemigos.add(nuevoEnemigo);
-                spriteFondo.attachChild(nuevoEnemigo);
+                attachChild(nuevoEnemigo);
             }
             else{
                 Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionEnemigo, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
                 Enemigo nuevoEnemigo = spriteEnemigo;
                 listaEnemigos.add(nuevoEnemigo);
-                spriteFondo.attachChild(nuevoEnemigo);
+                attachChild(nuevoEnemigo);
             }
         }
     }
@@ -1090,26 +1213,327 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
 
     private void posicionarPisosFlotantes(){
-        int maxima=5;
+        int maxima=63;
         posicionesPisosFlotantesX= new float [maxima];
         posicionesPisosFlotantesY=new float[maxima];
         comportamientoPiso=new int[maxima];
         numPasosPiso=new int[maxima];
         listaPisos= new Piso [maxima];
+
+        posicionesPisosFlotantesX[0]=1700;
+        //primera piramide
+        posicionesPisosFlotantesX[1]=2170;
+        posicionesPisosFlotantesX[2]=2430;
+        posicionesPisosFlotantesX[3]=2690;
+        posicionesPisosFlotantesX[4]=2950;
+        posicionesPisosFlotantesX[5]=2430;
+        posicionesPisosFlotantesX[6]=2690;
+        posicionesPisosFlotantesX[7]=2950;
+        posicionesPisosFlotantesX[8]=2690;
+        posicionesPisosFlotantesX[9]=2950;
+        posicionesPisosFlotantesX[10]=2950;
+        posicionesPisosFlotantesX[11]=5110;
+        posicionesPisosFlotantesX[12]=4850;
+        posicionesPisosFlotantesX[13]=4590;
+        posicionesPisosFlotantesX[14]=4330;
+        posicionesPisosFlotantesX[15]=4850;
+        posicionesPisosFlotantesX[16]=4590;
+        posicionesPisosFlotantesX[17]=4330;
+        posicionesPisosFlotantesX[18]=4590;
+        posicionesPisosFlotantesX[19]=4330;
+        posicionesPisosFlotantesX[20]=4330;
+        posicionesPisosFlotantesX[21]=3635;
+        posicionesPisosFlotantesX[22]=5895;
+        // fin primera piramide
+
+        //segunda media piramide
+        posicionesPisosFlotantesX[23]=7210;
+        posicionesPisosFlotantesX[24]=7470;
+        posicionesPisosFlotantesX[25]=7730;
+        posicionesPisosFlotantesX[26]=7990;
+        posicionesPisosFlotantesX[27]=7470;
+        posicionesPisosFlotantesX[28]=7730;
+        posicionesPisosFlotantesX[29]=7990;
+        posicionesPisosFlotantesX[30]=7730;
+        posicionesPisosFlotantesX[31]=7990;
+        posicionesPisosFlotantesX[32]=7990;
+
+        posicionesPisosFlotantesX[33]=8890;
+        posicionesPisosFlotantesX[34]=9150;
+        posicionesPisosFlotantesX[35]=9410;
+
+        //tercera media piramide
+        posicionesPisosFlotantesX[36]=10580;
+        posicionesPisosFlotantesX[37]=10840;
+        posicionesPisosFlotantesX[38]=11100;
+        posicionesPisosFlotantesX[39]=11360;
+        posicionesPisosFlotantesX[40]=10840;
+        posicionesPisosFlotantesX[41]=11100;
+        posicionesPisosFlotantesX[42]=11360;
+        posicionesPisosFlotantesX[43]=11100;
+        posicionesPisosFlotantesX[44]=11360;
+        posicionesPisosFlotantesX[45]=11360;
+        posicionesPisosFlotantesX[46]=12140;
+        posicionesPisosFlotantesX[47]=13230;
+        posicionesPisosFlotantesX[48]=14300;
+        posicionesPisosFlotantesX[49]=14980;
+        posicionesPisosFlotantesX[50]=16050;
+        posicionesPisosFlotantesX[51]=17148;
+        posicionesPisosFlotantesX[52]=17684;
+        posicionesPisosFlotantesX[53]=18500;
+        posicionesPisosFlotantesX[54]=19609;
+        posicionesPisosFlotantesX[55]=18855;
+        posicionesPisosFlotantesX[56]=20466;
+        posicionesPisosFlotantesX[57]=21326;
+        posicionesPisosFlotantesX[58]=21586;
+        posicionesPisosFlotantesX[59]=21846;
+        posicionesPisosFlotantesX[60]=22106;
+        posicionesPisosFlotantesX[61]=22366;
+        posicionesPisosFlotantesX[62]=21253;
+
+        posicionesPisosFlotantesY[0]=330;
+        //primera piramide
+        posicionesPisosFlotantesY[1]=44;
+        posicionesPisosFlotantesY[2]=44;
+        posicionesPisosFlotantesY[3]=44;
+        posicionesPisosFlotantesY[4]=44;
+        posicionesPisosFlotantesY[5]=140;
+        posicionesPisosFlotantesY[6]=140;
+        posicionesPisosFlotantesY[7]=140;
+        posicionesPisosFlotantesY[8]=238;
+        posicionesPisosFlotantesY[9]=238;
+        posicionesPisosFlotantesY[10]=334;
+        posicionesPisosFlotantesY[11]=44;
+        posicionesPisosFlotantesY[12]=44;
+        posicionesPisosFlotantesY[13]=44;
+        posicionesPisosFlotantesY[14]=44;
+        posicionesPisosFlotantesY[15]=140;
+        posicionesPisosFlotantesY[16]=140;
+        posicionesPisosFlotantesY[17]=140;
+        posicionesPisosFlotantesY[18]=238;
+        posicionesPisosFlotantesY[19]=238;
+        posicionesPisosFlotantesY[20]=334;
+        posicionesPisosFlotantesY[21]=334;
+        posicionesPisosFlotantesY[22]=400;
+
+        // fin primera piramide
+
+        //segunda media piramide
+
+        posicionesPisosFlotantesY[23]=132;
+        posicionesPisosFlotantesY[24]=132;
+        posicionesPisosFlotantesY[25]=132;
+        posicionesPisosFlotantesY[26]=132;
+        posicionesPisosFlotantesY[27]=230;
+        posicionesPisosFlotantesY[28]=230;
+        posicionesPisosFlotantesY[29]=230;
+        posicionesPisosFlotantesY[30]=328;
+        posicionesPisosFlotantesY[31]=328;
+        posicionesPisosFlotantesY[32]=426;
+
+        posicionesPisosFlotantesY[33]=600;
+        posicionesPisosFlotantesY[34]=600;
+        posicionesPisosFlotantesY[35]=600;
+
+        //tercera media piramide
+        posicionesPisosFlotantesY[36]=44;
+        posicionesPisosFlotantesY[37]=44;
+        posicionesPisosFlotantesY[38]=44;
+        posicionesPisosFlotantesY[39]=44;
+        posicionesPisosFlotantesY[40]=140;
+        posicionesPisosFlotantesY[41]=140;
+        posicionesPisosFlotantesY[42]=140;
+        posicionesPisosFlotantesY[43]=238;
+        posicionesPisosFlotantesY[44]=238;
+        posicionesPisosFlotantesY[45]=334;
+        posicionesPisosFlotantesY[46]=400;
+        posicionesPisosFlotantesY[47]=400;
+        posicionesPisosFlotantesY[48]=250;
+        posicionesPisosFlotantesY[49]=500;
+        posicionesPisosFlotantesY[50]=300;
+        posicionesPisosFlotantesY[51]=200;
+        posicionesPisosFlotantesY[52]=400;
+        posicionesPisosFlotantesY[53]=600;
+        posicionesPisosFlotantesY[54]=500;
+        posicionesPisosFlotantesY[55]=250;
+        posicionesPisosFlotantesY[56]=200;
+        posicionesPisosFlotantesY[57]=760;
+        posicionesPisosFlotantesY[58]=760;
+        posicionesPisosFlotantesY[59]=760;
+        posicionesPisosFlotantesY[60]=760;
+        posicionesPisosFlotantesY[61]=760;
+        posicionesPisosFlotantesY[62]=200;
+
+
+        comportamientoPiso[0]=0;
+        comportamientoPiso[1]=4;
+        comportamientoPiso[2]=4;
+        comportamientoPiso[3]=4;
+        comportamientoPiso[4]=4;
+        comportamientoPiso[5]=4;
+        comportamientoPiso[6]=4;
+        comportamientoPiso[7]=4;
+        comportamientoPiso[8]=4;
+        comportamientoPiso[9]=4;
+        comportamientoPiso[10]=4;
+        comportamientoPiso[11]=4;
+        comportamientoPiso[12]=4;
+        comportamientoPiso[13]=4;
+        comportamientoPiso[14]=4;
+        comportamientoPiso[15]=4;
+        comportamientoPiso[16]=4;
+        comportamientoPiso[17]=4;
+        comportamientoPiso[18]=4;
+        comportamientoPiso[19]=4;
+        comportamientoPiso[20]=4;
+        comportamientoPiso[21]=0;
+        comportamientoPiso[22]=2;
+        comportamientoPiso[23]=4;
+        comportamientoPiso[24]=4;
+        comportamientoPiso[25]=4;
+        comportamientoPiso[26]=4;
+        comportamientoPiso[27]=4;
+        comportamientoPiso[28]=4;
+        comportamientoPiso[29]=4;
+        comportamientoPiso[30]=4;
+        comportamientoPiso[31]=4;
+        comportamientoPiso[32]=4;
+        comportamientoPiso[33]=4;
+        comportamientoPiso[34]=4;
+        comportamientoPiso[35]=4;
+        comportamientoPiso[36]=4;
+        comportamientoPiso[37]=4;
+        comportamientoPiso[38]=4;
+        comportamientoPiso[39]=4;
+        comportamientoPiso[40]=4;
+        comportamientoPiso[41]=4;
+        comportamientoPiso[42]=4;
+        comportamientoPiso[43]=4;
+        comportamientoPiso[44]=4;
+        comportamientoPiso[45]=4;
+        comportamientoPiso[46]=4;
+        comportamientoPiso[47]=0;
+        comportamientoPiso[48]=1;
+        comportamientoPiso[49]=0;
+        comportamientoPiso[50]=1;
+        comportamientoPiso[51]=4;
+        comportamientoPiso[52]=4;
+        comportamientoPiso[53]=4;
+        comportamientoPiso[54]=2;
+        comportamientoPiso[55]=4;
+        comportamientoPiso[56]=0;
+        comportamientoPiso[57]=4;
+        comportamientoPiso[58]=4;
+        comportamientoPiso[59]=4;
+        comportamientoPiso[60]=4;
+        comportamientoPiso[61]=4;
+        comportamientoPiso[62]=10;
+
+        numPasosPiso[0]=50;
+        numPasosPiso[1]=50;
+        numPasosPiso[2]=50;
+        numPasosPiso[3]=50;
+        numPasosPiso[4]=50;
+        numPasosPiso[5]=50;
+        numPasosPiso[6]=50;
+        numPasosPiso[7]=50;
+        numPasosPiso[8]=50;
+        numPasosPiso[9]=50;
+        numPasosPiso[10]=50;
+        numPasosPiso[11]=50;
+        numPasosPiso[12]=50;
+        numPasosPiso[13]=50;
+        numPasosPiso[14]=50;
+        numPasosPiso[15]=50;
+        numPasosPiso[16]=50;
+        numPasosPiso[17]=50;
+        numPasosPiso[18]=50;
+        numPasosPiso[19]=50;
+        numPasosPiso[20]=50;
+        numPasosPiso[21]=45;
+        numPasosPiso[22]=45;
+        numPasosPiso[23]=50;
+        numPasosPiso[24]=50;
+        numPasosPiso[25]=50;
+        numPasosPiso[26]=50;
+        numPasosPiso[27]=50;
+        numPasosPiso[28]=50;
+        numPasosPiso[29]=50;
+        numPasosPiso[30]=50;
+        numPasosPiso[31]=50;
+        numPasosPiso[32]=50;
+        numPasosPiso[33]=50;
+        numPasosPiso[34]=50;
+        numPasosPiso[35]=50;
+        numPasosPiso[36]=50;
+        numPasosPiso[37]=50;
+        numPasosPiso[38]=50;
+        numPasosPiso[39]=50;
+        numPasosPiso[40]=50;
+        numPasosPiso[41]=50;
+        numPasosPiso[42]=50;
+        numPasosPiso[43]=50;
+        numPasosPiso[44]=50;
+        numPasosPiso[45]=50;
+        numPasosPiso[46]=50;
+        numPasosPiso[47]=115;
+        numPasosPiso[48]=35;
+        numPasosPiso[49]=45;
+        numPasosPiso[50]=75;
+        numPasosPiso[51]=75;
+        numPasosPiso[52]=75;
+        numPasosPiso[53]=75;
+        numPasosPiso[54]=45;
+        numPasosPiso[55]=45;
+        numPasosPiso[56]=65;
+        numPasosPiso[57]=35;
+        numPasosPiso[58]=35;
+        numPasosPiso[59]=35;
+        numPasosPiso[60]=35;
+        numPasosPiso[61]=35;
+        numPasosPiso[62]=35;
+
+        int cont;
+
+
+        for(cont=0; cont<posicionesPisosFlotantesX.length;cont++){
+            Piso spritePiso= new Piso(posicionesPisosFlotantesX[cont], posicionesPisosFlotantesY[cont], regionPisoFlotante,actividadJuego.getVertexBufferObjectManager(),comportamientoPiso[cont],numPasosPiso[cont]);
+            listaPisos[cont]=spritePiso;
+            attachChild(spritePiso);
+        }
+
     }
 
     private void agregarMonedas() {
         // Agrega monedas a lo largo del mundo
         listaMonedas = new ArrayList<>();
 
-        int maxima=1;
+        int maxima=10;
 
         posicionesMonedasX= new float[maxima];
         posicionesMonedasY= new float[maxima];
 
         posicionesMonedasX[0]=2000;
+        posicionesMonedasX[1]=3635;
+        posicionesMonedasX[2]=3335;
+        posicionesMonedasX[3]=4035;
+        posicionesMonedasX[4]=5935;
+        posicionesMonedasX[5]=6135;
+        posicionesMonedasX[6]=6235;
+        posicionesMonedasX[7]=8890;
+        posicionesMonedasX[8]=9150;
+        posicionesMonedasX[9]=9410;
 
-        posicionesMonedasY[0]=440;
+        posicionesMonedasY[0]=750;
+        posicionesMonedasY[1]=454;
+        posicionesMonedasY[2]=454;
+        posicionesMonedasY[3]=454;
+        posicionesMonedasY[4]=684;
+        posicionesMonedasY[5]=684;
+        posicionesMonedasY[6]=684;
+        posicionesMonedasY[7]=720;
+        posicionesMonedasY[8]=720;
+        posicionesMonedasY[9]=720;
 
         for (int i=0; i<posicionesMonedasX.length; i++) {
             float x = posicionesMonedasX[i];
@@ -1134,11 +1558,10 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                             spriteNavecita.detachSelf();
                             nubecita=false;
                         }
-
-                        poderDeSalto=4.1f;
                         enElAire=true;
                         paArriba=true;
                         gravedad=false;
+                        poderDeSalto=4.1f;
                         if(estoySobreUnaPalmera==true){
                             brincaSobrepalmera=true;
                         }
@@ -1147,8 +1570,8 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
-        registerTouchArea(btnSaltar);
-        attachChild(btnSaltar);
+        hud.registerTouchArea(btnSaltar);
+        hud.attachChild(btnSaltar);
     }
 
 
@@ -1170,6 +1593,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
             // Prueba colisión
             if (spritePersonaje.collidesWith(moneda)) {
                 // Desaparecer moneda
+                animacionTexto();
                 desaparecerMoneda(moneda);
             }
             // Salen las monedas que han desaparecido
@@ -1205,8 +1629,8 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
         };
-        registerTouchArea(btnDisparar);
-        attachChild(btnDisparar);
+        hud.registerTouchArea(btnDisparar);
+        hud.attachChild(btnDisparar);
     }
 
     private void actualizarProyectiles(float tiempo) {
@@ -1217,7 +1641,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
             Laser proyectil = listaProyectiles.get(i);
             proyectil.mover();
 
-            if (proyectil.getX() > ControlJuego.ANCHO_CAMARA) {
+            if (proyectil.getX()-spritePersonaje.getX() > 650 || proyectil.getX()-spritePersonaje.getX() < -650) {
                 detachChild(proyectil);
                 listaProyectiles.remove(proyectil);
                 continue;
@@ -1248,11 +1672,33 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         }
     }
 
-    private void actualizarVidas(float tiempo) {
+    private void animacionTexto(){
 
+        IFont tipo = cargarFont("fonts/monster.ttf");
+        final Text txtPuntos = new Text(spritePersonaje.getX(),spritePersonaje.getY(),tipo,"+$1",12,actividadJuego.getVertexBufferObjectManager());
+        txtPuntos.setColor(0,0,0);
+        attachChild(txtPuntos);
+
+        MoveYModifier modY = new MoveYModifier(1, txtPuntos.getY(),txtPuntos.getY()+60){
+            @Override
+            protected void onModifierStarted(IEntity pItem)
+            {
+                super.onModifierStarted(pItem);
+
+            }
+            @Override
+            protected void onModifierFinished(IEntity pItem)
+            {
+                super.onModifierFinished(pItem);
+                txtPuntos.setText("");
+            }
+        };
+        txtPuntos.registerEntityModifier(modY);
+    }
+
+    private void actualizarVidas(float tiempo) {
         // Se visita cada proyectil dentro de la lista, se recorre con el índice
         // porque se pueden borrar datos
-
         for (int i = listaVidasEncontradas.size() - 1; i>=0; i--) {
             Vida vida = listaVidasEncontradas.get(i);
 

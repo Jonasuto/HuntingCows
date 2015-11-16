@@ -27,6 +27,7 @@ public class AdministradorEscenas {
     private EscenaBase escenaHistoriaCazaJurasica;
     private EscenaBase escenaPerdiste;
     private EscenaBase escenaGanaste;
+    private EscenaBase escenaArcade;
     private EscenaBase escenaPeleaBossCazaJurasica;
 
     private boolean cazaJurasicaDesbloqueado=false;
@@ -131,6 +132,9 @@ public class AdministradorEscenas {
             case ESCENA_ESCENA_PELEA_BOSS_CAZA_JURASICA:
                 setEscenaBase(escenaPeleaBossCazaJurasica);
                 break;
+            case ESCENA_ARCADE:
+                setEscenaBase(escenaArcade);
+                break;
         }
     }
 
@@ -144,6 +148,17 @@ public class AdministradorEscenas {
     public void liberarEscenaSplash() {
         escenaSplash.liberarEscena();
         escenaSplash = null;
+    }
+
+    public void crearEscenaArcade() {
+        // Carga los recursos
+        escenaArcade = new mx.itesm.rmroman.proyectobasegpo01.EscenaArcade();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaArcade() {
+        escenaArcade.liberarEscena();
+        escenaArcade = null;
     }
 
     public void crearEscenaPeleaBossCazaJurasica() {
@@ -170,7 +185,7 @@ public class AdministradorEscenas {
 
     public void crearEscenaPerdiste() {
         // Carga los recursos
-        escenaPerdiste = new mx.itesm.rmroman.proyectobasegpo01.EscenaPerdiste();
+        escenaPerdiste = new mx.itesm.rmroman.proyectobasegpo01.EscenaGanaste();
     }
 
     //*** Libera la escena de Splash

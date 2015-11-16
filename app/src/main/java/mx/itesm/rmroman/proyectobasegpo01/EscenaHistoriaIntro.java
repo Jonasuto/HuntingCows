@@ -51,9 +51,9 @@ public class EscenaHistoriaIntro extends EscenaBase
         regionSlides[11] = cargarImagen("Imagenes/Historia/IntroHistoria/historia_11.jpg");
         
         regionSlideActual=regionSlides[0];
-        regionsiguiente = cargarImagen("Imagenes/Historia/flecha.png");
-        regionanterior = cargarImagen("Imagenes/Historia/flecha.png");
-        regionfinal = cargarImagen("Imagenes/Historia/flecha.png");
+        regionsiguiente = cargarImagen("Imagenes/Historia/comic_next.png");
+        regionanterior = cargarImagen("Imagenes/Historia/comic_prev.png");
+        regionfinal = cargarImagen("Imagenes/Historia/comic_skip.png");
         contadorSlide=0;
     }
 
@@ -97,7 +97,6 @@ public class EscenaHistoriaIntro extends EscenaBase
         opcionSiguiente.setPosition(450, -350);
 
         opcionanterior.setPosition(-450, -350);
-        opcionanterior.setRotation(-180);
 
         opcionafinal.setPosition(450,350);
 

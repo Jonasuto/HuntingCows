@@ -3,9 +3,12 @@ package mx.itesm.rmroman.proyectobasegpo01;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.util.adt.color.Color;
+
+import java.util.Random;
 
 /**
  * La escena de espera
@@ -21,6 +24,8 @@ public class EscenaCargando extends EscenaBase
 
     private int decision;
 
+    private Random aleatorio;
+
     public EscenaCargando(int numero) {
         decision=numero;
     }
@@ -29,7 +34,28 @@ public class EscenaCargando extends EscenaBase
     @Override
     public void cargarRecursos() {
 
-        regionFondo = cargarImagen("Imagenes/espera.png");
+        aleatorio= new Random();
+
+        int num=aleatorio.nextInt(5);
+
+        if(num==0){
+            regionFondo = cargarImagen("Imagenes/Roman/loading.jpg");
+        }
+
+        else if(num==1){
+            regionFondo = cargarImagen("Imagenes/Roman/loading2.jpg");
+        }
+
+        else if(num==2){
+            regionFondo = cargarImagen("Imagenes/Roman/loading3.jpg");
+        }
+
+        else if(num==3){
+            regionFondo = cargarImagen("Imagenes/Roman/loading4.jpg");
+        }
+        else{
+            regionFondo = cargarImagen("Imagenes/Roman/loading5.jpg");
+        }
     }
 
     // Arma la escena que se presentará en pantalla
@@ -41,10 +67,8 @@ public class EscenaCargando extends EscenaBase
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2,
                 regionFondo);
 
-        // Crea el fondo de la pantalla
-        Background fondo = new Background(1,1,1);
+        SpriteBackground fondo = new SpriteBackground(0.28f, 0.63f, 0.92f,spriteFondo);
         setBackground(fondo);
-        attachChild(spriteFondo);
         setBackgroundEnabled(true);
 
         // Programa la carga de la segunda escena, después de cierto tiempo
@@ -75,8 +99,6 @@ public class EscenaCargando extends EscenaBase
     @Override
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed);
-
-        spriteFondo.setRotation(spriteFondo.getRotation()+5);
     }
 
     @Override

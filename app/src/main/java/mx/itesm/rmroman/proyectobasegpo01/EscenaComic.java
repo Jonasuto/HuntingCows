@@ -56,9 +56,9 @@ public class EscenaComic extends EscenaBase
         regionSlides[15] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_15.jpg");
 
         regionSlideActual=regionSlides[0];
-        regionsiguiente = cargarImagen("Imagenes/Historia/flecha.png");
-        regionanterior = cargarImagen("Imagenes/Historia/flecha.png");
-        regionfinal = cargarImagen("Imagenes/Historia/flecha.png");
+        regionsiguiente = cargarImagen("Imagenes/Historia/comic_next.png");
+        regionanterior = cargarImagen("Imagenes/Historia/comic_prev.png");
+        regionfinal = cargarImagen("Imagenes/Historia/comic_skip.png");
         contadorSlide=0;
     }
 
@@ -101,7 +101,6 @@ public class EscenaComic extends EscenaBase
         opcionSiguiente.setPosition(450, -350);
 
         opcionanterior.setPosition(-450, -350);
-        opcionanterior.setRotation(-180);
         opcionfinal.setPosition(450, 350);
 
 
