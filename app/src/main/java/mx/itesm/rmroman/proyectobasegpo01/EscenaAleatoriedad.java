@@ -73,7 +73,10 @@ public class EscenaAleatoriedad extends EscenaBase {
     private Sprite spriteHoyoNegro;
     private Sprite spriteFondoPausa;
 
-    private ITextureRegion regionPisoFlotante;
+    private ITextureRegion regionPisoAzulTele;
+    private ITextureRegion regionPisoAzulClaro;
+    private ITextureRegion regionPisoGrandeTele;
+    private ITextureRegion regionPisoRosaTele;
 
     private ITextureRegion regionMenuPausa;
     private ITextureRegion regionMenuOffoff;
@@ -101,7 +104,7 @@ public class EscenaAleatoriedad extends EscenaBase {
     @Override
     public void cargarRecursos() {
         elQueSigue=new Random();
-        regionFondo = cargarImagen("Imagenes/Niveles/CazaJurasica/fondos/fondo2.jpg");
+        regionFondo = cargarImagen("Imagenes/EscenaAleatoriedad/fondo_teletrans.png");
         regionFondoPausa = cargarImagen("Imagenes/Logos/logoHuntingCows.png");
         regionBase=cargarImagen("Imagenes/Roman/baseJoystick.png");
         regionControlSalto =cargarImagen("Imagenes/Roman/joystick.png");
@@ -110,7 +113,6 @@ public class EscenaAleatoriedad extends EscenaBase {
         // Pausa
         regionBtnPausa = cargarImagen("Imagenes/Niveles/CazaJurasica/btnPausa.png");
         regionHoyoNegro= cargarImagen("Imagenes/hoyoNegro.png");
-        regionPisoFlotante = cargarImagen("Imagenes/lineas.png");
         regionMenuPausa = cargarImagen("Imagenes/Ajustes2/pausa_fondo.png");
         regionMenuOffoff=cargarImagen("Imagenes/Ajustes2/music_off_OFF.png");
         regionMenuOffon=cargarImagen("Imagenes/Ajustes2/music_off_ON.png");
@@ -119,6 +121,11 @@ public class EscenaAleatoriedad extends EscenaBase {
         regionIrAMenu=cargarImagen("Imagenes/Ajustes2/pausa_menu.png");
         regionMenuMusica=cargarImagen("Imagenes/Ajustes2/pausa_musica.png");
         regionMenuContinuar=cargarImagen("Imagenes/Ajustes2/pausa_continue.png");
+
+        regionPisoAzulTele = cargarImagen("Imagenes/EscenaAleatoriedad/azul_tele.png");
+        regionPisoAzulClaro = cargarImagen("Imagenes/EscenaAleatoriedad/azulclaro_tele.png");
+        regionPisoGrandeTele = cargarImagen("Imagenes/EscenaAleatoriedad/grande_tele.png");
+        regionPisoRosaTele = cargarImagen("Imagenes/EscenaAleatoriedad/rosa_tele.png");
     }
 
     @Override
@@ -128,10 +135,11 @@ public class EscenaAleatoriedad extends EscenaBase {
 
         contadorTiempo=0;
 
-        spriteFondo = cargarSprite(1950, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2 , regionFondo);
         attachChild(spriteFondo);
 
-        pisoActual= cargarSprite(10, 1500 , regionPisoFlotante);
+        pisoActual= cargarSprite(10, 1500 , regionPisoAzulTele);
+        pisoActual.setAlpha(0.1f);
         spriteFondo.attachChild(pisoActual);
 
         spriteHoyoNegro= cargarSprite(14700, 400, regionHoyoNegro);
@@ -139,7 +147,7 @@ public class EscenaAleatoriedad extends EscenaBase {
 
         aleatorio= new Random();
 
-        spritePersonajeDerecha = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
+        spritePersonajeDerecha = new Jugador((ControlJuego.ANCHO_CAMARA/2), (ControlJuego.ALTO_CAMARA/4),regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonajeDerecha.animate(70);
 
         spritePersonaje=spritePersonajeDerecha;
@@ -368,8 +376,6 @@ public class EscenaAleatoriedad extends EscenaBase {
         regionBtnPausa=null;
         regionHoyoNegro.getTexture().unload();
         regionHoyoNegro=null;
-        regionPisoFlotante.getTexture().unload();
-        regionPisoFlotante=null;
         regionMenuPausa.getTexture().unload();
         regionMenuPausa=null;
         regionMenuOffoff.getTexture().unload();
@@ -393,12 +399,11 @@ public class EscenaAleatoriedad extends EscenaBase {
                 regionBase, regionControlSalto,
                 0.03f, 100, actividadJuego.getVertexBufferObjectManager(), new AnalogOnScreenControl.IAnalogOnScreenControlListener() {
 
-                @Override
+            @Override
             public void onControlClick(AnalogOnScreenControl pAnalogOnScreenControl) {
             }
             @Override
             public void onControlChange(BaseOnScreenControl pBaseOnScreenControl, float pValueX, float pValueY) {
-
                 if(juegoCorriendo) {
                     if (pValueX > 0) {
                         if(personajeVolteandoDerecha==false) {
@@ -416,27 +421,28 @@ public class EscenaAleatoriedad extends EscenaBase {
                         spritePersonaje.animate(70);
                     }
 
-                        if (spriteFondo.getX() > 1980) {
-                            if (pValueX < 0) {
-                            } else {
-                                pValueX = pValueX * (-1);
-                                float x = spriteFondo.getX() + 25 * pValueX;
-                                spriteFondo.setX(x);
-                            }
+                    if(spritePersonaje.getX()>1280){
+                        if(pValueX>0){
                         }
-                        else if (spriteFondo.getX() < -12480) {
-                            if (pValueX > 0) {
-                            } else {
-                                pValueX = pValueX * (-1);
-                                float x = spriteFondo.getX() + 25 * pValueX;
-                                spriteFondo.setX(x);
-                            }
-                        } else {
-                            pValueX = pValueX * (-1);
-                            float x = spriteFondo.getX() + 25 * pValueX;
-                            spriteFondo.setX(x);
+                        else{
+                            float x = spritePersonaje.getX()+22*pValueX;
+                            spritePersonaje.setX(x);
                         }
+                    }
 
+                    else if(spritePersonaje.getX()<0){
+                        if(pValueX<0){
+                        }
+                        else{
+                            float x = spritePersonaje.getX()+22*pValueX;
+                            spritePersonaje.setX(x);
+                        }
+                    }
+
+                    else{
+                        float x = spritePersonaje.getX()+22*pValueX;
+                        spritePersonaje.setX(x);
+                    }
                 }
             }
 
@@ -460,7 +466,7 @@ public class EscenaAleatoriedad extends EscenaBase {
 
         for( cont = 0; cont< posicionesPisosFlotantesX.length;cont++){
 
-            Sprite spritePiso = cargarSprite(posicionesPisosFlotantesX[cont], posicionesPisosFlotantesY[cont] , regionPisoFlotante);
+            Sprite spritePiso = cargarSprite(posicionesPisosFlotantesX[cont], posicionesPisosFlotantesY[cont] , regionPisoAzulClaro);
             listaPisos[cont]=(spritePiso);
             spriteFondo.attachChild(spritePiso);
         }

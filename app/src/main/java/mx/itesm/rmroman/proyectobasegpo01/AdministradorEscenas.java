@@ -28,6 +28,7 @@ public class AdministradorEscenas {
     private EscenaBase escenaPerdiste;
     private EscenaBase escenaGanaste;
     private EscenaBase escenaArcade;
+    private EscenaBase escenaAleatoriedad;
     private EscenaBase escenaPeleaBossCazaJurasica;
 
     private boolean cazaJurasicaDesbloqueado=false;
@@ -135,6 +136,9 @@ public class AdministradorEscenas {
             case ESCENA_ARCADE:
                 setEscenaBase(escenaArcade);
                 break;
+            case ESCENA_ALEATORIEDAD:
+                setEscenaBase(escenaAleatoriedad);
+                break;
         }
     }
 
@@ -148,6 +152,17 @@ public class AdministradorEscenas {
     public void liberarEscenaSplash() {
         escenaSplash.liberarEscena();
         escenaSplash = null;
+    }
+
+    public void crearEscenaAleatoriedad() {
+        // Carga los recursos
+        escenaAleatoriedad = new mx.itesm.rmroman.proyectobasegpo01.EscenaAleatoriedad();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaAleatoriedad() {
+        escenaAleatoriedad.liberarEscena();
+        escenaAleatoriedad = null;
     }
 
     public void crearEscenaArcade() {
