@@ -139,6 +139,20 @@ public class Enemigo extends Sprite {
                 voltear=true;
             }
         }
+        else if(limiteDerecho==19){
+            this.setY(this.getY()-1);
+            pasos--;
+            if(pasos<-10){
+                limiteDerecho=20;
+            }
+        }
+        else if(limiteDerecho==20){
+            this.setY(this.getY()+1);
+            pasos++;
+            if(pasos>10){
+                limiteDerecho=19;
+            }
+        }
 
         else{
 

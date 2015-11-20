@@ -236,8 +236,8 @@ public class EscenaMenu extends EscenaBase
                         admMusica.vibrar(90);
                         admMusica.reproducirMusicaBoton();
                         admEscenas.liberarEscenaMenu();
-                        admEscenas.crearEscenaAleatoriedad();
-                        admEscenas.setEscena(TipoEscena.ESCENA_ALEATORIEDAD);
+                        admEscenas.crearEscenaCazaJurasicaNivel2();
+                        admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_NIVEL_2);
 
                         break;
 

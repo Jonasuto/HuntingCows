@@ -109,18 +109,21 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
     private float poderDeSalto;
 
-    private Sprite spriteOvni2;
     private Sprite spriteNavecita;
-    private Sprite spritePua;
 
+    private boolean estoySaltando;
     private int contadorTiempo;
 
+    private boolean permiso;
 
     private AnalogOnScreenControl control;
 
     private Jugador spritePersonaje;
-    private Jugador spritePersonajeizquierda;
+    private Jugador spritePersonajeParado;
     private Jugador spritePersonajeDerecha;
+    private Jugador spritePersonajeSaltandoUno;
+    private Jugador spritePersonajeSaltandoDos;
+    private Jugador spritePersonajeSaltandoCompleto;
 
     private Enemigo spriteEnemigo;
 
@@ -136,6 +139,10 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
 
     private TiledTextureRegion regionPersonajeAnimado;
+    private TiledTextureRegion regionPersonajeSaltandoUno;
+    private TiledTextureRegion regionPersonajeSaltandoDos;
+    private TiledTextureRegion regionPersonajeSaltandoCompleto;
+    private TiledTextureRegion regionPersonajeParado;
 
     private boolean personajeVolteandoDerecha=true;
 
@@ -147,6 +154,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
     private Sprite spriteFondo3;
     private Sprite spriteFondo5;
     private Sprite spriteFondo6;
+    private Sprite spriteFondo7;
     private Sprite spriteHoyoNegro;
     private Sprite spriteFondoPausa;
 
@@ -184,6 +192,8 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
     private Sprite spritebtnContinuar;
     private Sprite spritebtnIrAMenu;
 
+    private boolean yaBajo;
+
     private int cambiar=0;
     private boolean unicoQuePersigue;
 
@@ -215,6 +225,10 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         regionEnemigo = cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/vacaDinosaurio.png");
         regionVida = cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
         regionPersonajeAnimado = cargarImagenMosaico("Imagenes/Roman/prueba.png", 870, 200, 1, 8);
+        regionPersonajeParado = cargarImagenMosaico("Imagenes/Roman/parado.png", 500, 200, 1, 4);
+        regionPersonajeSaltandoUno = cargarImagenMosaico("Imagenes/Roman/spritesalto.png", 700, 200, 1, 3);
+        regionPersonajeSaltandoDos = cargarImagenMosaico("Imagenes/Roman/spritesalto.png", 700, 200, 3, 6);
+        regionPersonajeSaltandoCompleto = cargarImagenMosaico("Imagenes/Roman/spritesalto.png", 700, 200, 1, 6);
 
         // Pausa
         regionBtnPausa = cargarImagen("Imagenes/Niveles/CazaJurasica/btnPausa.png");
@@ -242,6 +256,10 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
     @Override
     public void crearEscena() {
 
+        estoySaltando=false;
+
+        yaBajo=false;
+
         spriteFondo = cargarSprite(1900, ControlJuego.ALTO_CAMARA/2 , regionFondo);
         attachChild(spriteFondo);
 
@@ -260,6 +278,9 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         spriteFondo6 = cargarSprite(21816, ControlJuego.ALTO_CAMARA/2 , regionFondo);
         spriteFondo.attachChild(spriteFondo6);
 
+        spriteFondo7 = cargarSprite(25770, ControlJuego.ALTO_CAMARA/2 , regionFondo);
+        spriteFondo.attachChild(spriteFondo7);
+
         agregarHUD();
 
         reloj=0;
@@ -277,13 +298,11 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         posicionarPisosFlotantes();
         posicionarEnemigos();
 
-        spriteOvni2=cargarSprite(5185, 300, regionOvni);
-        spriteOvni2.setSize(spriteOvni2.getWidth() - 30, spriteOvni2.getHeight() - 30);
-        spriteFondo.attachChild(spriteOvni2);
-
         spriteVidas= new Sprite[3];
 
         spriteBalas= new Sprite[10];
+
+        permiso=true;
 
         numeroDeBalas=9;
 
@@ -343,7 +362,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         pisoActual= new Piso(10, 1500, regionPisoFlotante,actividadJuego.getVertexBufferObjectManager(),4,0);
         attachChild(pisoActual);
 
-        spriteHoyoNegro= cargarSprite(14700, 400, regionHoyoNegro);
+        spriteHoyoNegro= cargarSprite(25283, 400, regionHoyoNegro);
         spriteFondo.attachChild(spriteHoyoNegro);
 
         aleatorio= new Random();
@@ -351,7 +370,18 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         spritePersonajeDerecha = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonajeDerecha.animate(70);
 
-        spritePersonaje=spritePersonajeDerecha;
+        spritePersonajeSaltandoUno = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeSaltandoUno, actividadJuego.getVertexBufferObjectManager());
+        spritePersonajeSaltandoUno.animate(70);
+
+        spritePersonajeSaltandoDos = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeSaltandoDos, actividadJuego.getVertexBufferObjectManager());
+        spritePersonajeSaltandoDos.animate(70);
+
+        spritePersonajeSaltandoCompleto = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeSaltandoCompleto, actividadJuego.getVertexBufferObjectManager());
+        spritePersonajeSaltandoCompleto.animate(180);
+
+        spritePersonajeParado = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeParado, actividadJuego.getVertexBufferObjectManager());
+
+        spritePersonaje=spritePersonajeParado;
         attachChild(spritePersonaje);
 
         spriteNavecita=null;
@@ -623,7 +653,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         contadorPersigue+=1;
 
         if(contadorPersigue>190 && unicoQuePersigue==false){
-            Enemigo spriteEnemigo = new Enemigo(30000, 720, regionOvni, actividadJuego.getVertexBufferObjectManager(), 9, false, false, 10,false,true, false);
+            Enemigo spriteEnemigo = new Enemigo(30000, 720, regionOvni, actividadJuego.getVertexBufferObjectManager(), 19, false, false, 10,false,true, false);
             Enemigo nuevoEnemigo = spriteEnemigo;
             nuevoEnemigo.setPersigue(true);
             listaEnemigos.add(nuevoEnemigo);
@@ -652,6 +682,19 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                         paArriba = false;
                         gravedad = true;
                         spritePersonaje.setY(piso.getY()+135);
+                        estoySaltando=false;
+                        if(yaBajo) {
+                            if (personajeVolteandoDerecha == false) {
+                                spritePersonajeParado.setFlippedHorizontal(true);
+                            } else {
+                                spritePersonajeParado.setFlippedHorizontal(false);
+                            }
+                            spritePersonajeParado.setPosition(spritePersonaje);
+                            spritePersonaje.detachSelf();
+                            spritePersonaje = spritePersonajeParado;
+                            attachChild(spritePersonaje);
+                            yaBajo=false;
+                        }
                     } else {
 
                         enElAire = true;
@@ -680,22 +723,27 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
         actualizarProyectilesEnemigo();
 
-        /*
-
         if(spritePersonaje.collidesWith(spriteHoyoNegro)){
-            admEscenas.setcazaJurasicaDesbloqueado(true);
             admEscenas.liberarEscenaCazaJurasicaNivel2();
             admEscenas.crearEscenaMenu();
             admEscenas.setEscena(TipoEscena.ESCENA_MENU);
         }
-
-        */
 
         if(gravedad==true && nubecita==false){
             if(spritePersonaje.getY()>ControlJuego.ALTO_CAMARA/4-20 && estoySobreUnaPalmera==false){
                 spritePersonaje.setY(spritePersonaje.getY()-20);
                 if(spritePersonaje.getY()<=ControlJuego.ALTO_CAMARA/4-20){
                     gravedad=false;
+                    estoySaltando=false;
+                    if (personajeVolteandoDerecha == false) {
+                        spritePersonajeParado.setFlippedHorizontal(true);
+                    } else {
+                        spritePersonajeParado.setFlippedHorizontal(false);
+                    }
+                    spritePersonajeParado.setPosition(spritePersonaje);
+                    spritePersonaje.detachSelf();
+                    spritePersonaje = spritePersonajeParado;
+                    attachChild(spritePersonaje);
                 }
             }
         }
@@ -704,11 +752,23 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
             if(paArriba){
                 spritePersonaje.setY(spritePersonaje.getY() + (5*poderDeSalto));
                 poderDeSalto-=0.15f;
+                yaBajo=true;
+                saltar(true);
                 if(poderDeSalto<0){
                     brincaSobrepalmera=false;
                 }
                 if(spritePersonaje.getY()<=ControlJuego.ALTO_CAMARA/4-20){
                     enElAire=false;
+                    estoySaltando=false;
+                    if (personajeVolteandoDerecha == false) {
+                        spritePersonajeParado.setFlippedHorizontal(true);
+                    } else {
+                        spritePersonajeParado.setFlippedHorizontal(false);
+                    }
+                    spritePersonajeParado.setPosition(spritePersonaje);
+                    spritePersonaje.detachSelf();
+                    spritePersonaje = spritePersonajeParado;
+                    attachChild(spritePersonaje);
                 }
 
             }
@@ -777,11 +837,11 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
                 unicoQuePersigue=true;
                 float dx =spritePersonaje.getX()-enemigo.getX();
-                if(dx>20){
-                    enemigo.setX(6+enemigo.getX());
+                if(dx>50){
+                    enemigo.setX(3+enemigo.getX());
                 }
-                else if(dx<20){
-                    enemigo.setX(enemigo.getX()-6);
+                else if(dx<-50){
+                    enemigo.setX(enemigo.getX()-3);
                 }
             }
 
@@ -841,6 +901,25 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         return tipoLetra;
     }
 
+    private void saltar(boolean arriba){
+        if(permiso){
+            permiso=false;
+            if(arriba){
+                if (personajeVolteandoDerecha == false) {
+                    spritePersonajeSaltandoUno.setFlippedHorizontal(true);
+                } else {
+                    spritePersonajeSaltandoUno.setFlippedHorizontal(false);
+                }
+                spritePersonajeSaltandoUno.setPosition(spritePersonaje);
+                spritePersonaje.detachSelf();
+                spritePersonaje = spritePersonajeSaltandoUno;
+                attachChild(spritePersonaje);
+            }
+            else{
+
+            }
+        }
+    }
     private void actualizarProyectilesEnemigo() {
         // Se visita cada proyectil dentro de la lista, se recorre con el índice
         // porque se pueden borrar datos
@@ -997,20 +1076,38 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                     }
 
 
-                    if (pValueX > 0) {
-                        if(personajeVolteandoDerecha==false) {
+                    if (pValueX > 0 && estoySaltando==false) {
                             personajeVolteandoDerecha = true;
-                            spritePersonaje.setFlippedHorizontal(false);
-                        }
+                            spritePersonajeDerecha.setFlippedHorizontal(false);
+                            spritePersonajeDerecha.setPosition(spritePersonaje);
+                            spritePersonaje.detachSelf();
+                            spritePersonaje=spritePersonajeDerecha;
+                            attachChild(spritePersonaje);
+
                     }
-                    else if (pValueX < 0) {
-                        if(personajeVolteandoDerecha==true) {
+                    else if (pValueX < 0 && estoySaltando==false) {
                             personajeVolteandoDerecha = false;
-                            spritePersonaje.setFlippedHorizontal(true);
-                        }
+                            spritePersonajeDerecha.setFlippedHorizontal(true);
+                            spritePersonajeDerecha.setPosition(spritePersonaje);
+                            spritePersonaje.detachSelf();
+                            spritePersonaje=spritePersonajeDerecha;
+                            attachChild(spritePersonaje);
+
                     }
                     else{
-                        spritePersonaje.animate(70);
+
+                        if(estoySaltando==false) {
+
+                            if (personajeVolteandoDerecha == false) {
+                                spritePersonajeParado.setFlippedHorizontal(true);
+                            } else {
+                                spritePersonajeParado.setFlippedHorizontal(false);
+                            }
+                            spritePersonajeParado.setPosition(spritePersonaje);
+                            spritePersonaje.detachSelf();
+                            spritePersonaje = spritePersonajeParado;
+                            attachChild(spritePersonaje);
+                        }
                     }
 
                     if(spritePersonaje.getX()>200008){
@@ -1047,7 +1144,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
     private void posicionarEnemigos(){
 
-        int maxima=13;
+        int maxima=22;
 
         posicionesEnemigosx = new float[maxima];
         posicionesEnemigosy = new float[maxima];
@@ -1072,10 +1169,19 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         posicionesEnemigosx[10]=18620;
         posicionesEnemigosx[11]=19900;
         posicionesEnemigosx[12]=21180;
+        posicionesEnemigosx[13]=22419;
+        posicionesEnemigosx[14]=23846;
+        posicionesEnemigosx[15]=23996;
+        posicionesEnemigosx[16]=24446;
+        posicionesEnemigosx[17]=24596;
+        posicionesEnemigosx[18]=24746;
+        posicionesEnemigosx[19]=22449;
+        posicionesEnemigosx[20]=22460;
+        posicionesEnemigosx[21]=23740;
 
         posicionesEnemigosy[0]=334;
         posicionesEnemigosy[1]=80;
-        posicionesEnemigosy[2]=130;
+        posicionesEnemigosy[2]=200;
         posicionesEnemigosy[3]=130;
         posicionesEnemigosy[4]=730;
         posicionesEnemigosy[5]=80;
@@ -1086,6 +1192,16 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         posicionesEnemigosy[10]=80;
         posicionesEnemigosy[11]=80;
         posicionesEnemigosy[12]=80;
+        posicionesEnemigosy[13]=290;
+
+        posicionesEnemigosy[14]=660;
+        posicionesEnemigosy[15]=660;
+        posicionesEnemigosy[16]=660;
+        posicionesEnemigosy[17]=660;
+        posicionesEnemigosy[18]=660;
+        posicionesEnemigosy[19]=290;
+        posicionesEnemigosy[20]=80;
+        posicionesEnemigosy[21]=80;
 
         brinca[0]=false;
         brinca[1]=false;
@@ -1100,6 +1216,15 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         brinca[10]=false;
         brinca[11]=false;
         brinca[12]=false;
+        brinca[13]=false;
+        brinca[14]=false;
+        brinca[15]=false;
+        brinca[16]=false;
+        brinca[17]=false;
+        brinca[18]=false;
+        brinca[19]=false;
+        brinca[20]=false;
+        brinca[21]=false;
 
         camina[0]=1;
         camina[1]=4;
@@ -1114,6 +1239,16 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         camina[10]=4;
         camina[11]=4;
         camina[12]=4;
+        camina[13]=4;
+
+        camina[14]=4;
+        camina[15]=4;
+        camina[16]=4;
+        camina[17]=4;
+        camina[18]=4;
+        camina[19]=4;
+        camina[20]=4;
+        camina[21]=4;
 
         rota[0]=false;
         rota[1]=false;
@@ -1128,6 +1263,16 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         rota[10]=false;
         rota[11]=false;
         rota[12]=false;
+        rota[13]=false;
+
+        rota[14]=false;
+        rota[15]=false;
+        rota[16]=false;
+        rota[17]=false;
+        rota[18]=false;
+        rota[19]=false;
+        rota[20]=false;
+        rota[21]=false;
 
         numPasos[0]=20;
         numPasos[1]=1;
@@ -1142,6 +1287,16 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         numPasos[10]=30;
         numPasos[11]=30;
         numPasos[12]=30;
+        numPasos[13]=30;
+
+        numPasos[14]=30;
+        numPasos[15]=30;
+        numPasos[16]=30;
+        numPasos[17]=30;
+        numPasos[18]=30;
+        numPasos[19]=30;
+        numPasos[20]=30;
+        numPasos[21]=30;
 
         rotaCamina[0]=false;
         rotaCamina[1]=false;
@@ -1156,6 +1311,16 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         rotaCamina[10]=false;
         rotaCamina[11]=false;
         rotaCamina[12]=false;
+        rotaCamina[13]=false;
+
+        rotaCamina[14]=false;
+        rotaCamina[15]=false;
+        rotaCamina[16]=false;
+        rotaCamina[17]=false;
+        rotaCamina[18]=false;
+        rotaCamina[19]=false;
+        rotaCamina[20]=false;
+        rotaCamina[21]=false;
 
         disparar[0]=false;
         disparar[1]=false;
@@ -1170,6 +1335,16 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         disparar[10]=false;
         disparar[11]=false;
         disparar[12]=false;
+        disparar[13]=false;
+        disparar[14]=false;
+        disparar[15]=false;
+        disparar[16]=false;
+        disparar[17]=false;
+        disparar[18]=false;
+        disparar[19]=false;
+        disparar[20]=false;
+        disparar[21]=false;
+
 
         noPuedeSerDestruido[0]=false;
         noPuedeSerDestruido[1]=true;
@@ -1184,15 +1359,24 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         noPuedeSerDestruido[10]=true;
         noPuedeSerDestruido[11]=true;
         noPuedeSerDestruido[12]=true;
+        noPuedeSerDestruido[13]=false;
+        noPuedeSerDestruido[14]=false;
+        noPuedeSerDestruido[15]=false;
+        noPuedeSerDestruido[16]=false;
+        noPuedeSerDestruido[17]=false;
+        noPuedeSerDestruido[18]=false;
+        noPuedeSerDestruido[19]=false;
+        noPuedeSerDestruido[20]=true;
+        noPuedeSerDestruido[21]=true;
 
 
         int cont;
         for( cont = 0; cont< posicionesEnemigosx.length;cont++){
-            if(cont==1 || cont==5 || cont==6 || cont==7 || cont==8 || cont==9 || cont==10 || cont==11 || cont==12){
+            if(cont==1 || cont==5 || cont==6 || cont==7 || cont==8 || cont==9 || cont==10 || cont==11 || cont==12 || cont==20 || cont==21){
                 Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionLava, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
                 Enemigo nuevoEnemigo = spriteEnemigo;
                 listaEnemigos.add(nuevoEnemigo);
-                if(cont==6 || cont==8 || cont==10 || cont == 12){
+                if(cont==6 || cont==8 || cont==10 || cont == 12 || cont == 21){
                     nuevoEnemigo.setFlippedHorizontal(true);
                 }
                 spriteFondo.attachChild(nuevoEnemigo);
@@ -1209,10 +1393,13 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                 listaEnemigos.add(nuevoEnemigo);
                 attachChild(nuevoEnemigo);
             }
-            else if(cont==-1){
+            else if(cont==13 || cont==14 || cont==15 || cont==16 || cont==17 || cont==18 || cont==19){
                 Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionPicos, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
                 Enemigo nuevoEnemigo = spriteEnemigo;
                 listaEnemigos.add(nuevoEnemigo);
+                if(cont==14 || cont==15 || cont==16 || cont==17 || cont==18){
+                    nuevoEnemigo.setRotation(180);
+                }
                 attachChild(nuevoEnemigo);
             }
             else{
@@ -1227,7 +1414,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
 
     private void posicionarPisosFlotantes(){
-        int maxima=63;
+        int maxima=72;
         posicionesPisosFlotantesX= new float [maxima];
         posicionesPisosFlotantesY=new float[maxima];
         comportamientoPiso=new int[maxima];
@@ -1304,6 +1491,16 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         posicionesPisosFlotantesX[60]=22106;
         posicionesPisosFlotantesX[61]=22366;
         posicionesPisosFlotantesX[62]=21253;
+        posicionesPisosFlotantesX[63]=22319;
+        posicionesPisosFlotantesX[64]=22419;
+
+        posicionesPisosFlotantesX[65]=23846;
+        posicionesPisosFlotantesX[66]=24106;
+        posicionesPisosFlotantesX[67]=24366;
+        posicionesPisosFlotantesX[68]=24626;
+        posicionesPisosFlotantesX[69]=24886;
+        posicionesPisosFlotantesX[70]=22449;
+        posicionesPisosFlotantesX[71]=24270;
 
         posicionesPisosFlotantesY[0]=330;
         //primera piramide
@@ -1377,6 +1574,16 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         posicionesPisosFlotantesY[60]=760;
         posicionesPisosFlotantesY[61]=760;
         posicionesPisosFlotantesY[62]=200;
+        posicionesPisosFlotantesY[63]=500;
+        posicionesPisosFlotantesY[64]=200;
+
+        posicionesPisosFlotantesY[65]=760;
+        posicionesPisosFlotantesY[66]=760;
+        posicionesPisosFlotantesY[67]=760;
+        posicionesPisosFlotantesY[68]=760;
+        posicionesPisosFlotantesY[69]=760;
+        posicionesPisosFlotantesY[70]=200;
+        posicionesPisosFlotantesY[71]=200;
 
 
         comportamientoPiso[0]=0;
@@ -1442,6 +1649,15 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         comportamientoPiso[60]=4;
         comportamientoPiso[61]=4;
         comportamientoPiso[62]=10;
+        comportamientoPiso[63]=4;
+        comportamientoPiso[64]=4;
+        comportamientoPiso[65]=4;
+        comportamientoPiso[66]=4;
+        comportamientoPiso[67]=4;
+        comportamientoPiso[68]=4;
+        comportamientoPiso[69]=4;
+        comportamientoPiso[70]=4;
+        comportamientoPiso[71]=4;
 
         numPasosPiso[0]=50;
         numPasosPiso[1]=50;
@@ -1506,6 +1722,15 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         numPasosPiso[60]=35;
         numPasosPiso[61]=35;
         numPasosPiso[62]=35;
+        numPasosPiso[63]=35;
+        numPasosPiso[64]=35;
+        numPasosPiso[65]=35;
+        numPasosPiso[66]=35;
+        numPasosPiso[67]=35;
+        numPasosPiso[68]=35;
+        numPasosPiso[69]=35;
+        numPasosPiso[70]=35;
+        numPasosPiso[71]=35;
 
         int cont;
 
@@ -1572,6 +1797,8 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                             spriteNavecita.detachSelf();
                             nubecita=false;
                         }
+                        estoySaltando=true;
+                        permiso=true;
                         enElAire=true;
                         paArriba=true;
                         gravedad=false;
@@ -1725,12 +1952,12 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
 
                     if(cantidadVida==0){
                         spriteVidas[1]= cargarSprite(1150, 750, vidas);
-                        attachChild(spriteVidas[1]);
+                        hud.attachChild(spriteVidas[1]);
                         cantidadVida++;
                     }
                     else if(cantidadVida==1){
                         spriteVidas[0]= cargarSprite(1100, 750, vidas);
-                        attachChild(spriteVidas[0]);
+                        hud.attachChild(spriteVidas[0]);
                         cantidadVida++;
                     }
                 }

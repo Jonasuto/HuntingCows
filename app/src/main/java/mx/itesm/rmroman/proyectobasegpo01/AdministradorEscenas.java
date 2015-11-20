@@ -28,6 +28,7 @@ public class AdministradorEscenas {
     private EscenaBase escenaPerdiste;
     private EscenaBase escenaGanaste;
     private EscenaBase escenaArcade;
+    private EscenaBase escenaLaberintoUno;
     private EscenaBase escenaAleatoriedad;
     private EscenaBase escenaPeleaBossCazaJurasica;
 
@@ -139,6 +140,9 @@ public class AdministradorEscenas {
             case ESCENA_ALEATORIEDAD:
                 setEscenaBase(escenaAleatoriedad);
                 break;
+            case ESCENA_LABERINTO_UNO:
+                setEscenaBase(escenaLaberintoUno);
+                break;
         }
     }
 
@@ -152,6 +156,17 @@ public class AdministradorEscenas {
     public void liberarEscenaSplash() {
         escenaSplash.liberarEscena();
         escenaSplash = null;
+    }
+
+    public void crearEscenaLaberintoUno() {
+        // Carga los recursos
+        escenaLaberintoUno = new mx.itesm.rmroman.proyectobasegpo01.EscenaLaberintoUno();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaLaberintoUno() {
+        escenaLaberintoUno.liberarEscena();
+        escenaLaberintoUno = null;
     }
 
     public void crearEscenaAleatoriedad() {

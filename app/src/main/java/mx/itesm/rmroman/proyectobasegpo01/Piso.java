@@ -107,7 +107,7 @@ public class Piso extends Sprite {
             }
         }
         else if(balsa==true){
-            if(this.getX()<23377) {
+            if(this.getX()<25283) {
                 this.setX(this.getX() + 4);
             }
         }
