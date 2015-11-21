@@ -115,6 +115,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
     private int contadorTiempo;
 
     private boolean permiso;
+    private boolean permiso2;
 
     private AnalogOnScreenControl control;
 
@@ -123,7 +124,6 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
     private Jugador spritePersonajeDerecha;
     private Jugador spritePersonajeSaltandoUno;
     private Jugador spritePersonajeSaltandoDos;
-    private Jugador spritePersonajeSaltandoCompleto;
 
     private Enemigo spriteEnemigo;
 
@@ -226,8 +226,8 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         regionVida = cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
         regionPersonajeAnimado = cargarImagenMosaico("Imagenes/Roman/prueba.png", 870, 200, 1, 8);
         regionPersonajeParado = cargarImagenMosaico("Imagenes/Roman/parado.png", 500, 200, 1, 4);
-        regionPersonajeSaltandoUno = cargarImagenMosaico("Imagenes/Roman/spritesalto.png", 700, 200, 1, 3);
-        regionPersonajeSaltandoDos = cargarImagenMosaico("Imagenes/Roman/spritesalto.png", 700, 200, 3, 6);
+        regionPersonajeSaltandoUno = cargarImagenMosaico("Imagenes/Roman/spritesaltouno.png", 370, 200, 1, 3);
+        regionPersonajeSaltandoDos = cargarImagenMosaico("Imagenes/Roman/spritesaltodos.png", 370, 200, 1, 3);
         regionPersonajeSaltandoCompleto = cargarImagenMosaico("Imagenes/Roman/spritesalto.png", 700, 200, 1, 6);
 
         // Pausa
@@ -303,6 +303,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         spriteBalas= new Sprite[10];
 
         permiso=true;
+        permiso2=true;
 
         numeroDeBalas=9;
 
@@ -371,13 +372,8 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         spritePersonajeDerecha.animate(70);
 
         spritePersonajeSaltandoUno = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeSaltandoUno, actividadJuego.getVertexBufferObjectManager());
-        spritePersonajeSaltandoUno.animate(70);
-
         spritePersonajeSaltandoDos = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeSaltandoDos, actividadJuego.getVertexBufferObjectManager());
-        spritePersonajeSaltandoDos.animate(70);
 
-        spritePersonajeSaltandoCompleto = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeSaltandoCompleto, actividadJuego.getVertexBufferObjectManager());
-        spritePersonajeSaltandoCompleto.animate(180);
 
         spritePersonajeParado = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeParado, actividadJuego.getVertexBufferObjectManager());
 
@@ -732,6 +728,8 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         if(gravedad==true && nubecita==false){
             if(spritePersonaje.getY()>ControlJuego.ALTO_CAMARA/4-20 && estoySobreUnaPalmera==false){
                 spritePersonaje.setY(spritePersonaje.getY()-20);
+                permiso2=true;
+                saltar(false);
                 if(spritePersonaje.getY()<=ControlJuego.ALTO_CAMARA/4-20){
                     gravedad=false;
                     estoySaltando=false;
@@ -748,12 +746,14 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
             }
         }
         if(enElAire==true && nubecita==false){
-
             if(paArriba){
                 spritePersonaje.setY(spritePersonaje.getY() + (5*poderDeSalto));
                 poderDeSalto-=0.15f;
                 yaBajo=true;
                 saltar(true);
+                if(poderDeSalto<0){
+                    saltar(false);
+                }
                 if(poderDeSalto<0){
                     brincaSobrepalmera=false;
                 }
@@ -770,7 +770,6 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                     spritePersonaje = spritePersonajeParado;
                     attachChild(spritePersonaje);
                 }
-
             }
         }
 
@@ -902,23 +901,36 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
     }
 
     private void saltar(boolean arriba){
-        if(permiso){
-            permiso=false;
             if(arriba){
-                if (personajeVolteandoDerecha == false) {
-                    spritePersonajeSaltandoUno.setFlippedHorizontal(true);
-                } else {
-                    spritePersonajeSaltandoUno.setFlippedHorizontal(false);
+                if(permiso) {
+                    permiso=false;
+                    if (personajeVolteandoDerecha == false) {
+                        spritePersonajeSaltandoUno.setFlippedHorizontal(true);
+                    } else {
+                        spritePersonajeSaltandoUno.setFlippedHorizontal(false);
+                    }
+                    spritePersonajeSaltandoUno.setPosition(spritePersonaje);
+                    spritePersonajeSaltandoUno.animate(70, false);
+                    spritePersonaje.detachSelf();
+                    spritePersonaje = spritePersonajeSaltandoUno;
+                    attachChild(spritePersonaje);
                 }
-                spritePersonajeSaltandoUno.setPosition(spritePersonaje);
-                spritePersonaje.detachSelf();
-                spritePersonaje = spritePersonajeSaltandoUno;
-                attachChild(spritePersonaje);
             }
             else{
-
+                if(permiso2) {
+                    permiso2=false;
+                    if (personajeVolteandoDerecha == false) {
+                        spritePersonajeSaltandoDos.setFlippedHorizontal(true);
+                    } else {
+                        spritePersonajeSaltandoDos.setFlippedHorizontal(false);
+                    }
+                    spritePersonajeSaltandoDos.setPosition(spritePersonaje);
+                    spritePersonajeSaltandoDos.animate(70, false);
+                    spritePersonaje.detachSelf();
+                    spritePersonaje = spritePersonajeSaltandoDos;
+                    attachChild(spritePersonaje);
+                }
             }
-        }
     }
     private void actualizarProyectilesEnemigo() {
         // Se visita cada proyectil dentro de la lista, se recorre con el índice
@@ -1085,6 +1097,10 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                             attachChild(spritePersonaje);
 
                     }
+                    else if (pValueX > 0 && estoySaltando==true) {
+                        personajeVolteandoDerecha = true;
+                        spritePersonaje.setFlippedHorizontal(false);
+                    }
                     else if (pValueX < 0 && estoySaltando==false) {
                             personajeVolteandoDerecha = false;
                             spritePersonajeDerecha.setFlippedHorizontal(true);
@@ -1093,6 +1109,10 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                             spritePersonaje=spritePersonajeDerecha;
                             attachChild(spritePersonaje);
 
+                    }
+                    else if (pValueX < 0 && estoySaltando==true) {
+                        personajeVolteandoDerecha = false;
+                        spritePersonaje.setFlippedHorizontal(true);
                     }
                     else{
 
@@ -1799,6 +1819,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                         }
                         estoySaltando=true;
                         permiso=true;
+                        permiso2=true;
                         enElAire=true;
                         paArriba=true;
                         gravedad=false;
@@ -1814,7 +1835,6 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
         hud.registerTouchArea(btnSaltar);
         hud.attachChild(btnSaltar);
     }
-
 
     private void desaparecerMoneda(final Sprite monedaD) {
         ScaleModifier escala = new ScaleModifier(0.3f,1,0) {

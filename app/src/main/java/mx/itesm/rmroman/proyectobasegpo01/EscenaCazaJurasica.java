@@ -48,6 +48,9 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private Random elQueSigue;
 
+    private boolean permiso;
+    private boolean permiso2;
+
     private int reloj;
 
     private boolean enElAire=false;
@@ -117,7 +120,10 @@ public class EscenaCazaJurasica extends EscenaBase {
     private AnalogOnScreenControl control;
 
     private Jugador spritePersonaje;
+    private Jugador spritePersonajeParado;
     private Jugador spritePersonajeDerecha;
+    private Jugador spritePersonajeSaltandoUno;
+    private Jugador spritePersonajeSaltandoDos;
 
     private Enemigo spriteEnemigo;
 
@@ -131,8 +137,11 @@ public class EscenaCazaJurasica extends EscenaBase {
     private CameraScene escenaPausa;
     private ITextureRegion regionBtnPausa;
 
-
     private TiledTextureRegion regionPersonajeAnimado;
+    private TiledTextureRegion regionPersonajeSaltandoUno;
+    private TiledTextureRegion regionPersonajeSaltandoDos;
+    private TiledTextureRegion regionPersonajeSaltandoCompleto;
+    private TiledTextureRegion regionPersonajeParado;
 
     private boolean personajeVolteandoDerecha=true;
 
@@ -177,6 +186,10 @@ public class EscenaCazaJurasica extends EscenaBase {
     private Sprite spritebtnContinuar;
     private Sprite spritebtnIrAMenu;
 
+    private boolean yaBajo;
+
+    private boolean estoySaltando;
+
     private int cambiar=0;
 
 
@@ -203,6 +216,10 @@ public class EscenaCazaJurasica extends EscenaBase {
         regionEnemigo = cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/vacaDinosaurio.png");
         regionVida = cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
         regionPersonajeAnimado = cargarImagenMosaico("Imagenes/Roman/prueba.png", 870, 200, 1, 8);
+        regionPersonajeParado = cargarImagenMosaico("Imagenes/Roman/parado.png", 500, 200, 1, 4);
+        regionPersonajeSaltandoUno = cargarImagenMosaico("Imagenes/Roman/spritesaltouno.png", 370, 200, 1, 3);
+        regionPersonajeSaltandoDos = cargarImagenMosaico("Imagenes/Roman/spritesaltodos.png", 370, 200, 1, 3);
+        regionPersonajeSaltandoCompleto = cargarImagenMosaico("Imagenes/Roman/spritesalto.png", 700, 200, 1, 6);
 
         // Pausa
         regionBtnPausa = cargarImagen("Imagenes/Niveles/CazaJurasica/btnPausa.png");
@@ -227,6 +244,10 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     @Override
     public void crearEscena() {
+
+        estoySaltando=false;
+
+        yaBajo=false;
 
         agregarHUD();
 
@@ -329,7 +350,13 @@ public class EscenaCazaJurasica extends EscenaBase {
         spritePersonajeDerecha = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonajeDerecha.animate(70);
 
-        spritePersonaje=spritePersonajeDerecha;
+        spritePersonajeSaltandoUno = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeSaltandoUno, actividadJuego.getVertexBufferObjectManager());
+        spritePersonajeSaltandoDos = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeSaltandoDos, actividadJuego.getVertexBufferObjectManager());
+
+
+        spritePersonajeParado = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeParado, actividadJuego.getVertexBufferObjectManager());
+
+        spritePersonaje=spritePersonajeParado;
         attachChild(spritePersonaje);
 
         spriteNavecita=null;
@@ -608,7 +635,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
             final Sprite piso = listaPisos[i];
 
-            if (spritePersonaje.collidesWith(piso) && spritePersonaje.getY()-130>piso.getY() && poderDeSalto<2) {
+            if (spritePersonaje.collidesWith(piso) && spritePersonaje.getY()-110>piso.getY() && poderDeSalto<2) {
 
 
                 pisoActual.setPosition(piso);
@@ -619,11 +646,23 @@ public class EscenaCazaJurasica extends EscenaBase {
                     estoySobreUnaPalmera = true;
 
                     if (brincaSobrepalmera == false) {
-
                         enElAire = false;
                         paArriba = false;
                         gravedad = true;
-                        spritePersonaje.setY(piso.getY()+150);
+                        spritePersonaje.setY(piso.getY()+135);
+                        estoySaltando=false;
+                        if(yaBajo) {
+                            if (personajeVolteandoDerecha == false) {
+                                spritePersonajeParado.setFlippedHorizontal(true);
+                            } else {
+                                spritePersonajeParado.setFlippedHorizontal(false);
+                            }
+                            spritePersonajeParado.setPosition(spritePersonaje);
+                            spritePersonaje.detachSelf();
+                            spritePersonaje = spritePersonajeParado;
+                            attachChild(spritePersonaje);
+                            yaBajo=false;
+                        }
                     } else {
 
                         enElAire = true;
@@ -676,24 +715,48 @@ public class EscenaCazaJurasica extends EscenaBase {
         if(gravedad==true && nubecita==false){
             if(spritePersonaje.getY()>ControlJuego.ALTO_CAMARA/4-20 && estoySobreUnaPalmera==false){
                 spritePersonaje.setY(spritePersonaje.getY()-20);
+                permiso2=true;
+                saltar(false);
                 if(spritePersonaje.getY()<=ControlJuego.ALTO_CAMARA/4-20){
                     gravedad=false;
+                    estoySaltando=false;
+                    if (personajeVolteandoDerecha == false) {
+                        spritePersonajeParado.setFlippedHorizontal(true);
+                    } else {
+                        spritePersonajeParado.setFlippedHorizontal(false);
+                    }
+                    spritePersonajeParado.setPosition(spritePersonaje);
+                    spritePersonaje.detachSelf();
+                    spritePersonaje = spritePersonajeParado;
+                    attachChild(spritePersonaje);
                 }
             }
         }
         if(enElAire==true && nubecita==false){
-
             if(paArriba){
                 spritePersonaje.setY(spritePersonaje.getY() + (5*poderDeSalto));
                 poderDeSalto-=0.15f;
+                yaBajo=true;
+                saltar(true);
+                if(poderDeSalto<0){
+                    saltar(false);
+                }
                 if(poderDeSalto<0){
                     brincaSobrepalmera=false;
                 }
                 if(spritePersonaje.getY()<=ControlJuego.ALTO_CAMARA/4-20){
                     enElAire=false;
-                    poderDeSalto=4.1f;
+                    estoySaltando=false;
+                    if (personajeVolteandoDerecha == false) {
+                        spritePersonajeParado.setFlippedHorizontal(true);
+                    } else {
+                        spritePersonajeParado.setFlippedHorizontal(false);
+                    }
+                    spritePersonajeParado.setPosition(spritePersonaje);
+                    spritePersonaje.detachSelf();
+                    spritePersonaje = spritePersonajeParado;
+                    attachChild(spritePersonaje);
                 }
-
             }
         }
 
@@ -813,6 +876,39 @@ public class EscenaCazaJurasica extends EscenaBase {
         tipoLetra.prepareLetters("InicoFnalMed 01234567890.".toCharArray());
 
         return tipoLetra;
+    }
+
+    private void saltar(boolean arriba){
+        if(arriba){
+            if(permiso) {
+                permiso=false;
+                if (personajeVolteandoDerecha == false) {
+                    spritePersonajeSaltandoUno.setFlippedHorizontal(true);
+                } else {
+                    spritePersonajeSaltandoUno.setFlippedHorizontal(false);
+                }
+                spritePersonajeSaltandoUno.setPosition(spritePersonaje);
+                spritePersonajeSaltandoUno.animate(70, false);
+                spritePersonaje.detachSelf();
+                spritePersonaje = spritePersonajeSaltandoUno;
+                attachChild(spritePersonaje);
+            }
+        }
+        else{
+            if(permiso2) {
+                permiso2=false;
+                if (personajeVolteandoDerecha == false) {
+                    spritePersonajeSaltandoDos.setFlippedHorizontal(true);
+                } else {
+                    spritePersonajeSaltandoDos.setFlippedHorizontal(false);
+                }
+                spritePersonajeSaltandoDos.setPosition(spritePersonaje);
+                spritePersonajeSaltandoDos.animate(70, false);
+                spritePersonaje.detachSelf();
+                spritePersonaje = spritePersonajeSaltandoDos;
+                attachChild(spritePersonaje);
+            }
+        }
     }
 
     private void actualizarProyectilesEnemigo() {
@@ -971,20 +1067,46 @@ public class EscenaCazaJurasica extends EscenaBase {
                     }
 
 
-                    if (pValueX > 0) {
-                        if(personajeVolteandoDerecha==false) {
-                            personajeVolteandoDerecha = true;
-                            spritePersonaje.setFlippedHorizontal(false);
-                        }
+                    if (pValueX > 0 && estoySaltando==false) {
+                        personajeVolteandoDerecha = true;
+                        spritePersonajeDerecha.setFlippedHorizontal(false);
+                        spritePersonajeDerecha.setPosition(spritePersonaje);
+                        spritePersonaje.detachSelf();
+                        spritePersonaje=spritePersonajeDerecha;
+                        attachChild(spritePersonaje);
+
                     }
-                    else if (pValueX < 0) {
-                        if(personajeVolteandoDerecha==true) {
-                            personajeVolteandoDerecha = false;
-                            spritePersonaje.setFlippedHorizontal(true);
-                        }
+                    else if (pValueX > 0 && estoySaltando==true) {
+                        personajeVolteandoDerecha = true;
+                        spritePersonaje.setFlippedHorizontal(false);
+                    }
+                    else if (pValueX < 0 && estoySaltando==false) {
+                        personajeVolteandoDerecha = false;
+                        spritePersonajeDerecha.setFlippedHorizontal(true);
+                        spritePersonajeDerecha.setPosition(spritePersonaje);
+                        spritePersonaje.detachSelf();
+                        spritePersonaje=spritePersonajeDerecha;
+                        attachChild(spritePersonaje);
+
+                    }
+                    else if (pValueX < 0 && estoySaltando==true) {
+                        personajeVolteandoDerecha = false;
+                        spritePersonaje.setFlippedHorizontal(true);
                     }
                     else{
-                        spritePersonaje.animate(70);
+
+                        if(estoySaltando==false) {
+
+                            if (personajeVolteandoDerecha == false) {
+                                spritePersonajeParado.setFlippedHorizontal(true);
+                            } else {
+                                spritePersonajeParado.setFlippedHorizontal(false);
+                            }
+                            spritePersonajeParado.setPosition(spritePersonaje);
+                            spritePersonaje.detachSelf();
+                            spritePersonaje = spritePersonajeParado;
+                            attachChild(spritePersonaje);
+                        }
                     }
 
                         if (spriteFondo.getX() > 1980) {
@@ -1530,11 +1652,13 @@ public class EscenaCazaJurasica extends EscenaBase {
                             spriteNavecita.detachSelf();
                             nubecita=false;
                         }
-
-                        poderDeSalto=4.1f;
+                        estoySaltando=true;
+                        permiso=true;
+                        permiso2=true;
                         enElAire=true;
                         paArriba=true;
                         gravedad=false;
+                        poderDeSalto=4.1f;
                         if(estoySobreUnaPalmera==true){
                             brincaSobrepalmera=true;
                         }
