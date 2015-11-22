@@ -35,6 +35,7 @@ import java.util.Random;
 public class EscenaViajeEgipto extends EscenaBase {
 
     private ITextureRegion regionFondo;
+    private ITextureRegion regionFondo2;
     private ITextureRegion regionFondoPausa;
     private ITextureRegion regionControlSalto;
     private ITextureRegion regionBase;
@@ -230,6 +231,7 @@ public class EscenaViajeEgipto extends EscenaBase {
         vidas=cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
         regionNave=cargarImagen("Imagenes/Roman/nave.png");
         regionFondo = cargarImagen("Imagenes/ViajeEgipto/nivel_grande.jpg");
+        regionFondo2 = cargarImagen("Imagenes/ViajeEgipto/minijuego.jpg");
         regionFondoPausa = cargarImagen("Imagenes/Logos/logoHuntingCows.png");
         regionBase=cargarImagen("Imagenes/Roman/baseJoystick.png");
         regionControlSalto =cargarImagen("Imagenes/Roman/joystick.png");
@@ -669,6 +671,27 @@ public class EscenaViajeEgipto extends EscenaBase {
             spritePersonaje.detachSelf();
             spritePersonaje = spritePersonajeNave;
             attachChild(spritePersonaje);
+
+            spriteFondo.detachSelf();
+            spriteFondo2.detachSelf();
+            spriteFondo3.detachSelf();
+            spriteFondo4.detachSelf();
+            spriteFondo5.detachSelf();
+
+            spriteFondo = cargarSprite(1895, 1392 , regionFondo2);
+            attachChild(spriteFondo);
+
+            spriteFondo2 = cargarSprite(5895, 1392 , regionFondo2);
+            attachChild(spriteFondo2);
+
+            spriteFondo3 = cargarSprite(9895, 1392 , regionFondo2);
+            attachChild(spriteFondo3);
+
+            spriteFondo4 = cargarSprite(13895, 1392 , regionFondo2);
+            attachChild(spriteFondo4);
+
+            spriteFondo5 = cargarSprite(17895, 1392, regionFondo2);
+            attachChild(spriteFondo5);
 
         }
 

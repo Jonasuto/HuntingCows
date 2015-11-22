@@ -692,7 +692,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
             nubecita=true;
             spriteNaveRoman.detachSelf();
-            spritePersonajeNave.setPosition(spritePersonaje);
+            spritePersonajeNave.setPosition(spritePersonaje.getX(),450);
             spritePersonaje.detachSelf();
             spritePersonaje = spritePersonajeNave;
             attachChild(spritePersonaje);
@@ -1153,7 +1153,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private void posicionarEnemigos(){
 
-        int maxima=16;
+        int maxima=23;
 
         posicionesEnemigosx = new float[maxima];
         posicionesEnemigosy = new float[maxima];
@@ -1181,6 +1181,13 @@ public class EscenaCazaJurasica extends EscenaBase {
         posicionesEnemigosx[13]=13400;
         posicionesEnemigosx[14]=13400;
         posicionesEnemigosx[15]=13390;
+        posicionesEnemigosx[16]=13500;
+        posicionesEnemigosx[17]=13700;
+        posicionesEnemigosx[18]=13900;
+        posicionesEnemigosx[19]=14100;
+        posicionesEnemigosx[20]=13700;
+        posicionesEnemigosx[21]=13900;
+        posicionesEnemigosx[22]=14100;
 
         posicionesEnemigosy[0]=150;
         posicionesEnemigosy[1]=625;
