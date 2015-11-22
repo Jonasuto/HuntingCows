@@ -116,10 +116,6 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
     private AnalogOnScreenControl control;
 
     private Jugador spritePersonaje;
-    private Jugador spritePersonajeParado;
-    private Jugador spritePersonajeDerecha;
-    private Jugador spritePersonajeSaltandoUno;
-    private Jugador spritePersonajeSaltandoDos;
     private Jugador spritePersonajeNave;
 
     private Enemigo spriteEnemigo;
@@ -346,18 +342,9 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
 
         aleatorio= new Random();
 
-        spritePersonajeDerecha = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
-        spritePersonajeDerecha.animate(70);
-
-        spritePersonajeSaltandoUno = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeSaltandoUno, actividadJuego.getVertexBufferObjectManager());
-        spritePersonajeSaltandoDos = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeSaltandoDos, actividadJuego.getVertexBufferObjectManager());
-
-
-        spritePersonajeParado = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeParado, actividadJuego.getVertexBufferObjectManager());
-
         spritePersonajeNave = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeNave, actividadJuego.getVertexBufferObjectManager());
 
-        spritePersonaje=spritePersonajeParado;
+        spritePersonaje=spritePersonajeNave;
         attachChild(spritePersonaje);
 
         admMusica.cargarMusica(2);
@@ -365,8 +352,6 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
         posicionarEnemigos();
 
         posicionarPisosFlotantes();
-
-        agregarJoystick();
         agregarBotonSalto();
         agregarBotonDisparar();
 
@@ -651,14 +636,6 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
                         spritePersonaje.setY(piso.getY()+135);
                         estoySaltando=false;
                         if(yaBajo) {
-                            if (personajeVolteandoDerecha == false) {
-                                spritePersonajeParado.setFlippedHorizontal(true);
-                            } else {
-                                spritePersonajeParado.setFlippedHorizontal(false);
-                            }
-                            spritePersonajeParado.setPosition(spritePersonaje);
-                            spritePersonaje.detachSelf();
-                            spritePersonaje = spritePersonajeParado;
                             attachChild(spritePersonaje);
                             yaBajo=false;
                         }
@@ -692,7 +669,6 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
             spritePersonaje.detachSelf();
             spritePersonaje = spritePersonajeNave;
             attachChild(spritePersonaje);
-
         }
 
         actualizarMonedas();
@@ -710,19 +686,9 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
             if(spritePersonaje.getY()>ControlJuego.ALTO_CAMARA/4-20 && estoySobreUnaPalmera==false){
                 spritePersonaje.setY(spritePersonaje.getY()-20);
                 permiso2=true;
-                saltar(false);
                 if(spritePersonaje.getY()<=ControlJuego.ALTO_CAMARA/4-20){
                     gravedad=false;
                     estoySaltando=false;
-                    if (personajeVolteandoDerecha == false) {
-                        spritePersonajeParado.setFlippedHorizontal(true);
-                    } else {
-                        spritePersonajeParado.setFlippedHorizontal(false);
-                    }
-                    spritePersonajeParado.setPosition(spritePersonaje);
-                    spritePersonaje.detachSelf();
-                    spritePersonaje = spritePersonajeParado;
-                    attachChild(spritePersonaje);
                     spritePersonaje.setY((ControlJuego.ALTO_CAMARA / 4) - 20);
                 }
             }
@@ -732,25 +698,12 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
                 spritePersonaje.setY(spritePersonaje.getY() + (5*poderDeSalto));
                 poderDeSalto-=0.15f;
                 yaBajo=true;
-                saltar(true);
-                if(poderDeSalto<0){
-                    saltar(false);
-                }
                 if(poderDeSalto<0){
                     brincaSobrepalmera=false;
                 }
                 if(spritePersonaje.getY()<=ControlJuego.ALTO_CAMARA/4-20){
                     enElAire=false;
                     estoySaltando=false;
-                    if (personajeVolteandoDerecha == false) {
-                        spritePersonajeParado.setFlippedHorizontal(true);
-                    } else {
-                        spritePersonajeParado.setFlippedHorizontal(false);
-                    }
-                    spritePersonajeParado.setPosition(spritePersonaje);
-                    spritePersonaje.detachSelf();
-                    spritePersonaje = spritePersonajeParado;
-                    attachChild(spritePersonaje);
                     spritePersonaje.setY((ControlJuego.ALTO_CAMARA / 4) - 20);
                 }
             }
@@ -873,38 +826,6 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
         return tipoLetra;
     }
 
-    private void saltar(boolean arriba){
-        if(arriba){
-            if(permiso) {
-                permiso=false;
-                if (personajeVolteandoDerecha == false) {
-                    spritePersonajeSaltandoUno.setFlippedHorizontal(true);
-                } else {
-                    spritePersonajeSaltandoUno.setFlippedHorizontal(false);
-                }
-                spritePersonajeSaltandoUno.setPosition(spritePersonaje);
-                spritePersonajeSaltandoUno.animate(70, false);
-                spritePersonaje.detachSelf();
-                spritePersonaje = spritePersonajeSaltandoUno;
-                attachChild(spritePersonaje);
-            }
-        }
-        else{
-            if(permiso2) {
-                permiso2=false;
-                if (personajeVolteandoDerecha == false) {
-                    spritePersonajeSaltandoDos.setFlippedHorizontal(true);
-                } else {
-                    spritePersonajeSaltandoDos.setFlippedHorizontal(false);
-                }
-                spritePersonajeSaltandoDos.setPosition(spritePersonaje);
-                spritePersonajeSaltandoDos.animate(70, false);
-                spritePersonaje.detachSelf();
-                spritePersonaje = spritePersonajeSaltandoDos;
-                attachChild(spritePersonaje);
-            }
-        }
-    }
 
     private void actualizarProyectilesEnemigo() {
         // Se visita cada proyectil dentro de la lista, se recorre con el índice
@@ -1022,130 +943,6 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
         regionMenuContinuar=null;
     }
 
-    private void agregarJoystick() {
-        control = new AnalogOnScreenControl(100, 100, actividadJuego.camara,
-                regionBase, regionControlSalto,
-                0.03f, 100, actividadJuego.getVertexBufferObjectManager(), new AnalogOnScreenControl.IAnalogOnScreenControlListener() {
-
-                @Override
-            public void onControlClick(AnalogOnScreenControl pAnalogOnScreenControl) {
-            }
-            @Override
-            public void onControlChange(BaseOnScreenControl pBaseOnScreenControl, float pValueX, float pValueY) {
-
-                if(juegoCorriendo) {
-
-                    if (nubecita == true) {
-
-                        if(spritePersonaje.getY()<200){
-                            if(pValueY<0){
-                            }
-                            else{
-                                float y = spritePersonaje.getY() + 15 * pValueY;
-                                spritePersonaje.setY(y);
-                            }
-                        }
-
-                        else if(spritePersonaje.getY()>700){
-                            if(pValueY>0){
-                            }
-                            else{
-                                float y = spritePersonaje.getY() + 15 * pValueY;
-                                spritePersonaje.setY(y);
-                            }
-                        }
-
-                        else{
-                            float y = spritePersonaje.getY() + 15 * pValueY;
-                            spritePersonaje.setY(y);
-                        }
-
-                    }
-
-
-                    if (pValueX > 0 && estoySaltando==false) {
-                        if (nubecita == false) {
-                            personajeVolteandoDerecha = true;
-                            spritePersonajeDerecha.setFlippedHorizontal(false);
-                            spritePersonajeDerecha.setPosition(spritePersonaje);
-                            spritePersonaje.detachSelf();
-                            spritePersonaje = spritePersonajeDerecha;
-                            attachChild(spritePersonaje);
-                        }
-                        else{
-                            personajeVolteandoDerecha = true;
-                            spritePersonaje.setFlippedHorizontal(false);
-                        }
-
-                    }
-                    else if (pValueX > 0 && estoySaltando==true) {
-                        personajeVolteandoDerecha = true;
-                        spritePersonaje.setFlippedHorizontal(false);
-                    }
-                    else if (pValueX < 0 && estoySaltando==false) {
-                        if (nubecita == false) {
-                            personajeVolteandoDerecha = false;
-                            spritePersonajeDerecha.setFlippedHorizontal(true);
-                            spritePersonajeDerecha.setPosition(spritePersonaje);
-                            spritePersonaje.detachSelf();
-                            spritePersonaje = spritePersonajeDerecha;
-                            attachChild(spritePersonaje);
-                        }
-                        else{
-                            personajeVolteandoDerecha = false;
-                            spritePersonaje.setFlippedHorizontal(true);
-                        }
-
-                    }
-                    else if (pValueX < 0 && estoySaltando==true) {
-                        personajeVolteandoDerecha = false;
-                        spritePersonaje.setFlippedHorizontal(true);
-                    }
-                    else{
-
-                        if(estoySaltando==false) {
-
-                            if(nubecita == false) {
-                                if (personajeVolteandoDerecha == false) {
-                                    spritePersonajeParado.setFlippedHorizontal(true);
-                                } else {
-                                    spritePersonajeParado.setFlippedHorizontal(false);
-                                }
-                                spritePersonajeParado.setPosition(spritePersonaje);
-                                spritePersonaje.detachSelf();
-                                spritePersonaje = spritePersonajeParado;
-                                attachChild(spritePersonaje);
-                            }
-                        }
-                    }
-
-                        if (spriteFondo.getX() > 1980) {
-                            if (pValueX < 0) {
-                            } else {
-                                pValueX = pValueX * (-1);
-                                float x = spriteFondo.getX() + 25 * pValueX;
-                                spriteFondo.setX(x);
-                            }
-                        }
-                        else if (spriteFondo.getX() < -12480) {
-                            if (pValueX > 0) {
-                            } else {
-                                pValueX = pValueX * (-1);
-                                float x = spriteFondo.getX() + 25 * pValueX;
-                                spriteFondo.setX(x);
-                            }
-                        } else {
-                            pValueX = pValueX * (-1);
-                            float x = spriteFondo.getX() + 25 * pValueX;
-                            spriteFondo.setX(x);
-                        }
-
-                }
-            }
-
-        });
-        EscenaCazaJurasicaRunner.this.setChildScene(control);
-    }
 
     private void posicionarEnemigos(){
 

@@ -45,6 +45,9 @@ public class EscenaViajeEgipto extends EscenaBase {
     private ITextureRegion regionPicos;
     private ITextureRegion regionLava;
 
+    private Sprite spriteNaveRoman;
+    private ITextureRegion regionNaveRoman;
+
     private Random elQueSigue;
 
     private int reloj;
@@ -98,7 +101,10 @@ public class EscenaViajeEgipto extends EscenaBase {
 
     private Random aleatorio;
 
+    private TiledTextureRegion regionPersonajeNave;
+
     private ITextureRegion vidas;
+
     private Sprite[] spriteVidas;
 
     private Sprite[] spriteBalas;
@@ -128,6 +134,7 @@ public class EscenaViajeEgipto extends EscenaBase {
     private Enemigo spriteEnemigo;
 
     private boolean juegoCorriendo = true;
+    private boolean llegoFinal = false;
 
     private Piso pisoActual;
 
@@ -143,6 +150,7 @@ public class EscenaViajeEgipto extends EscenaBase {
     private TiledTextureRegion regionPersonajeSaltandoDos;
     private TiledTextureRegion regionPersonajeSaltandoCompleto;
     private TiledTextureRegion regionPersonajeParado;
+
 
     private boolean personajeVolteandoDerecha=true;
 
@@ -192,6 +200,9 @@ public class EscenaViajeEgipto extends EscenaBase {
     private Sprite spritebtnContinuar;
     private Sprite spritebtnIrAMenu;
 
+    private Jugador spritePersonajeNave;
+
+
     private boolean yaBajo;
 
     private int cambiar=0;
@@ -230,13 +241,14 @@ public class EscenaViajeEgipto extends EscenaBase {
         regionPersonajeSaltandoUno = cargarImagenMosaico("Imagenes/Roman/spritesaltouno.png", 370, 200, 1, 3);
         regionPersonajeSaltandoDos = cargarImagenMosaico("Imagenes/Roman/spritesaltodos.png", 370, 200, 1, 3);
         regionPersonajeSaltandoCompleto = cargarImagenMosaico("Imagenes/Roman/spritesalto.png", 700, 200, 1, 6);
+        regionPersonajeNave = cargarImagenMosaico("Imagenes/Roman/lanchajuego.png", 500, 300, 1, 1);
 
         // Pausa
         regionBtnPausa = cargarImagen("Imagenes/Niveles/CazaJurasica/btnPausa.png");
         regionHoyoNegro= cargarImagen("Imagenes/hoyoNegro.png");
         regionProyectil = cargarImagen("Imagenes/Roman/laser.png");
         regionPisoFlotante = cargarImagen("Imagenes/lineas.png");
-
+        regionNaveRoman = cargarImagen("Imagenes/Roman/lanchajuego.png");
 
         regionOvni= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/naveVaca.png");
         regionPua= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/pua.png");
@@ -302,7 +314,7 @@ public class EscenaViajeEgipto extends EscenaBase {
 
         numeroDeBalas=9;
 
-        spriteNave=cargarSprite(320, 320, regionNave);
+        spriteNave=cargarSprite(500, 320, regionNave);
         spriteFondo.attachChild(spriteNave);
 
         spriteVidas[0]= cargarSprite(1100, 750, vidas);
@@ -372,8 +384,13 @@ public class EscenaViajeEgipto extends EscenaBase {
 
         spritePersonajeParado = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeParado, actividadJuego.getVertexBufferObjectManager());
 
+        spritePersonajeNave = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeNave, actividadJuego.getVertexBufferObjectManager());
+
         spritePersonaje=spritePersonajeParado;
         attachChild(spritePersonaje);
+
+        spriteNaveRoman=cargarSprite(15000, 300, regionNaveRoman);
+        spriteFondo.attachChild(spriteNaveRoman);
 
         spriteNavecita=null;
 
@@ -644,6 +661,17 @@ public class EscenaViajeEgipto extends EscenaBase {
 
         contadorPersigue+=1;
 
+        if(spritePersonaje.collidesWith(spriteNaveRoman)){
+
+            nubecita=true;
+            spriteNaveRoman.detachSelf();
+            spritePersonajeNave.setPosition(spritePersonaje);
+            spritePersonaje.detachSelf();
+            spritePersonaje = spritePersonajeNave;
+            attachChild(spritePersonaje);
+
+        }
+
         if(contadorPersigue>190 && unicoQuePersigue==false){
             Enemigo spriteEnemigo = new Enemigo(30000, 720, regionOvni, actividadJuego.getVertexBufferObjectManager(), 19, false, false, 10,false,true, false);
             Enemigo nuevoEnemigo = spriteEnemigo;
@@ -663,6 +691,13 @@ public class EscenaViajeEgipto extends EscenaBase {
                     piso.setBalsa(true);
                 }
                 pisoActual=piso;
+
+                if(i==36){
+                    llegoFinal=true;
+                }
+                else{
+                    llegoFinal=false;
+                }
 
                 if (nubecita == false) {
 
@@ -1061,7 +1096,7 @@ public class EscenaViajeEgipto extends EscenaBase {
 
                     if (nubecita == true) {
 
-                        if(spritePersonaje.getY()<0){
+                        if(spritePersonaje.getY()<400){
                             if(pValueY<0){
                             }
                             else{
@@ -1070,17 +1105,17 @@ public class EscenaViajeEgipto extends EscenaBase {
                             }
                         }
 
-                        else if(spritePersonaje.getY()>750){
+                        else if(spritePersonaje.getY()>4000){
                             if(pValueY>0){
                             }
                             else{
-                                float y = spritePersonaje.getY() + 20 * pValueY;
+                                float y = spritePersonaje.getY() + 15 * pValueY;
                                 spritePersonaje.setY(y);
                             }
                         }
 
                         else{
-                            float y = spritePersonaje.getY() + 20 * pValueY;
+                            float y = spritePersonaje.getY() + 15 * pValueY;
                             spritePersonaje.setY(y);
                         }
 
@@ -1088,12 +1123,18 @@ public class EscenaViajeEgipto extends EscenaBase {
 
 
                     if (pValueX > 0 && estoySaltando==false) {
+                        if (nubecita == false) {
                             personajeVolteandoDerecha = true;
                             spritePersonajeDerecha.setFlippedHorizontal(false);
                             spritePersonajeDerecha.setPosition(spritePersonaje);
                             spritePersonaje.detachSelf();
-                            spritePersonaje=spritePersonajeDerecha;
+                            spritePersonaje = spritePersonajeDerecha;
                             attachChild(spritePersonaje);
+                        }
+                        else{
+                            personajeVolteandoDerecha = true;
+                            spritePersonaje.setFlippedHorizontal(false);
+                        }
 
                     }
                     else if (pValueX > 0 && estoySaltando==true) {
@@ -1101,12 +1142,18 @@ public class EscenaViajeEgipto extends EscenaBase {
                         spritePersonaje.setFlippedHorizontal(false);
                     }
                     else if (pValueX < 0 && estoySaltando==false) {
+                        if (nubecita == false) {
                             personajeVolteandoDerecha = false;
                             spritePersonajeDerecha.setFlippedHorizontal(true);
                             spritePersonajeDerecha.setPosition(spritePersonaje);
                             spritePersonaje.detachSelf();
-                            spritePersonaje=spritePersonajeDerecha;
+                            spritePersonaje = spritePersonajeDerecha;
                             attachChild(spritePersonaje);
+                        }
+                        else{
+                            personajeVolteandoDerecha = false;
+                            spritePersonaje.setFlippedHorizontal(true);
+                        }
 
                     }
                     else if (pValueX < 0 && estoySaltando==true) {
@@ -1117,15 +1164,17 @@ public class EscenaViajeEgipto extends EscenaBase {
 
                         if(estoySaltando==false) {
 
-                            if (personajeVolteandoDerecha == false) {
-                                spritePersonajeParado.setFlippedHorizontal(true);
-                            } else {
-                                spritePersonajeParado.setFlippedHorizontal(false);
+                            if(nubecita == false) {
+                                if (personajeVolteandoDerecha == false) {
+                                    spritePersonajeParado.setFlippedHorizontal(true);
+                                } else {
+                                    spritePersonajeParado.setFlippedHorizontal(false);
+                                }
+                                spritePersonajeParado.setPosition(spritePersonaje);
+                                spritePersonaje.detachSelf();
+                                spritePersonaje = spritePersonajeParado;
+                                attachChild(spritePersonaje);
                             }
-                            spritePersonajeParado.setPosition(spritePersonaje);
-                            spritePersonaje.detachSelf();
-                            spritePersonaje = spritePersonajeParado;
-                            attachChild(spritePersonaje);
                         }
                     }
 
@@ -1147,13 +1196,16 @@ public class EscenaViajeEgipto extends EscenaBase {
                         }
                     }
 
-                    else{
-                        float x = spritePersonaje.getX()+22*pValueX;
+                    else {
+                        float x = spritePersonaje.getX() + 22 * pValueX;
                         spritePersonaje.setX(x);
                     }
-
-                    actividadJuego.camara.setCenter(spritePersonaje.getX(), 400);
-
+                    if(nubecita) {
+                        actividadJuego.camara.setChaseEntity(spritePersonaje);
+                    }
+                    else{
+                        actividadJuego.camara.setCenter(spritePersonaje.getX(),400);
+                    }
                 }
             }
 
@@ -1413,7 +1465,6 @@ public class EscenaViajeEgipto extends EscenaBase {
         posicionesPisosFlotantesX[33]=13780;
         posicionesPisosFlotantesX[34]=13260;
         posicionesPisosFlotantesX[35]=13520;
-
 
         posicionesPisosFlotantesY[0]=330;
         posicionesPisosFlotantesY[1]=460;
@@ -1691,19 +1742,19 @@ public class EscenaViajeEgipto extends EscenaBase {
                 if (juegoCorriendo) {
                     if (pSceneTouchEvent.isActionDown() && enElAire==false) {
 
-                        if(nubecita==true){
-                            spriteNavecita.detachSelf();
-                            nubecita=false;
-                        }
-                        estoySaltando=true;
-                        permiso=true;
-                        permiso2=true;
-                        enElAire=true;
-                        paArriba=true;
-                        gravedad=false;
-                        poderDeSalto=4.1f;
-                        if(estoySobreUnaPalmera==true){
-                            brincaSobrepalmera=true;
+                        if (nubecita == true) {
+
+                        } else {
+                            estoySaltando = true;
+                            permiso = true;
+                            permiso2 = true;
+                            enElAire = true;
+                            paArriba = true;
+                            gravedad = false;
+                            poderDeSalto = 4.1f;
+                            if (estoySobreUnaPalmera == true) {
+                                brincaSobrepalmera = true;
+                            }
                         }
                     }
                 }
