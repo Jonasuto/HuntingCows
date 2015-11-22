@@ -40,7 +40,7 @@ public class EscenaMundosCazaJurasica extends EscenaBase {
 
         admMusica.cargarMusica(0);
 
-        Sprite Nivel1 = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-300,
+        Sprite Nivel1 = new Sprite(ControlJuego.ANCHO_CAMARA / 2-300, ControlJuego.ALTO_CAMARA / 2,
                 regionPlaneta, actividadJuego.getVertexBufferObjectManager()) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -70,7 +70,7 @@ public class EscenaMundosCazaJurasica extends EscenaBase {
         attachChild(Nivel2);
         registerTouchArea(Nivel2);
 
-        Sprite Nivel3 = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2+300,
+        Sprite Nivel3 = new Sprite(ControlJuego.ANCHO_CAMARA / 2+300, ControlJuego.ALTO_CAMARA / 2,
                 regionPlaneta, actividadJuego.getVertexBufferObjectManager()) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -84,6 +84,21 @@ public class EscenaMundosCazaJurasica extends EscenaBase {
         };
         attachChild(Nivel3);
         registerTouchArea(Nivel3);
+
+        Sprite Nivel4 = new Sprite(ControlJuego.ANCHO_CAMARA / 2-300, ControlJuego.ALTO_CAMARA / 2-300,
+                regionPlaneta, actividadJuego.getVertexBufferObjectManager()) {
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if (pSceneTouchEvent.isActionUp()) {
+                    admEscenas.liberarEscenaMundosCazaJurasica();
+                    admEscenas.crearEscenaCazaJurasicaRunner();
+                    admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_RUNNER);
+                }
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
+        attachChild(Nivel4);
+        registerTouchArea(Nivel4);
 
     }
 

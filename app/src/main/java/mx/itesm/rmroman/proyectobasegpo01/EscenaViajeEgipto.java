@@ -12,6 +12,7 @@ import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.scene.CameraScene;
+import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -191,6 +192,7 @@ public class EscenaViajeEgipto extends EscenaBase {
     private ITextureRegion regionMenuMusica;
     private ITextureRegion regionMenuContinuar;
     private ITextureRegion regionIrAMenu;
+    private boolean miniJuego;
 
     private boolean musicaEncendida;
 
@@ -226,7 +228,6 @@ public class EscenaViajeEgipto extends EscenaBase {
         fontMonster = cargarFont("fonts/monster.ttf");
 
         contadorPersigue=0;
-
 
         vidas=cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
         regionNave=cargarImagen("Imagenes/Roman/nave.png");
@@ -461,9 +462,7 @@ public class EscenaViajeEgipto extends EscenaBase {
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.isActionUp()) {
 
-
                     if(musicaEncendida==true && cambiar==0){
-
 
                         spritebtnOff.detachSelf();
                         spritebtnOn.detachSelf();
@@ -481,8 +480,6 @@ public class EscenaViajeEgipto extends EscenaBase {
         };
         escenaPausa.attachChild(spriteOffFinal);
         escenaPausa.registerTouchArea(spriteOffFinal);
-
-
 
         Sprite spriteOnFinal = new Sprite(ControlJuego.ANCHO_CAMARA / 2+45, ControlJuego.ALTO_CAMARA / 2-45,
                 regionMenuOnoff, actividadJuego.getVertexBufferObjectManager()) {
@@ -527,7 +524,6 @@ public class EscenaViajeEgipto extends EscenaBase {
             setChildScene(escenaPausa,false,true,false);
             juegoCorriendo = false;
         }
-
         else {
             clearChildScene();
             EscenaViajeEgipto.this.setChildScene(control);
@@ -537,7 +533,6 @@ public class EscenaViajeEgipto extends EscenaBase {
 
     private void agregarHUD() {
         hud = new HUD();
-
 
         // Marcador/valorMarcador
         txtMarcador = new Text(ControlJuego.ANCHO_CAMARA/2,ControlJuego.ALTO_CAMARA-100,
@@ -559,7 +554,7 @@ public class EscenaViajeEgipto extends EscenaBase {
 
         if (!juegoCorriendo) {
 
-            if(cambiar==1) {
+            if (cambiar == 1) {
 
                 if (musicaEncendida == true) {
                     spritebtnOff = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 155, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOffoff);
@@ -574,195 +569,171 @@ public class EscenaViajeEgipto extends EscenaBase {
                     spritebtnOn = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 45, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOnoff);
                     escenaPausa.attachChild(spritebtnOn);
                 }
-
-
-                cambiar=0;
+                cambiar = 0;
             }
-
             return;
         }
 
-        Log.i("estoy",spritePersonaje.getX()+"");
+        Log.i("estoy", spritePersonaje.getX() + "");
 
 
-        if(numeroDeBalas<9){
-            contadorTiempo+=1;
+        if (numeroDeBalas < 9) {
+            contadorTiempo += 1;
 
-            if(contadorTiempo>=150){
-                int posicionBala=8-numeroDeBalas;
+            if (contadorTiempo >= 150) {
+                int posicionBala = 8 - numeroDeBalas;
 
 
-                if(posicionBala==0) {
+                if (posicionBala == 0) {
                     spriteBalas[0] = cargarSprite(1100, 600, regionProyectil);
                     spriteBalas[0].setSize(spriteBalas[0].getWidth() - 20, spriteBalas[0].getHeight() - 20);
                     hud.attachChild(spriteBalas[0]);
-                }
-
-
-                else if(posicionBala==1) {
+                } else if (posicionBala == 1) {
                     spriteBalas[1] = cargarSprite(1100, 550, regionProyectil);
                     spriteBalas[1].setSize(spriteBalas[1].getWidth() - 20, spriteBalas[1].getHeight() - 20);
                     hud.attachChild(spriteBalas[1]);
-                }
-
-                else if(posicionBala==2) {
+                } else if (posicionBala == 2) {
                     spriteBalas[2] = cargarSprite(1100, 500, regionProyectil);
                     spriteBalas[2].setSize(spriteBalas[2].getWidth() - 20, spriteBalas[2].getHeight() - 20);
                     hud.attachChild(spriteBalas[2]);
-                }
-
-                else if(posicionBala==3) {
+                } else if (posicionBala == 3) {
                     spriteBalas[3] = cargarSprite(1100, 450, regionProyectil);
                     spriteBalas[3].setSize(spriteBalas[3].getWidth() - 20, spriteBalas[3].getHeight() - 20);
                     hud.attachChild(spriteBalas[3]);
-                }
-
-                else if(posicionBala==4) {
+                } else if (posicionBala == 4) {
                     spriteBalas[4] = cargarSprite(1100, 400, regionProyectil);
                     spriteBalas[4].setSize(spriteBalas[4].getWidth() - 20, spriteBalas[4].getHeight() - 20);
                     hud.attachChild(spriteBalas[4]);
-                }
-
-                else if(posicionBala==5) {
+                } else if (posicionBala == 5) {
                     spriteBalas[5] = cargarSprite(1100, 350, regionProyectil);
                     spriteBalas[5].setSize(spriteBalas[5].getWidth() - 20, spriteBalas[5].getHeight() - 20);
                     hud.attachChild(spriteBalas[5]);
-                }
-
-                else if(posicionBala==6) {
+                } else if (posicionBala == 6) {
                     spriteBalas[6] = cargarSprite(1100, 300, regionProyectil);
                     spriteBalas[6].setSize(spriteBalas[6].getWidth() - 20, spriteBalas[6].getHeight() - 20);
                     hud.attachChild(spriteBalas[6]);
-                }
-
-                else if(posicionBala==7) {
+                } else if (posicionBala == 7) {
                     spriteBalas[7] = cargarSprite(1100, 250, regionProyectil);
                     spriteBalas[7].setSize(spriteBalas[7].getWidth() - 20, spriteBalas[7].getHeight() - 20);
                     hud.attachChild(spriteBalas[7]);
-                }
-
-                else if(posicionBala==8) {
+                } else if (posicionBala == 8) {
                     spriteBalas[8] = cargarSprite(1100, 200, regionProyectil);
                     spriteBalas[8].setSize(spriteBalas[8].getWidth() - 20, spriteBalas[8].getHeight() - 20);
                     hud.attachChild(spriteBalas[8]);
-                }
-
-
-                else if(posicionBala==9) {
+                } else if (posicionBala == 9) {
                     spriteBalas[9] = cargarSprite(1100, 150, regionProyectil);
                     spriteBalas[9].setSize(spriteBalas[9].getWidth() - 20, spriteBalas[9].getHeight() - 20);
                     hud.attachChild(spriteBalas[9]);
                 }
 
 
-                contadorTiempo=0;
+                contadorTiempo = 0;
                 numeroDeBalas++;
             }
         }
 
 
-        contadorPersigue+=1;
+        contadorPersigue += 1;
 
-        if(spritePersonaje.collidesWith(spriteNaveRoman)){
+        if (spritePersonaje.collidesWith(spriteNaveRoman)) {
 
-            nubecita=true;
-            spriteNaveRoman.detachSelf();
-            spritePersonajeNave.setPosition(spritePersonaje);
-            spritePersonaje.detachSelf();
-            spritePersonaje = spritePersonajeNave;
-            attachChild(spritePersonaje);
-
+            nubecita = true;
+            miniJuego = true;
             spriteFondo.detachSelf();
             spriteFondo2.detachSelf();
             spriteFondo3.detachSelf();
             spriteFondo4.detachSelf();
             spriteFondo5.detachSelf();
 
-            spriteFondo = cargarSprite(1895, 1392 , regionFondo2);
+            spriteFondo = cargarSprite(1895, 1392, regionFondo2);
             attachChild(spriteFondo);
 
-            spriteFondo2 = cargarSprite(5895, 1392 , regionFondo2);
+            spriteFondo2 = cargarSprite(5895, 1392, regionFondo2);
             attachChild(spriteFondo2);
 
-            spriteFondo3 = cargarSprite(9895, 1392 , regionFondo2);
+            spriteFondo3 = cargarSprite(9895, 1392, regionFondo2);
             attachChild(spriteFondo3);
 
-            spriteFondo4 = cargarSprite(13895, 1392 , regionFondo2);
+            spriteFondo4 = cargarSprite(13895, 1392, regionFondo2);
             attachChild(spriteFondo4);
 
             spriteFondo5 = cargarSprite(17895, 1392, regionFondo2);
             attachChild(spriteFondo5);
 
+            spriteNaveRoman.detachSelf();
+            spritePersonajeNave.setPosition(spritePersonaje);
+            spritePersonaje.detachSelf();
+            spritePersonaje = spritePersonajeNave;
+            attachChild(spritePersonaje);
         }
 
-        if(contadorPersigue>190 && unicoQuePersigue==false){
-            Enemigo spriteEnemigo = new Enemigo(30000, 720, regionOvni, actividadJuego.getVertexBufferObjectManager(), 19, false, false, 10,false,true, false);
+        if (contadorPersigue > 190 && unicoQuePersigue == false) {
+            Enemigo spriteEnemigo = new Enemigo(30000, 720, regionOvni, actividadJuego.getVertexBufferObjectManager(), 19, false, false, 10, false, true, false);
             Enemigo nuevoEnemigo = spriteEnemigo;
             nuevoEnemigo.setPersigue(true);
             listaEnemigos.add(nuevoEnemigo);
             attachChild(nuevoEnemigo);
-            contadorPersigue=0;
+            contadorPersigue = 0;
         }
 
-        for (int i= listaPisos.length-1; i>=0; i--) {
+        if(miniJuego==false) {
+            for (int i = listaPisos.length - 1; i >= 0; i--) {
 
-            final Piso piso = listaPisos[i];
+                final Piso piso = listaPisos[i];
 
-            if (spritePersonaje.collidesWith(piso) && piso.getY()+110<spritePersonaje.getY() && poderDeSalto<0.3) {
+                if (spritePersonaje.collidesWith(piso) && piso.getY() + 110 < spritePersonaje.getY() && poderDeSalto < 0.3 && miniJuego == false) {
 
-                if(piso.getLimiteDerecho()==10){
-                    piso.setBalsa(true);
-                }
-                pisoActual=piso;
+                    if (piso.getLimiteDerecho() == 10) {
+                        piso.setBalsa(true);
+                    }
+                    pisoActual = piso;
 
-                if(i==36){
-                    llegoFinal=true;
-                }
-                else{
-                    llegoFinal=false;
-                }
-
-                if (nubecita == false) {
-
-                    estoySobreUnaPalmera = true;
-
-                    if (brincaSobrepalmera == false) {
-
-                        enElAire = false;
-                        paArriba = false;
-                        gravedad = true;
-                        spritePersonaje.setY(piso.getY()+135);
-                        estoySaltando=false;
-                        if(yaBajo) {
-                            if (personajeVolteandoDerecha == false) {
-                                spritePersonajeParado.setFlippedHorizontal(true);
-                            } else {
-                                spritePersonajeParado.setFlippedHorizontal(false);
-                            }
-                            spritePersonajeParado.setPosition(spritePersonaje);
-                            spritePersonaje.detachSelf();
-                            spritePersonaje = spritePersonajeParado;
-                            attachChild(spritePersonaje);
-                            yaBajo=false;
-                        }
+                    if (i == 36) {
+                        llegoFinal = true;
                     } else {
+                        llegoFinal = false;
+                    }
 
-                        enElAire = true;
-                        paArriba = true;
-                        gravedad = false;
+                    if (nubecita == false) {
+
+                        estoySobreUnaPalmera = true;
+
+                        if (brincaSobrepalmera == false) {
+
+                            enElAire = false;
+                            paArriba = false;
+                            gravedad = true;
+                            spritePersonaje.setY(piso.getY() + 135);
+                            estoySaltando = false;
+                            if (yaBajo) {
+                                if (personajeVolteandoDerecha == false) {
+                                    spritePersonajeParado.setFlippedHorizontal(true);
+                                } else {
+                                    spritePersonajeParado.setFlippedHorizontal(false);
+                                }
+                                spritePersonajeParado.setPosition(spritePersonaje);
+                                spritePersonaje.detachSelf();
+                                spritePersonaje = spritePersonajeParado;
+                                attachChild(spritePersonaje);
+                                yaBajo = false;
+                            }
+                        } else {
+
+                            enElAire = true;
+                            paArriba = true;
+                            gravedad = false;
+                        }
+                    }
+                } else {
+
+                    if (spritePersonaje.collidesWith(pisoActual) == false) {
+                        estoySobreUnaPalmera = false;
                     }
                 }
-            }
 
-            else{
-
-                if(spritePersonaje.collidesWith(pisoActual)==false){
-                    estoySobreUnaPalmera = false;
+                if (piso.getMover()) {
+                    piso.mover(pSecondsElapsed);
                 }
-            }
-
-            if(piso.getMover()){
-                piso.mover(pSecondsElapsed);
             }
         }
 
@@ -833,75 +804,72 @@ public class EscenaViajeEgipto extends EscenaBase {
 
         actualizarVidas(pSecondsElapsed);
 
-        for (int i= listaEnemigos.size()-1; i>=0; i--) {
 
-            final Enemigo enemigo = listaEnemigos.get(i);
+        if(miniJuego==false) {
+            for (int i = listaEnemigos.size() - 1; i >= 0; i--) {
 
-            if(enemigo.getPuedeDisparar()==true){
+                final Enemigo enemigo = listaEnemigos.get(i);
 
-                if(enemigo.getDisparara()==1){
-                    dispararEnemigo(enemigo);
+                if (enemigo.getPuedeDisparar() == true) {
+
+                    if (enemigo.getDisparara() == 1) {
+                        dispararEnemigo(enemigo);
+                    }
+
                 }
+                if (enemigo.getBrinco() == true) {
 
-            }
-            if(enemigo.getBrinco()==true){
+                    if (enemigo.getRotacion()) {
+                        if (enemigo.getBrincando() == false) {
+                            enemigo.setBrincando(true);
+                            // Animar sprite central
+                            JumpModifier salto = new JumpModifier(1, enemigo.getX(), enemigo.getX(),
+                                    enemigo.getY(), enemigo.getY(), -400);
+                            RotationModifier rotacion = new RotationModifier(1, 360, 0);
+                            ParallelEntityModifier paralelo = new ParallelEntityModifier(salto, rotacion) {
+                                @Override
+                                protected void onModifierFinished(IEntity pItem) {
+                                    enemigo.setBrincando(false);
+                                    unregisterEntityModifier(this);
+                                    super.onModifierFinished(pItem);
+                                }
+                            };
+                            enemigo.registerEntityModifier(paralelo);
+                        }
+                    } else {
+                        if (enemigo.getBrincando() == false) {
+                            enemigo.setBrincando(true);
+                            // Animar sprite central
+                            JumpModifier salto = new JumpModifier(1, enemigo.getX(), enemigo.getX(),
+                                    enemigo.getY(), enemigo.getY(), -400);
+                            ParallelEntityModifier paralelo = new ParallelEntityModifier(salto) {
+                                @Override
+                                protected void onModifierFinished(IEntity pItem) {
+                                    enemigo.setBrincando(false);
+                                    unregisterEntityModifier(this);
+                                    super.onModifierFinished(pItem);
+                                }
+                            };
+                            enemigo.registerEntityModifier(paralelo);
+                        }
+                    }
 
-                if(enemigo.getRotacion()){
-                    if (enemigo.getBrincando()==false) {
-                        enemigo.setBrincando(true);
-                        // Animar sprite central
-                        JumpModifier salto = new JumpModifier(1, enemigo.getX(), enemigo.getX(),
-                                enemigo.getY(), enemigo.getY(), -400);
-                        RotationModifier rotacion = new RotationModifier(1, 360, 0);
-                        ParallelEntityModifier paralelo = new ParallelEntityModifier(salto, rotacion) {
-                            @Override
-                            protected void onModifierFinished(IEntity pItem) {
-                                enemigo.setBrincando(false);
-                                unregisterEntityModifier(this);
-                                super.onModifierFinished(pItem);
-                            }
-                        };
-                        enemigo.registerEntityModifier(paralelo);
+                } else {
+                    enemigo.mover(pSecondsElapsed);
+                }
+                if (enemigo.getPersigue() == true) {
+
+                    unicoQuePersigue = true;
+                    float dx = spritePersonaje.getX() - enemigo.getX();
+                    if (dx > 50) {
+                        enemigo.setX(3 + enemigo.getX());
+                    } else if (dx < -50) {
+                        enemigo.setX(enemigo.getX() - 3);
                     }
                 }
-
-
-                else{
-                    if (enemigo.getBrincando()==false) {
-                        enemigo.setBrincando(true);
-                        // Animar sprite central
-                        JumpModifier salto = new JumpModifier(1, enemigo.getX(), enemigo.getX(),
-                                enemigo.getY(), enemigo.getY(), -400);
-                        ParallelEntityModifier paralelo = new ParallelEntityModifier(salto) {
-                            @Override
-                            protected void onModifierFinished(IEntity pItem) {
-                                enemigo.setBrincando(false);
-                                unregisterEntityModifier(this);
-                                super.onModifierFinished(pItem);
-                            }
-                        };
-                        enemigo.registerEntityModifier(paralelo);
-                    }
-                }
-
-            }
-            else{
-                enemigo.mover(pSecondsElapsed);
-            }
-            if(enemigo.getPersigue()==true){
-
-                unicoQuePersigue=true;
-                float dx =spritePersonaje.getX()-enemigo.getX();
-                if(dx>50){
-                    enemigo.setX(3+enemigo.getX());
-                }
-                else if(dx<-50){
-                    enemigo.setX(enemigo.getX()-3);
-                }
-            }
 
 /*
-            if (spritePersonaje.collidesWith(enemigo)) {
+            if (spritePersonaje.collidesWith(enemigo) && miniJuego==false) {
 
                 if(cantidadVida -1<0){
                     admEscenas.liberarEscenaViajeEgipto();
@@ -940,6 +908,7 @@ public class EscenaViajeEgipto extends EscenaBase {
                 }
             }
             */
+            }
         }
     }
 
@@ -990,43 +959,41 @@ public class EscenaViajeEgipto extends EscenaBase {
     private void actualizarProyectilesEnemigo() {
         // Se visita cada proyectil dentro de la lista, se recorre con el índice
         // porque se pueden borrar datos
-        for (int i = listaProyectilesEnemigo.size() - 1; i >= 0; i--) {
+        if(miniJuego == false) {
+            for (int i = listaProyectilesEnemigo.size() - 1; i >= 0; i--) {
 
-            Laser proyectil = listaProyectilesEnemigo.get(i);
-            proyectil.mover();
-            if (proyectil.getY() < 200 ) {
-                proyectil.detachSelf();
-                listaProyectilesEnemigo.remove(proyectil);
-                continue;
-            }
-            if (proyectil.collidesWith(spritePersonaje)) {
-                // Baja puntos/vida
-                if(cantidadVida-1<0){
-                    admEscenas.liberarEscenaViajeEgipto();
-                    admEscenas.crearEscenaPerdiste();
-                    admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
-                }
-                else{
+                Laser proyectil = listaProyectilesEnemigo.get(i);
+                proyectil.mover();
+                if (proyectil.getY() < 200) {
                     proyectil.detachSelf();
                     listaProyectilesEnemigo.remove(proyectil);
-                    admMusica.vibrar(200);
-                    if(nubecita==true){
-                        spriteNavecita.detachSelf();
-                        nubecita=false;
-                        enElAire=true;
-                        paArriba=true;
-                        gravedad=false;
-                    }
-
-                    else {
-                        if(2-cantidadVida>=0) {
-                            spriteVidas[2 - cantidadVida].detachSelf();
-                            cantidadVida--;
-                        }
-                        else{
-                            admEscenas.liberarEscenaViajeEgipto();
-                            admEscenas.crearEscenaMenu();
-                            admEscenas.setEscena(TipoEscena.ESCENA_MENU);
+                    continue;
+                }
+                if (proyectil.collidesWith(spritePersonaje) && miniJuego == false) {
+                    // Baja puntos/vida
+                    if (cantidadVida - 1 < 0) {
+                        admEscenas.liberarEscenaViajeEgipto();
+                        admEscenas.crearEscenaPerdiste();
+                        admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
+                    } else {
+                        proyectil.detachSelf();
+                        listaProyectilesEnemigo.remove(proyectil);
+                        admMusica.vibrar(200);
+                        if (nubecita == true) {
+                            spriteNavecita.detachSelf();
+                            nubecita = false;
+                            enElAire = true;
+                            paArriba = true;
+                            gravedad = false;
+                        } else {
+                            if (2 - cantidadVida >= 0) {
+                                spriteVidas[2 - cantidadVida].detachSelf();
+                                cantidadVida--;
+                            } else {
+                                admEscenas.liberarEscenaViajeEgipto();
+                                admEscenas.crearEscenaMenu();
+                                admEscenas.setEscena(TipoEscena.ESCENA_MENU);
+                            }
                         }
                     }
                 }
@@ -1800,20 +1767,22 @@ public class EscenaViajeEgipto extends EscenaBase {
     }
 
     private void actualizarMonedas() {
-        for (int i=listaMonedas.size()-1; i>=0; i--) {
-            final Sprite moneda = listaMonedas.get(i);
-            moneda.setRotation(moneda.getRotation()+5);
-            // Prueba colisión
-            if (spritePersonaje.collidesWith(moneda)) {
-                // Desaparecer moneda
-                animacionTexto();
-                desaparecerMoneda(moneda);
-            }
-            // Salen las monedas que han desaparecido
-            if (moneda.getScaleX()==0) {
-                valorMarcador += 100;
-                moneda.detachSelf();
-                listaMonedas.remove(moneda);
+        if(miniJuego == false) {
+            for (int i = listaMonedas.size() - 1; i >= 0; i--) {
+                final Sprite moneda = listaMonedas.get(i);
+                moneda.setRotation(moneda.getRotation() + 5);
+                // Prueba colisión
+                if (spritePersonaje.collidesWith(moneda)) {
+                    // Desaparecer moneda
+                    animacionTexto();
+                    desaparecerMoneda(moneda);
+                }
+                // Salen las monedas que han desaparecido
+                if (moneda.getScaleX() == 0) {
+                    valorMarcador += 100;
+                    moneda.detachSelf();
+                    listaMonedas.remove(moneda);
+                }
             }
         }
     }
@@ -1850,42 +1819,43 @@ public class EscenaViajeEgipto extends EscenaBase {
 
         // Se visita cada proyectil dentro de la lista, se recorre con el índice
         // porque se pueden borrar datos
-        for (int i = listaProyectiles.size() - 1; i>=0; i--) {
-            Laser proyectil = listaProyectiles.get(i);
-            proyectil.mover();
 
-            if (proyectil.getX()-spritePersonaje.getX() > 650 || proyectil.getX()-spritePersonaje.getX() < -650) {
-                detachChild(proyectil);
-                listaProyectiles.remove(proyectil);
-                continue;
-            }
-            // Probar si colisionó con un enemigo
-            // Se visita cada proyectil dentro de la lista, se recorre con el índice
-            // porque se pueden borrar datos
-            for (int k = listaEnemigos.size() - 1; k >= 0; k--) {
-                Enemigo enemigo = listaEnemigos.get(k);
-                if (proyectil.collidesWith(enemigo)) {
-                    // Lo destruye
+            for (int i = listaProyectiles.size() - 1; i >= 0; i--) {
+                Laser proyectil = listaProyectiles.get(i);
+                proyectil.mover();
 
-                    if(enemigo.getNoPuedeSerDestruido()==false){
-                        if (enemigo.getRegalo() == 1 || enemigo.getRegalo() == 3) {
-                            crearVida(enemigo);
-                        }
-
-                        if(enemigo.getPersigue()){
-                            unicoQuePersigue=false;
-                        }
-                        enemigo.detachSelf();
-                        listaEnemigos.remove(enemigo);
-                    }
-                    // desaparece el proyectil
+                if (proyectil.getX() - spritePersonaje.getX() > 650 || proyectil.getX() - spritePersonaje.getX() < -650) {
                     detachChild(proyectil);
                     listaProyectiles.remove(proyectil);
-                    break;
+                    continue;
+                }
+                // Probar si colisionó con un enemigo
+                // Se visita cada proyectil dentro de la lista, se recorre con el índice
+                // porque se pueden borrar datos
+                for (int k = listaEnemigos.size() - 1; k >= 0; k--) {
+                    Enemigo enemigo = listaEnemigos.get(k);
+                    if (proyectil.collidesWith(enemigo) && miniJuego == false) {
+                        // Lo destruye
 
+                        if (enemigo.getNoPuedeSerDestruido() == false) {
+                            if (enemigo.getRegalo() == 1 || enemigo.getRegalo() == 3) {
+                                crearVida(enemigo);
+                            }
+
+                            if (enemigo.getPersigue()) {
+                                unicoQuePersigue = false;
+                            }
+                            enemigo.detachSelf();
+                            listaEnemigos.remove(enemigo);
+                        }
+                        // desaparece el proyectil
+                        detachChild(proyectil);
+                        listaProyectiles.remove(proyectil);
+                        break;
+
+                    }
                 }
             }
-        }
     }
 
     private void animacionTexto(){
