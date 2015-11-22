@@ -31,6 +31,8 @@ public class AdministradorEscenas {
     private EscenaBase escenaLaberintoUno;
     private EscenaBase escenaAleatoriedad;
     private EscenaBase escenaPeleaBossCazaJurasica;
+    private EscenaBase escenaViajeEgipto;
+    private EscenaBase escenaMundosCazaJurasica;
 
     private boolean cazaJurasicaDesbloqueado=false;
 
@@ -143,6 +145,12 @@ public class AdministradorEscenas {
             case ESCENA_LABERINTO_UNO:
                 setEscenaBase(escenaLaberintoUno);
                 break;
+            case ESCENA_VIAJE_EGIPTO:
+                setEscenaBase(escenaViajeEgipto);
+                break;
+            case ESCENA_MUNDOS_CAZA_JURASICA:
+                setEscenaBase(escenaMundosCazaJurasica);
+                break;
         }
     }
 
@@ -156,6 +164,28 @@ public class AdministradorEscenas {
     public void liberarEscenaSplash() {
         escenaSplash.liberarEscena();
         escenaSplash = null;
+    }
+
+    public void crearEscenaMundosCazaJurasica() {
+        // Carga los recursos
+        escenaMundosCazaJurasica = new mx.itesm.rmroman.proyectobasegpo01.EscenaMundosCazaJurasica();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaMundosCazaJurasica() {
+        escenaMundosCazaJurasica.liberarEscena();
+        escenaMundosCazaJurasica = null;
+    }
+
+    public void crearEscenaViajeEgipto() {
+        // Carga los recursos
+        escenaViajeEgipto = new mx.itesm.rmroman.proyectobasegpo01.EscenaViajeEgipto();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaViajeEgipto() {
+        escenaViajeEgipto.liberarEscena();
+        escenaViajeEgipto = null;
     }
 
     public void crearEscenaLaberintoUno() {

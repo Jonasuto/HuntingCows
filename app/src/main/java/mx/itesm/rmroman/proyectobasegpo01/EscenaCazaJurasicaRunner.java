@@ -1,8 +1,5 @@
 package mx.itesm.rmroman.proyectobasegpo01;
 
-import android.util.Log;
-
-import org.andengine.audio.music.MusicFactory;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
@@ -25,7 +22,6 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
@@ -34,7 +30,7 @@ import java.util.Random;
 /**
  * Created by Campos on 11/10/15.
  */
-public class EscenaCazaJurasica extends EscenaBase {
+public class EscenaCazaJurasicaRunner extends EscenaBase {
 
     private ITextureRegion regionFondo;
     private ITextureRegion regionFondoPausa;
@@ -505,7 +501,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         else {
             clearChildScene();
-            EscenaCazaJurasica.this.setChildScene(control);
+            EscenaCazaJurasicaRunner.this.setChildScene(control);
             juegoCorriendo = true;
         }
     }
@@ -524,9 +520,9 @@ public class EscenaCazaJurasica extends EscenaBase {
     }
 
     @Override
-    public mx.itesm.rmroman.proyectobasegpo01.TipoEscena getTipoEscena() {
+    public TipoEscena getTipoEscena() {
 
-        return mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_CAZA_JURASICA;
+        return TipoEscena.ESCENA_CAZA_JURASICA;
     }
 
     protected void onManagedUpdate(float pSecondsElapsed) {
@@ -869,7 +865,7 @@ public class EscenaCazaJurasica extends EscenaBase {
         // La imagen que contiene cada símbolo
         final ITexture fontTexture = new BitmapTextureAtlas(actividadJuego.getEngine().getTextureManager(),512,256);
         // Carga el archivo, tamaño 56, antialias y color
-        org.andengine.opengl.font.Font tipoLetra = FontFactory.createFromAsset(actividadJuego.getEngine().getFontManager(),
+        Font tipoLetra = FontFactory.createFromAsset(actividadJuego.getEngine().getFontManager(),
                 fontTexture, actividadJuego.getAssets(), archivo, 56, true, 0xFF00FF00);
         tipoLetra.load();
         tipoLetra.prepareLetters("InicoFnalMed 01234567890.".toCharArray());
@@ -1148,7 +1144,7 @@ public class EscenaCazaJurasica extends EscenaBase {
             }
 
         });
-        EscenaCazaJurasica.this.setChildScene(control);
+        EscenaCazaJurasicaRunner.this.setChildScene(control);
     }
 
     private void posicionarEnemigos(){

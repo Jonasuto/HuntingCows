@@ -4,6 +4,7 @@ import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
 /**
@@ -58,8 +59,30 @@ public class EscenaArcade extends EscenaBase
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
         attachChild(spriteFondo);
 
-        spriteFlecha = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 4, regionFlechaActual);
+        Sprite spriteFlecha = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 4,
+                regionFlechaActual, actividadJuego.getVertexBufferObjectManager()) {
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if (pSceneTouchEvent.isActionUp()) {
+                    if(contadorSlide==0) {
+                        admEscenas.liberarEscenaArcade();
+                        admEscenas.crearEscenaMundosCazaJurasica();
+                        admEscenas.setEscena(TipoEscena.ESCENA_MUNDOS_CAZA_JURASICA);
+                    }
+                    else if(contadorSlide==1) {
+                        admMusica.vibrar(90);
+                    }
+                    else {
+                        admEscenas.liberarEscenaArcade();
+                        admEscenas.crearEscenaViajeEgipto();
+                        admEscenas.setEscena(TipoEscena.ESCENA_VIAJE_EGIPTO);
+                    }
+                }
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
         attachChild(spriteFlecha);
+        registerTouchArea(spriteFlecha);
 
 
         agregarMenu();

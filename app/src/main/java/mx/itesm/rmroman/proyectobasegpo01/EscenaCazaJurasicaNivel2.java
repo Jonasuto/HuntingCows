@@ -644,7 +644,6 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
             }
         }
 
-        Log.i("estoy",spritePersonaje.getX()+"");
 
         contadorPersigue+=1;
 
@@ -742,6 +741,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                     spritePersonaje.detachSelf();
                     spritePersonaje = spritePersonajeParado;
                     attachChild(spritePersonaje);
+                    spritePersonaje.setY((ControlJuego.ALTO_CAMARA / 4) - 20);
                 }
             }
         }
@@ -769,6 +769,7 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
                     spritePersonaje.detachSelf();
                     spritePersonaje = spritePersonajeParado;
                     attachChild(spritePersonaje);
+                    spritePersonaje.setY((ControlJuego.ALTO_CAMARA / 4) - 20);
                 }
             }
         }
@@ -990,6 +991,8 @@ public class EscenaCazaJurasicaNivel2 extends EscenaBase {
     @Override
     public void liberarEscena() {
         liberarRecursos();
+        hud.detachChildren();
+        this.detachChildren();
         this.detachSelf();
         this.dispose();
     }
