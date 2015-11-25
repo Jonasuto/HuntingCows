@@ -76,7 +76,7 @@ public class EscenaPeleaOvnis extends EscenaBase {
         agregarJoystick();
         agregarBotonDisparar();
 
-        Sprite btnPausa = new Sprite(regionBtnPausa.getWidth(), ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight(),
+        Sprite btnPausa = new Sprite(100, 710,
                 regionBtnPausa, actividadJuego.getVertexBufferObjectManager()) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {

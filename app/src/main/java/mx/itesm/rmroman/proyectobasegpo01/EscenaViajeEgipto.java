@@ -24,6 +24,7 @@ import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.util.adt.color.Color;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -109,9 +110,13 @@ public class EscenaViajeEgipto extends EscenaBase {
 
     private Sprite[] spriteVidas;
 
-    private Sprite[] spriteBalas;
-
     private Sprite spriteNave;
+
+    private Text txtBalas; // Por ahora con valorMarcador
+
+    private Text txtTotalBalas; // Por ahora con valorMarcador
+
+    private int valorBalas;
 
     private boolean estoySobreUnaPalmera;
 
@@ -293,6 +298,8 @@ public class EscenaViajeEgipto extends EscenaBase {
 
         agregarHUD();
 
+        numeroDeBalas=10;
+
         reloj=0;
 
         contadorTiempo=0;
@@ -310,12 +317,8 @@ public class EscenaViajeEgipto extends EscenaBase {
 
         spriteVidas= new Sprite[3];
 
-        spriteBalas= new Sprite[10];
-
         permiso=true;
         permiso2=true;
-
-        numeroDeBalas=9;
 
         spriteNave=cargarSprite(500, 320, regionNave);
         spriteFondo.attachChild(spriteNave);
@@ -328,47 +331,6 @@ public class EscenaViajeEgipto extends EscenaBase {
 
         spriteVidas[2]= cargarSprite(1200, 750, vidas);
         hud.attachChild(spriteVidas[2]);
-
-
-        spriteBalas[0]= cargarSprite(1100, 600, regionProyectil);
-        spriteBalas[0].setSize(spriteBalas[0].getWidth() - 20, spriteBalas[0].getHeight() - 20);
-        hud.attachChild(spriteBalas[0]);
-
-        spriteBalas[1]= cargarSprite(1100, 550, regionProyectil);
-        spriteBalas[1].setSize(spriteBalas[1].getWidth() - 20, spriteBalas[1].getHeight() - 20);
-        hud.attachChild(spriteBalas[1]);
-
-        spriteBalas[2]= cargarSprite(1100, 500, regionProyectil);
-        spriteBalas[2].setSize(spriteBalas[2].getWidth() - 20, spriteBalas[2].getHeight() - 20);
-        hud.attachChild(spriteBalas[2]);
-
-        spriteBalas[3]= cargarSprite(1100, 450, regionProyectil);
-        spriteBalas[3].setSize(spriteBalas[3].getWidth() - 20, spriteBalas[3].getHeight() - 20);
-        hud.attachChild(spriteBalas[3]);
-
-        spriteBalas[4]= cargarSprite(1100, 400, regionProyectil);
-        spriteBalas[4].setSize(spriteBalas[4].getWidth() - 20, spriteBalas[4].getHeight() - 20);
-        hud.attachChild(spriteBalas[4]);
-
-        spriteBalas[5]= cargarSprite(1100, 350, regionProyectil);
-        spriteBalas[5].setSize(spriteBalas[5].getWidth() - 20, spriteBalas[5].getHeight() - 20);
-        hud.attachChild(spriteBalas[5]);
-
-        spriteBalas[6]= cargarSprite(1100, 300, regionProyectil);
-        spriteBalas[6].setSize(spriteBalas[6].getWidth() - 20, spriteBalas[6].getHeight() - 20);
-        hud.attachChild(spriteBalas[6]);
-
-        spriteBalas[7]= cargarSprite(1100, 250, regionProyectil);
-        spriteBalas[7].setSize(spriteBalas[7].getWidth() - 20, spriteBalas[7].getHeight() - 20);
-        hud.attachChild(spriteBalas[7]);
-
-        spriteBalas[8]= cargarSprite(1100, 200, regionProyectil);
-        spriteBalas[8].setSize(spriteBalas[8].getWidth() - 20, spriteBalas[8].getHeight() - 20);
-        hud.attachChild(spriteBalas[8]);
-
-        spriteBalas[9] = cargarSprite(1100, 150, regionProyectil);
-        spriteBalas[9].setSize(spriteBalas[9].getWidth() - 20, spriteBalas[9].getHeight() - 20);
-        hud.attachChild(spriteBalas[9]);
 
         pisoActual= new Piso(10, 1500, regionPisoFlotante,actividadJuego.getVertexBufferObjectManager(),4,0);
         attachChild(pisoActual);
@@ -403,7 +365,7 @@ public class EscenaViajeEgipto extends EscenaBase {
         agregarBotonSalto();
         agregarBotonDisparar();
 
-        Sprite btnPausa = new Sprite(regionBtnPausa.getWidth(), ControlJuego.ALTO_CAMARA - regionBtnPausa.getHeight(),
+        Sprite btnPausa = new Sprite(100, 710,
                 regionBtnPausa, actividadJuego.getVertexBufferObjectManager()) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -537,8 +499,20 @@ public class EscenaViajeEgipto extends EscenaBase {
         // Marcador/valorMarcador
         txtMarcador = new Text(ControlJuego.ANCHO_CAMARA/2,ControlJuego.ALTO_CAMARA-100,
                 fontMonster,"    0    ",actividadJuego.getVertexBufferObjectManager());
+        txtMarcador.setColor(Color.BLUE);
         hud.attachChild(txtMarcador);
         valorMarcador = 0;
+
+        txtBalas = new Text(1170, 700,
+                fontMonster,"    10    ",actividadJuego.getVertexBufferObjectManager());
+        txtBalas.setColor(Color.BLUE);
+        hud.attachChild(txtBalas);
+        valorBalas = 10;
+
+        txtTotalBalas = new Text(1220, 700,
+                fontMonster,"    /10    ",actividadJuego.getVertexBufferObjectManager());
+        txtTotalBalas.setColor(Color.BLUE);
+        hud.attachChild(txtTotalBalas);
 
         actividadJuego.camara.setHUD(hud);
     }
@@ -577,58 +551,12 @@ public class EscenaViajeEgipto extends EscenaBase {
         Log.i("estoy", spritePersonaje.getX() + "");
 
 
-        if (numeroDeBalas < 9) {
-            contadorTiempo += 1;
-
-            if (contadorTiempo >= 150) {
-                int posicionBala = 8 - numeroDeBalas;
-
-
-                if (posicionBala == 0) {
-                    spriteBalas[0] = cargarSprite(1100, 600, regionProyectil);
-                    spriteBalas[0].setSize(spriteBalas[0].getWidth() - 20, spriteBalas[0].getHeight() - 20);
-                    hud.attachChild(spriteBalas[0]);
-                } else if (posicionBala == 1) {
-                    spriteBalas[1] = cargarSprite(1100, 550, regionProyectil);
-                    spriteBalas[1].setSize(spriteBalas[1].getWidth() - 20, spriteBalas[1].getHeight() - 20);
-                    hud.attachChild(spriteBalas[1]);
-                } else if (posicionBala == 2) {
-                    spriteBalas[2] = cargarSprite(1100, 500, regionProyectil);
-                    spriteBalas[2].setSize(spriteBalas[2].getWidth() - 20, spriteBalas[2].getHeight() - 20);
-                    hud.attachChild(spriteBalas[2]);
-                } else if (posicionBala == 3) {
-                    spriteBalas[3] = cargarSprite(1100, 450, regionProyectil);
-                    spriteBalas[3].setSize(spriteBalas[3].getWidth() - 20, spriteBalas[3].getHeight() - 20);
-                    hud.attachChild(spriteBalas[3]);
-                } else if (posicionBala == 4) {
-                    spriteBalas[4] = cargarSprite(1100, 400, regionProyectil);
-                    spriteBalas[4].setSize(spriteBalas[4].getWidth() - 20, spriteBalas[4].getHeight() - 20);
-                    hud.attachChild(spriteBalas[4]);
-                } else if (posicionBala == 5) {
-                    spriteBalas[5] = cargarSprite(1100, 350, regionProyectil);
-                    spriteBalas[5].setSize(spriteBalas[5].getWidth() - 20, spriteBalas[5].getHeight() - 20);
-                    hud.attachChild(spriteBalas[5]);
-                } else if (posicionBala == 6) {
-                    spriteBalas[6] = cargarSprite(1100, 300, regionProyectil);
-                    spriteBalas[6].setSize(spriteBalas[6].getWidth() - 20, spriteBalas[6].getHeight() - 20);
-                    hud.attachChild(spriteBalas[6]);
-                } else if (posicionBala == 7) {
-                    spriteBalas[7] = cargarSprite(1100, 250, regionProyectil);
-                    spriteBalas[7].setSize(spriteBalas[7].getWidth() - 20, spriteBalas[7].getHeight() - 20);
-                    hud.attachChild(spriteBalas[7]);
-                } else if (posicionBala == 8) {
-                    spriteBalas[8] = cargarSprite(1100, 200, regionProyectil);
-                    spriteBalas[8].setSize(spriteBalas[8].getWidth() - 20, spriteBalas[8].getHeight() - 20);
-                    hud.attachChild(spriteBalas[8]);
-                } else if (posicionBala == 9) {
-                    spriteBalas[9] = cargarSprite(1100, 150, regionProyectil);
-                    spriteBalas[9].setSize(spriteBalas[9].getWidth() - 20, spriteBalas[9].getHeight() - 20);
-                    hud.attachChild(spriteBalas[9]);
-                }
-
-
-                contadorTiempo = 0;
+        if(numeroDeBalas<10){
+            contadorTiempo+=1;
+            if(contadorTiempo>=150){
                 numeroDeBalas++;
+                valorBalas++;
+                contadorTiempo=0;
             }
         }
 
@@ -739,6 +667,8 @@ public class EscenaViajeEgipto extends EscenaBase {
 
         DecimalFormat df = new DecimalFormat("##.##"); // Para formatear 2 decimales
         txtMarcador.setText(df.format(valorMarcador));
+
+        txtBalas.setText(df.format(valorBalas));
 
         actualizarMonedas();
 
@@ -1774,7 +1704,7 @@ public class EscenaViajeEgipto extends EscenaBase {
                 // Prueba colisión
                 if (spritePersonaje.collidesWith(moneda)) {
                     // Desaparecer moneda
-                    animacionTexto();
+                    animacionTexto(moneda.getX(),moneda.getY()+20);
                     desaparecerMoneda(moneda);
                 }
                 // Salen las monedas que han desaparecido
@@ -1798,12 +1728,11 @@ public class EscenaViajeEgipto extends EscenaBase {
                 if (juegoCorriendo) {
                     if(pSceneTouchEvent.isActionDown()){
 
-                        if(numeroDeBalas>=0) {
+                        if(numeroDeBalas>0) {
                             dispararProyectil();
                             admMusica.vibrar(100);
                             admMusica.reproducirMusicaBoton();
-                            int posicionBala=9-numeroDeBalas;
-                            spriteBalas[posicionBala].detachSelf();
+                            valorBalas--;
                             numeroDeBalas--;
                         }
                     }
@@ -1858,19 +1787,18 @@ public class EscenaViajeEgipto extends EscenaBase {
             }
     }
 
-    private void animacionTexto(){
+    private void animacionTexto(float x, float y){
 
         IFont tipo = cargarFont("fonts/monster.ttf");
-        final Text txtPuntos = new Text(spritePersonaje.getX(),spritePersonaje.getY(),tipo,"+$1",12,actividadJuego.getVertexBufferObjectManager());
+        final Text txtPuntos = new Text(x,y,tipo,"+1",12,actividadJuego.getVertexBufferObjectManager());
         txtPuntos.setColor(0,0,0);
         attachChild(txtPuntos);
 
-        MoveYModifier modY = new MoveYModifier(1, txtPuntos.getY(),txtPuntos.getY()+60){
+        MoveYModifier modY = new MoveYModifier(1, txtPuntos.getY(),txtPuntos.getY()+1){
             @Override
             protected void onModifierStarted(IEntity pItem)
             {
                 super.onModifierStarted(pItem);
-
             }
             @Override
             protected void onModifierFinished(IEntity pItem)
