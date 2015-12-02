@@ -49,11 +49,13 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
     private Sprite down;
 
     private Jugador spriteNaveParado;
+    private Jugador spriteNaveMoviendo;
     private Jugador spriteNaveActual;
 
     private int cambiar=0;
 
     private TiledTextureRegion regionNavenimadoParado;
+    private TiledTextureRegion regionNavenimadoMoviendo;
 
     private boolean personajeParado=true;
 
@@ -95,6 +97,7 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
         regionProyectil = cargarImagen("Imagenes/Roman/laser.png");
         regionDisparar=cargarImagen("Imagenes/Roman/boton_fuego.png");
         regionNavenimadoParado = cargarImagenMosaico("Imagenes/Roman/naveStand.png", 800, 267, 1, 2);
+        regionNavenimadoMoviendo = cargarImagenMosaico("Imagenes/Roman/naveMovimiento.png", 435, 181, 1, 1 );
         regionControlDer=cargarImagen("Imagenes/Joystick/derecha_joystick.png");
         regionControlIz=cargarImagen("Imagenes/Joystick/izquiera_joystick.png");
         regionControlUp=cargarImagen("Imagenes/Joystick/arriba_joystick.png");
@@ -118,6 +121,9 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
 
         spriteNaveParado = new Jugador((ControlJuego.ANCHO_CAMARA/2)-200, (ControlJuego.ALTO_CAMARA/4)-20,regionNavenimadoParado, actividadJuego.getVertexBufferObjectManager());
         spriteNaveParado.animate(30);
+
+        spriteNaveMoviendo = new Jugador((ControlJuego.ANCHO_CAMARA/2)-200, (ControlJuego.ALTO_CAMARA/4)-20,regionNavenimadoMoviendo, actividadJuego.getVertexBufferObjectManager());
+
 
         spriteNaveActual=spriteNaveParado;
         attachChild(spriteNaveActual);
@@ -362,6 +368,19 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
             public void onControlChange(BaseOnScreenControl pBaseOnScreenControl, float pValueX, float pValueY) {
 
                 if(juegoCorriendo){
+
+                    if(pValueX!=0){
+                        spriteNaveMoviendo.setPosition(spriteNaveActual);
+                        spriteNaveActual.detachSelf();
+                        spriteNaveActual=spriteNaveMoviendo;
+                        attachChild(spriteNaveActual);
+                    }
+                    else{
+                        spriteNaveParado.setPosition(spriteNaveActual);
+                        spriteNaveActual.detachSelf();
+                        spriteNaveActual=spriteNaveParado;
+                        attachChild(spriteNaveActual);
+                    }
                     if(pValueX>0){
                         der.setAlpha(1);
                         iz.setAlpha(0.001f);

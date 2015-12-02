@@ -250,11 +250,33 @@ public class EscenaAleatoriedad extends EscenaBase {
         spritebtnMusica=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-45, regionMenuMusica);
         escenaPausa.attachChild(spritebtnMusica);
 
-        spritebtnContinuar=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2 + 300, regionMenuContinuar);
+        spritebtnContinuar = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2 + 300,
+                regionMenuContinuar, actividadJuego.getVertexBufferObjectManager()) {
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if (pSceneTouchEvent.isActionUp()) {
+                    pausarJuego();
+                }
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
         escenaPausa.attachChild(spritebtnContinuar);
+        escenaPausa.registerTouchArea(spritebtnContinuar);
 
-        spritebtnIrAMenu=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-300, regionIrAMenu);
+        spritebtnIrAMenu = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-300,
+                regionIrAMenu, actividadJuego.getVertexBufferObjectManager()) {
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if (pSceneTouchEvent.isActionUp()) {
+                    admEscenas.liberarEscenaAleatoriedad();
+                    admEscenas.crearEscenaMenu();
+                    admEscenas.setEscena(TipoEscena.ESCENA_MENU);
+                }
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
         escenaPausa.attachChild(spritebtnIrAMenu);
+        escenaPausa.registerTouchArea(spritebtnIrAMenu);
 
         if (musicaEncendida == true) {
             spritebtnOff = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 155, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOffoff);
