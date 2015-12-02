@@ -159,6 +159,10 @@ public class EscenaOdiseaPirata extends EscenaBase {
     @Override
     public void crearEscena() {
 
+        actividadJuego.camara.setHUD(new HUD());
+
+        actividadJuego.camara.setCenter(640,400);
+
  // Fondo animado
         AutoParallaxBackground fondoAnimado = new AutoParallaxBackground(1, 1, 1, 5);
 

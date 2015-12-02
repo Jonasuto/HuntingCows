@@ -2,11 +2,13 @@ package mx.itesm.rmroman.proyectobasegpo01;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
@@ -108,6 +110,8 @@ public class EscenaMenu extends EscenaBase
     @Override
     public void crearEscena() {
         // Creamos el sprite de manera óptima
+        actividadJuego.camara.setCenter(640,400);
+
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionFondo);
 
         // Crea el fondo de la pantalla
@@ -122,6 +126,8 @@ public class EscenaMenu extends EscenaBase
         //admMusica.cargarMusicaBoton();
 
         agregarMenu();
+
+        actividadJuego.camara.setHUD(new HUD());
     }
 
 
@@ -150,8 +156,6 @@ public class EscenaMenu extends EscenaBase
         IMenuItem opcionBotonComics = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_COMICS,
                 regionBtnComic, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
-        IMenuItem opcionContinuarJuego = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_CONTINUAR_JUEGO,
-                regionBtnContinuarJuego, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
 
         // Agrega las opciones al menú
@@ -161,7 +165,6 @@ public class EscenaMenu extends EscenaBase
         menu.addMenuItem(opcionMusica);
         menu.addMenuItem(opcionBotonArcade);
         menu.addMenuItem(opcionBotonComics);
-        menu.addMenuItem(opcionContinuarJuego);
 
         // que es esto??
 
@@ -173,31 +176,36 @@ public class EscenaMenu extends EscenaBase
         // Ubicar las opciones DENTRO del menú. El centro del menú es (0,0)
 
         if(tipoMenu==4) {
-            opcionAcercaDe.setPosition(540, 320);
-            opcionJugar.setPosition(-320, 226);
-            opcionBotonRojo.setPosition(540, -340);
-            opcionMusica.setPosition(-570, 310);
-            opcionBotonArcade.setPosition(-480, 10);
-            opcionBotonComics.setPosition(-320, -70);
-            opcionContinuarJuego.setPosition(-290, 126);
+            opcionAcercaDe.setPosition(-550, 340);
+            opcionJugar.setPosition(200, 200);
+            opcionBotonRojo.setPosition(550, -340);
+            opcionMusica.setPosition(550, 350);
+            opcionBotonArcade.setPosition(450, 0);
+            opcionBotonComics.setPosition(200, -200);
         }
         else if(tipoMenu==2){
-            opcionAcercaDe.setPosition(-570, -320);
-            opcionJugar.setPosition(360, 220);
-            opcionBotonRojo.setPosition(520, -340);
-            opcionMusica.setPosition(-570, 310);
-            opcionBotonArcade.setPosition(430, -60);
-            opcionBotonComics.setPosition(-570, -370);
-            opcionContinuarJuego.setPosition(90, 95);
+            opcionAcercaDe.setPosition(-550, 340);
+            opcionJugar.setPosition(200, 200);
+            opcionBotonRojo.setPosition(550, -340);
+            opcionMusica.setPosition(550, 350);
+            opcionBotonArcade.setPosition(450, 0);
+            opcionBotonComics.setPosition(200, -200);
         }
-        else{
-            opcionAcercaDe.setPosition(-570, -320);
-            opcionJugar.setPosition(360, 220);
-            opcionBotonRojo.setPosition(520, -340);
-            opcionMusica.setPosition(-570, 310);
-            opcionBotonArcade.setPosition(210, -60);
-            opcionBotonComics.setPosition(90, 95);
-            opcionContinuarJuego.setPosition(430, -60);
+        else if(tipoMenu==3){
+            opcionAcercaDe.setPosition(-550, 340);
+            opcionJugar.setPosition(200, 200);
+            opcionBotonRojo.setPosition(550, -340);
+            opcionMusica.setPosition(550, 350);
+            opcionBotonArcade.setPosition(450, 0);
+            opcionBotonComics.setPosition(200, -200);
+        }
+        else if(tipoMenu==1){
+            opcionAcercaDe.setPosition(-550, 340);
+            opcionJugar.setPosition(200, 200);
+            opcionBotonRojo.setPosition(550, -340);
+            opcionMusica.setPosition(550, 350);
+            opcionBotonArcade.setPosition(450, 0);
+            opcionBotonComics.setPosition(200, -200);
         }
 
         // Registra el Listener para atender las opciones
@@ -273,6 +281,8 @@ public class EscenaMenu extends EscenaBase
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed);
 
+
+        Log.i("estoy",actividadJuego.camara.getCenterX()+"-- "+actividadJuego.camara.getCenterY());
     }
 
 

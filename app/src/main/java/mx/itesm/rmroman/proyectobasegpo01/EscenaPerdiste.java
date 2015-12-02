@@ -1,4 +1,5 @@
 package mx.itesm.rmroman.proyectobasegpo01;
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
@@ -35,6 +36,11 @@ public class EscenaPerdiste extends EscenaBase
     // Arma la escena que se presentará en pantalla
     @Override
     public void crearEscena() {
+
+        actividadJuego.camara.setHUD(new HUD());
+
+        actividadJuego.camara.setCenter(640,400);
+
         // Crea el(los) sprite(s) de la escena
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2,
                 regionFondo);
@@ -52,6 +58,11 @@ public class EscenaPerdiste extends EscenaBase
                     if(num==1){
                         admEscenas.liberarEscenaPerdiste();
                         admEscenas.crearEscenaCargando(1);
+                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
+                    }
+                    else if(num==2){
+                        admEscenas.liberarEscenaPerdiste();
+                        admEscenas.crearEscenaCargando(2);
                         admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
                     }
                 }

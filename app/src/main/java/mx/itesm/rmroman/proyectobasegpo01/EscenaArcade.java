@@ -1,4 +1,5 @@
 package mx.itesm.rmroman.proyectobasegpo01;
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
@@ -56,6 +57,11 @@ public class EscenaArcade extends EscenaBase
 
     @Override
     public void crearEscena() {
+
+        actividadJuego.camara.setCenter(640,400);
+
+        actividadJuego.camara.setHUD(new HUD());
+
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
         attachChild(spriteFondo);
 

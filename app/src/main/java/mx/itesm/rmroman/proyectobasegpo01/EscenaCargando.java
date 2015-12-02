@@ -1,5 +1,6 @@
 package mx.itesm.rmroman.proyectobasegpo01;
 
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.background.Background;
@@ -63,6 +64,11 @@ public class EscenaCargando extends EscenaBase
 
     @Override
     public void crearEscena() {
+
+        actividadJuego.camara.setHUD(new HUD());
+
+        actividadJuego.camara.setCenter(640,400);
+
         // Crea el(los) sprite(s) de la escena
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2,
                 regionFondo);
@@ -88,6 +94,11 @@ public class EscenaCargando extends EscenaBase
                             admEscenas.liberarEscenaCargando();
                             admEscenas.crearEscenaCazaJurasica();
                             admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA);
+                        }
+                        else if(decision==2){
+                            admEscenas.liberarEscenaCargando();
+                            admEscenas.crearEscenaCazaJurasicaLvl2();
+                            admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_LVL2);
                         }
 
                     }

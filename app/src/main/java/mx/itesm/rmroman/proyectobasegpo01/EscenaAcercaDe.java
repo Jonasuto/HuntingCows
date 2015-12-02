@@ -1,4 +1,5 @@
 package mx.itesm.rmroman.proyectobasegpo01;
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -30,6 +31,9 @@ public class EscenaAcercaDe extends mx.itesm.rmroman.proyectobasegpo01.EscenaBas
 
     @Override
     public void crearEscena() {
+
+        actividadJuego.camara.setCenter(640,400);
+        actividadJuego.camara.setHUD(new HUD());
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
         attachChild(spriteFondo);
         //admMusica.cargarMusica(1);

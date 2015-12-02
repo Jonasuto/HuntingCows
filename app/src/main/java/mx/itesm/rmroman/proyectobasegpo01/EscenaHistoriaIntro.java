@@ -1,4 +1,5 @@
 package mx.itesm.rmroman.proyectobasegpo01;
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
@@ -70,6 +71,10 @@ public class EscenaHistoriaIntro extends EscenaBase
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
         attachChild(spriteFondo);
         agregarMenu();
+        actividadJuego.camara.setHUD(new HUD());
+
+        actividadJuego.camara.setCenter(640,400);
+
     }
 
     private void agregarMenu() {

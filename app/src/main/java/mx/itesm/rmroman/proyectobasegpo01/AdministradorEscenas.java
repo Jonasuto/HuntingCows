@@ -35,6 +35,7 @@ public class AdministradorEscenas {
     private EscenaBase escenaMundosCazaJurasica;
     private EscenaBase escenaCazaJurasicaRunner;
     private EscenaBase escenaPirata;
+    private EscenaBase escenaJurasicaLvl2;
 
     private boolean cazaJurasicaDesbloqueado=false;
 
@@ -123,9 +124,6 @@ public class AdministradorEscenas {
             case ESCENA_INTRO_CAZA_JURASICA:
                 setEscenaBase(escenaIntroCazaJurasica);
                 break;
-            case ESCENA_CAZA_JURASICA_NIVEL_2:
-                setEscenaBase(escenaCazaJurasicaNivel2);
-                break;
             case ESCENA_HISTORIA_CAZA_JURASICA:
                 setEscenaBase(escenaHistoriaCazaJurasica);
                 break;
@@ -144,20 +142,17 @@ public class AdministradorEscenas {
             case ESCENA_ALEATORIEDAD:
                 setEscenaBase(escenaAleatoriedad);
                 break;
-            case ESCENA_LABERINTO_UNO:
-                setEscenaBase(escenaLaberintoUno);
-                break;
             case ESCENA_VIAJE_EGIPTO:
                 setEscenaBase(escenaViajeEgipto);
                 break;
             case ESCENA_MUNDOS_CAZA_JURASICA:
                 setEscenaBase(escenaMundosCazaJurasica);
                 break;
-            case ESCENA_CAZA_JURASICA_RUNNER:
-                setEscenaBase(escenaCazaJurasicaRunner);
-                break;
             case ESCENA_PIRATA:
                 setEscenaBase(escenaPirata);
+                break;
+            case ESCENA_CAZA_JURASICA_LVL2:
+                setEscenaBase(escenaJurasicaLvl2);
                 break;
         }
     }
@@ -174,6 +169,17 @@ public class AdministradorEscenas {
         escenaSplash = null;
     }
 
+    public void crearEscenaCazaJurasicaLvl2() {
+        // Carga los recursos
+        escenaJurasicaLvl2 = new mx.itesm.rmroman.proyectobasegpo01.EscenaCazaJurasicaLvl2();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaCazaJurasicaLvl2() {
+        escenaJurasicaLvl2.liberarEscena();
+        escenaJurasicaLvl2 = null;
+    }
+
     public void crearEscenaPirata() {
         // Carga los recursos
         escenaPirata = new mx.itesm.rmroman.proyectobasegpo01.EscenaOdiseaPirata();
@@ -185,16 +191,6 @@ public class AdministradorEscenas {
         escenaPirata = null;
     }
 
-    public void crearEscenaCazaJurasicaRunner() {
-        // Carga los recursos
-        escenaCazaJurasicaRunner= new mx.itesm.rmroman.proyectobasegpo01.EscenaCazaJurasicaRunner();
-    }
-
-    //*** Libera la escena de Splash
-    public void liberarEscenaCazaJurasicaRunner() {
-        escenaCazaJurasicaRunner.liberarEscena();
-        escenaCazaJurasicaRunner = null;
-    }
 
     public void crearEscenaMundosCazaJurasica() {
         // Carga los recursos
@@ -218,16 +214,6 @@ public class AdministradorEscenas {
         escenaViajeEgipto = null;
     }
 
-    public void crearEscenaLaberintoUno() {
-        // Carga los recursos
-        escenaLaberintoUno = new mx.itesm.rmroman.proyectobasegpo01.EscenaLaberintoUno();
-    }
-
-    //*** Libera la escena de Splash
-    public void liberarEscenaLaberintoUno() {
-        escenaLaberintoUno.liberarEscena();
-        escenaLaberintoUno = null;
-    }
 
     public void crearEscenaAleatoriedad() {
         // Carga los recursos
@@ -251,20 +237,9 @@ public class AdministradorEscenas {
         escenaArcade = null;
     }
 
-    public void crearEscenaPeleaBossCazaJurasica() {
+    public void crearEscenaGanaste(int da) {
         // Carga los recursos
-        escenaPeleaBossCazaJurasica = new mx.itesm.rmroman.proyectobasegpo01.EscenaPeleaBossCazaJurasica();
-    }
-
-    //*** Libera la escena de Splash
-    public void liberarEscenaPeleaBossCazaJurasica() {
-        escenaPeleaBossCazaJurasica.liberarEscena();
-        escenaPeleaBossCazaJurasica = null;
-    }
-
-    public void crearEscenaGanaste() {
-        // Carga los recursos
-        escenaGanaste = new mx.itesm.rmroman.proyectobasegpo01.EscenaGanaste();
+        escenaGanaste = new mx.itesm.rmroman.proyectobasegpo01.EscenaGanaste(da);
     }
 
     //*** Libera la escena de Splash
@@ -293,17 +268,6 @@ public class AdministradorEscenas {
     public void liberarEscenaHistoriaCazaJurasica() {
         escenaHistoriaCazaJurasica.liberarEscena();
         escenaHistoriaCazaJurasica = null;
-    }
-
-    public void crearEscenaCazaJurasicaNivel2() {
-        // Carga los recursos
-        escenaCazaJurasicaNivel2 = new mx.itesm.rmroman.proyectobasegpo01.EscenaCazaJurasicaNivel2();
-    }
-
-    //*** Libera la escena de Splash
-    public void liberarEscenaCazaJurasicaNivel2() {
-        escenaCazaJurasicaNivel2.liberarEscena();
-        escenaCazaJurasicaNivel2 = null;
     }
 
     public void crearEscenaIntroCazaJurasica() {

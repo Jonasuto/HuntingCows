@@ -49,6 +49,7 @@ public class EscenaCazaJurasica extends EscenaBase {
     private ITextureRegion regionPua;
     private ITextureRegion regionPicos;
 
+    private boolean terminoelJuego=false;
     private Random elQueSigue;
 
     private boolean permiso;
@@ -278,6 +279,10 @@ public class EscenaCazaJurasica extends EscenaBase {
 
         yaBajo=false;
 
+        actividadJuego.camara.setHUD(new HUD());
+
+        actividadJuego.camara.setCenter(640,400);
+
         agregarHUD();
 
         reloj=0;
@@ -367,8 +372,6 @@ public class EscenaCazaJurasica extends EscenaBase {
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.isActionDown()) {
                     pausarJuego();
-
-
                     /*if(admMusica.getMusicaEncendida()==true) {
                         admMusica.reproduceio();
                     }*/
@@ -398,7 +401,7 @@ public class EscenaCazaJurasica extends EscenaBase {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.isActionUp()) {
-                    onBackKeyPressed();
+                    pausarJuego();
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
@@ -671,10 +674,10 @@ public class EscenaCazaJurasica extends EscenaBase {
         actualizarProyectilesEnemigo();
 
         if(spritePersonaje.collidesWith(spriteHoyoNegro)){
-            admEscenas.setcazaJurasicaDesbloqueado(true);
+            terminoelJuego=true;
             admEscenas.liberarEscenaCazaJurasica();
-            admEscenas.crearEscenaCazaJurasicaNivel2();
-            admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_NIVEL_2);
+            admEscenas.crearEscenaCazaJurasicaLvl2();
+            admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_LVL2);
         }
 
         if(gravedad==true && nubecita==false){
@@ -791,6 +794,7 @@ public class EscenaCazaJurasica extends EscenaBase {
             if (spritePersonaje.collidesWith(enemigo)) {
 
                 if(cantidadVida -1<0){
+                    terminoelJuego=true;
                     admEscenas.liberarEscenaCazaJurasica();
                     admEscenas.crearEscenaPerdiste(1);
                     admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
@@ -817,6 +821,7 @@ public class EscenaCazaJurasica extends EscenaBase {
 
                         }
                         else{
+                            terminoelJuego=true;
                             admEscenas.liberarEscenaCazaJurasica();
                             admEscenas.crearEscenaPerdiste(1);
                             admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
@@ -888,6 +893,7 @@ public class EscenaCazaJurasica extends EscenaBase {
             if (proyectil.collidesWith(spritePersonaje)) {
                 // Baja puntos/vida
                 if(cantidadVida-1<0){
+                    terminoelJuego=true;
                     admEscenas.liberarEscenaCazaJurasica();
                     admEscenas.crearEscenaPerdiste(1);
                     admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
@@ -910,6 +916,7 @@ public class EscenaCazaJurasica extends EscenaBase {
                             cantidadVida--;
                         }
                         else{
+                            terminoelJuego=true;
                             admEscenas.liberarEscenaCazaJurasica();
                             admEscenas.crearEscenaPerdiste(1);
                             admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
@@ -941,7 +948,9 @@ public class EscenaCazaJurasica extends EscenaBase {
     public void liberarRecursos() {
 
         //admMusica.liberarMusica();
-        actividadJuego.getEngine().disableAccelerationSensor(actividadJuego);
+        btnDisparar.detachSelf();
+        hud.detachChildren();
+        hud.detachSelf();
         regionFondo.getTexture().unload();
         regionFondo=null;
         regionNave.getTexture().unload();
@@ -1670,7 +1679,7 @@ public class EscenaCazaJurasica extends EscenaBase {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 
-                if (juegoCorriendo) {
+                if (juegoCorriendo && terminoelJuego==false) {
                     if(pSceneTouchEvent.isActionDown()){
                         if(numeroDeBalas>0) {
                             dispararProyectil();

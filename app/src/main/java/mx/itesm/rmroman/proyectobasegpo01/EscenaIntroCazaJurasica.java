@@ -273,6 +273,10 @@ public class EscenaIntroCazaJurasica extends EscenaBase {
         spriteOnFinal.setAlpha(0.2f);
         escenaPausa.attachChild(spriteOnFinal);
         registerTouchArea(spriteOnFinal);
+
+        actividadJuego.camara.setHUD(new HUD());
+
+        actividadJuego.camara.setCenter(640,400);
     }
 
     @Override

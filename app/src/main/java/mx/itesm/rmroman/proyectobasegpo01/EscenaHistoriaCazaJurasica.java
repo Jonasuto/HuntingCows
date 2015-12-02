@@ -2,6 +2,7 @@ package mx.itesm.rmroman.proyectobasegpo01;
 import android.view.MotionEvent;
 import android.view.View;
 
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
@@ -58,6 +59,11 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
 
     @Override
     public void crearEscena() {
+
+        actividadJuego.camara.setHUD(new HUD());
+
+        actividadJuego.camara.setCenter(640,400);
+
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
         attachChild(spriteFondo);
         agregarMenu();

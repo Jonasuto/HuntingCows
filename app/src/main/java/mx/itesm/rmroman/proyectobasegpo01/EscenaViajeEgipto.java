@@ -274,8 +274,13 @@ public class EscenaViajeEgipto extends EscenaBase {
         unicoQuePersigue=false;
     }
 
+
     @Override
     public void crearEscena() {
+
+        actividadJuego.camara.setHUD(new HUD());
+
+        actividadJuego.camara.setCenter(640,400);
 
         estoySaltando=false;
 

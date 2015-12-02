@@ -148,6 +148,10 @@ public class EscenaAleatoriedad extends EscenaBase {
 
         reloj=0;
 
+        actividadJuego.camara.setCenter(640,400);
+
+        actividadJuego.camara.setHUD(new HUD());
+
         contadorTiempo=0;
 
         numMagico=0;
@@ -394,9 +398,9 @@ public class EscenaAleatoriedad extends EscenaBase {
         }
 
         if(spritePersonaje.collidesWith(spriteHoyoNegro)){
-            admEscenas.liberarEscenaCazaJurasica();
-            admEscenas.crearEscenaCazaJurasicaNivel2();
-            admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_NIVEL_2);
+            admEscenas.liberarEscenaAleatoriedad();
+            admEscenas.crearEscenaPirata();
+            admEscenas.setEscena(TipoEscena.ESCENA_PIRATA);
         }
     }
 

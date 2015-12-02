@@ -1,5 +1,6 @@
 package mx.itesm.rmroman.proyectobasegpo01;
 
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
@@ -29,6 +30,11 @@ public class EscenaMundosCazaJurasica extends EscenaBase {
     // Arma la escena que se presentará en pantalla
     @Override
     public void crearEscena() {
+
+        actividadJuego.camara.setHUD(new HUD());
+
+        actividadJuego.camara.setCenter(640,400);
+
         // Crea el(los) sprite(s) de la escena
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2,
                 regionFondo);
@@ -61,8 +67,8 @@ public class EscenaMundosCazaJurasica extends EscenaBase {
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.isActionUp()) {
                     admEscenas.liberarEscenaMundosCazaJurasica();
-                    admEscenas.crearEscenaCazaJurasicaNivel2();
-                    admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_NIVEL_2);
+                    admEscenas.crearEscenaCazaJurasicaLvl2();
+                    admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_LVL2);
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
@@ -84,21 +90,6 @@ public class EscenaMundosCazaJurasica extends EscenaBase {
         };
         attachChild(Nivel3);
         registerTouchArea(Nivel3);
-
-        Sprite Nivel4 = new Sprite(ControlJuego.ANCHO_CAMARA / 2-300, ControlJuego.ALTO_CAMARA / 2-300,
-                regionPlaneta, actividadJuego.getVertexBufferObjectManager()) {
-            @Override
-            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                if (pSceneTouchEvent.isActionUp()) {
-                    admEscenas.liberarEscenaMundosCazaJurasica();
-                    admEscenas.crearEscenaCazaJurasicaRunner();
-                    admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_RUNNER);
-                }
-                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-            }
-        };
-        attachChild(Nivel4);
-        registerTouchArea(Nivel4);
 
     }
 
