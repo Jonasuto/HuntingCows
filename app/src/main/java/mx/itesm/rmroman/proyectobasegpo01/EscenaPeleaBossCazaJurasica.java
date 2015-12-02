@@ -104,7 +104,7 @@ public class EscenaPeleaBossCazaJurasica extends EscenaBase {
         setBackground(fondo);
         setBackgroundEnabled(true);
 
-        admMusica.cargarMusica(0);
+        //admMusica.cargarMusica(0);
 
         spriteBase= cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/4, regionBase);
         spriteFondo.attachChild(spriteBase);
@@ -195,7 +195,7 @@ public class EscenaPeleaBossCazaJurasica extends EscenaBase {
                 }
                 else{
                     superSalto=false;
-                    admMusica.vibrar(100);
+                    //admMusica.vibrar(100);
                     spriteEnemigoBossFinal.setBrincando(false);
                     temblor=true;
                 }
@@ -242,7 +242,7 @@ public class EscenaPeleaBossCazaJurasica extends EscenaBase {
     @Override
     public void liberarRecursos() {
         // Estas dos instrucciones por cada región inicializada
-        admMusica.liberarMusica();
+        //admMusica.liberarMusica();
         regionFondo.getTexture().unload();
         regionFondo = null;
     }

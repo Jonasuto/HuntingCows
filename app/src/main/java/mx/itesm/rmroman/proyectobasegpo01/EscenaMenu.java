@@ -118,8 +118,8 @@ public class EscenaMenu extends EscenaBase
         // Mostrar un recuadro atrás del menú
         // Mostrar opciones de menú
 
-        admMusica.cargarMusica(4);
-        admMusica.cargarMusicaBoton();
+        //admMusica.cargarMusica(4);
+        //admMusica.cargarMusicaBoton();
 
         agregarMenu();
     }
@@ -225,19 +225,16 @@ public class EscenaMenu extends EscenaBase
                         break;
 
                     case OPCION_MUSICA:
-                        admEscenas.liberarEscenaMenu();
-                        admEscenas.crearEscenaAjustes();
-                        admEscenas.setEscena(TipoEscena.ESCENA_AJUSTES);
 
                         break;
 
                     case OPCION_BOTON_ROJO:
                         // Mostrar la escena de AcercaDe
-                        admMusica.vibrar(90);
-                        admMusica.reproducirMusicaBoton();
+                        //admMusica.vibrar(90);
+                        //admMusica.reproducirMusicaBoton();
                         admEscenas.liberarEscenaMenu();
-                        admEscenas.crearEscenaCazaJurasicaRunner();
-                        admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_RUNNER);
+                        admEscenas.crearEscenaPirata();
+                        admEscenas.setEscena(TipoEscena.ESCENA_PIRATA);
 
                         break;
 
@@ -257,8 +254,8 @@ public class EscenaMenu extends EscenaBase
 
                     case OPCION_CONTINUAR_JUEGO:
                         // Mostrar la escena de AcercaDe
-                        admMusica.vibrar(250);
-                        admMusica.reproducirMusicaBoton();
+                        //admMusica.vibrar(250);
+                        //admMusica.reproducirMusicaBoton();
                         break;
                 }
 
@@ -299,7 +296,7 @@ public class EscenaMenu extends EscenaBase
 
     @Override
     public void liberarRecursos() {
-        admMusica.liberarMusica();
+        //admMusica.liberarMusica();
         regionFondo.getTexture().unload();
         regionFondo = null;
     }

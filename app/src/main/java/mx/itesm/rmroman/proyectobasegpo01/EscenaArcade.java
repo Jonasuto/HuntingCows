@@ -70,7 +70,7 @@ public class EscenaArcade extends EscenaBase
                         admEscenas.setEscena(TipoEscena.ESCENA_MUNDOS_CAZA_JURASICA);
                     }
                     else if(contadorSlide==1) {
-                        admMusica.vibrar(90);
+                        //admMusica.vibrar(90);
                     }
                     else {
                         admEscenas.liberarEscenaArcade();

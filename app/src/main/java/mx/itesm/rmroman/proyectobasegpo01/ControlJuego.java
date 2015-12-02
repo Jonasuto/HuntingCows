@@ -40,7 +40,8 @@ public class ControlJuego extends SimpleBaseGameActivity
     // El administrador de escenas (se encarga de cambiar las escenas)
 
     private mx.itesm.rmroman.proyectobasegpo01.AdministradorEscenas admEscenas;
-    private mx.itesm.rmroman.proyectobasegpo01.AdministradorMusica admMusica;
+
+    //private mx.itesm.rmroman.proyectobasegpo01.AdministradorMusica admMusica;
 
     @Override
     protected void onCreate(Bundle pSavedInstanceState) {
@@ -95,7 +96,7 @@ public class ControlJuego extends SimpleBaseGameActivity
         mx.itesm.rmroman.proyectobasegpo01.AdministradorEscenas.inicializarAdministrador(this, mEngine);
         // Obtenemos la referencia al objeto administrador
         admEscenas = mx.itesm.rmroman.proyectobasegpo01.AdministradorEscenas.getInstance();
-        mx.itesm.rmroman.proyectobasegpo01.AdministradorMusica.inicializarAdministrador(mEngine, this);
+        //mx.itesm.rmroman.proyectobasegpo01.AdministradorMusica.inicializarAdministrador(mEngine, this);
     }
 
     // Regresa la escena inicial.

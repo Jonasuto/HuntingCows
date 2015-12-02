@@ -34,6 +34,7 @@ public class AdministradorEscenas {
     private EscenaBase escenaViajeEgipto;
     private EscenaBase escenaMundosCazaJurasica;
     private EscenaBase escenaCazaJurasicaRunner;
+    private EscenaBase escenaPirata;
 
     private boolean cazaJurasicaDesbloqueado=false;
 
@@ -155,6 +156,9 @@ public class AdministradorEscenas {
             case ESCENA_CAZA_JURASICA_RUNNER:
                 setEscenaBase(escenaCazaJurasicaRunner);
                 break;
+            case ESCENA_PIRATA:
+                setEscenaBase(escenaPirata);
+                break;
         }
     }
 
@@ -168,6 +172,17 @@ public class AdministradorEscenas {
     public void liberarEscenaSplash() {
         escenaSplash.liberarEscena();
         escenaSplash = null;
+    }
+
+    public void crearEscenaPirata() {
+        // Carga los recursos
+        escenaPirata = new mx.itesm.rmroman.proyectobasegpo01.EscenaOdiseaPirata();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaPirata() {
+        escenaPirata.liberarEscena();
+        escenaPirata = null;
     }
 
     public void crearEscenaCazaJurasicaRunner() {
@@ -258,9 +273,9 @@ public class AdministradorEscenas {
         escenaGanaste = null;
     }
 
-    public void crearEscenaPerdiste() {
+    public void crearEscenaPerdiste(int num) {
         // Carga los recursos
-        escenaPerdiste = new mx.itesm.rmroman.proyectobasegpo01.EscenaGanaste();
+        escenaPerdiste = new mx.itesm.rmroman.proyectobasegpo01.EscenaPerdiste(num);
     }
 
     //*** Libera la escena de Splash
@@ -386,17 +401,4 @@ public class AdministradorEscenas {
         escenaCargando.liberarEscena();
         escenaCargando = null;
     }
-
-    public void crearEscenaAjustes() {
-        // Carga los recursos
-        escenaAjustes = new EscenaAjustes();
-    }
-
-    //*** Libera la escena de cargando
-    public void liberarEscenaAjustes() {
-        escenaAjustes.liberarEscena();
-        escenaAjustes = null;
-    }
-
-
 }

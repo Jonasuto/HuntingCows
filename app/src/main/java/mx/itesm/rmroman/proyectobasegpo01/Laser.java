@@ -19,6 +19,8 @@ public class Laser extends Sprite {
     private Random aleatorio;
     private int movimiento;
 
+    private boolean yaDespegue;
+
 
     public Laser(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager,boolean volteandoDerecha,boolean disparoOvni) {
         super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
@@ -26,6 +28,7 @@ public class Laser extends Sprite {
         this.disparoOvni=disparoOvni;
         aleatorio= new Random();
         movimiento=aleatorio.nextInt(3);
+        yaDespegue=false;
     }
 
     public void mover(){
@@ -55,5 +58,13 @@ public class Laser extends Sprite {
                 this.setX(this.getX() + 20);
             }
         }
+    }
+
+    public boolean getYaDespegue(){
+        return this.yaDespegue;
+    }
+
+    public void setYaDespegue(boolean yaDespegue){
+        this.yaDespegue=yaDespegue;
     }
 }

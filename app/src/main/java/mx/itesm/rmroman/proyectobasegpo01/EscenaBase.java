@@ -35,13 +35,13 @@ public abstract class EscenaBase extends Scene
 
 
 
-    protected AdministradorMusica admMusica;
+    //protected AdministradorMusica admMusica;
 
 
 
     public EscenaBase() {
         admEscenas = AdministradorEscenas.getInstance();
-        admMusica = AdministradorMusica.getInstance();
+        //admMusica = AdministradorMusica.getInstance();
 
 
         // Llama al método que crea la escena

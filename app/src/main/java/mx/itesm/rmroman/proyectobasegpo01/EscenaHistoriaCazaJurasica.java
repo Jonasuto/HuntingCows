@@ -8,6 +8,7 @@ import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.util.adt.color.Color;
 
 /**
  * Created by rmroman on 11/09/15.
@@ -21,6 +22,7 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
     private ITextureRegion regionsiguiente;
     private ITextureRegion regionanterior;
     private ITextureRegion regionfinal;
+    private ITextureRegion regionMenu;
 
     private int contadorSlide;
 
@@ -29,6 +31,7 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
     private final int OPCION_SIGUIENTE = 0;
     private final int OPCION_ANTERIOR = 1;
     private final int OPCION_FINAL = 2;
+    private final int OPCION_MENU = 3;
 
     private MenuScene menu;
 
@@ -49,6 +52,7 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
         regionsiguiente = cargarImagen("Imagenes/Historia/comic_next.png");
         regionanterior = cargarImagen("Imagenes/Historia/comic_prev.png");
         regionfinal = cargarImagen("Imagenes/Historia/comic_skip.png");
+        regionMenu = cargarImagen("Imagenes/menu.png");
         contadorSlide=0;
     }
 
@@ -72,14 +76,18 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
         IMenuItem opcionanterior = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_ANTERIOR,
                 regionanterior, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
-        IMenuItem opcionafinal = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_FINAL,
+        final IMenuItem opcionafinal = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_FINAL,
                 regionfinal, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
+
+        final IMenuItem opcionMenu = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_MENU,
+                regionMenu, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
 
         // Agrega las opciones al menú
         menu.addMenuItem(opcionSiguiente);
         menu.addMenuItem(opcionanterior);
         menu.addMenuItem(opcionafinal);
+        menu.addMenuItem(opcionMenu);
 
         // que es esto??
 
@@ -94,6 +102,8 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
         opcionanterior.setPosition(-450, -350);
 
         opcionafinal.setPosition(450,350);
+        opcionMenu.setPosition(-450,300);
+        opcionMenu.setColor(Color.WHITE);
 
 
         // Registra el Listener para atender las opciones
@@ -108,6 +118,18 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
                         // Mostrar la escena de AcercaDe
                         if (contadorSlide < regionSlides.length-1) {
                             contadorSlide++;
+                            if (contadorSlide == 1) {
+                                opcionMenu.setPosition(-450,250);
+                            }
+                            else{
+                                opcionMenu.setPosition(-450,315);
+                            }
+                            if (contadorSlide == 2) {
+                                opcionafinal.setPosition(450,270);
+                            }
+                            else{
+                                opcionafinal.setPosition(450,350);
+                            }
                             regionSlideActual = regionSlides[contadorSlide];
                             spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
                             attachChild(spriteFondo);
@@ -126,6 +148,18 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
                         // Mostrar la escena de AcercaDe
                         if (contadorSlide > 0) {
                             contadorSlide--;
+                            if (contadorSlide == 1) {
+                                opcionMenu.setPosition(-450,250);
+                            }
+                            else{
+                                opcionMenu.setPosition(-450,315);
+                            }
+                            if (contadorSlide == 2) {
+                                opcionafinal.setPosition(450,270);
+                            }
+                            else{
+                                opcionafinal.setPosition(450,350);
+                            }
                             regionSlideActual = regionSlides[contadorSlide];
                             spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
                             attachChild(spriteFondo);
@@ -142,6 +176,12 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
 
                         return true;
 
+                    case OPCION_MENU:
+
+                        onBackKeyPressed();
+
+                        return true;
+
                 }
                 return true;
             }
@@ -155,8 +195,8 @@ public class EscenaHistoriaCazaJurasica extends EscenaBase
     public void onBackKeyPressed() {
         // Regresar al menú principal
         admEscenas.crearEscenaMenu();
-        admEscenas.setEscena(TipoEscena.ESCENA_MENU);
-        admEscenas.liberarEscenaHistoriaIntro();
+        admEscenas.setEscena(mx.itesm.rmroman.proyectobasegpo01.TipoEscena.ESCENA_MENU);
+        admEscenas.liberarEscenaHistoriaCazaJurasica();
     }
 
     @Override

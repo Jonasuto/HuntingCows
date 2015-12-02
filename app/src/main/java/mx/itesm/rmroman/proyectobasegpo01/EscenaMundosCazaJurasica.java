@@ -38,7 +38,7 @@ public class EscenaMundosCazaJurasica extends EscenaBase {
         setBackground(fondo);
         setBackgroundEnabled(true);
 
-        admMusica.cargarMusica(0);
+        //admMusica.cargarMusica(0);
 
         Sprite Nivel1 = new Sprite(ControlJuego.ANCHO_CAMARA / 2-300, ControlJuego.ALTO_CAMARA / 2,
                 regionPlaneta, actividadJuego.getVertexBufferObjectManager()) {
@@ -136,7 +136,7 @@ public class EscenaMundosCazaJurasica extends EscenaBase {
     @Override
     public void liberarRecursos() {
         // Estas dos instrucciones por cada región inicializada
-        admMusica.liberarMusica();
+        //admMusica.liberarMusica();
         regionFondo.getTexture().unload();
         regionFondo = null;
     }

@@ -34,7 +34,7 @@ public class EscenaGanaste extends EscenaBase
         setBackground(fondo);
         setBackgroundEnabled(true);
 
-        admMusica.cargarMusica(3);
+        //admMusica.cargarMusica(3);
     }
 
     // La escena se debe actualizar en este método que se repite "varias" veces por segundo
@@ -61,7 +61,7 @@ public class EscenaGanaste extends EscenaBase
     // Libera la escena misma del engine
     @Override
     public void liberarEscena() {
-        admMusica.liberarMusica();
+        //admMusica.liberarMusica();
         this.detachSelf();      // La escena se deconecta del engine
         this.dispose();         // Libera la memoria
 

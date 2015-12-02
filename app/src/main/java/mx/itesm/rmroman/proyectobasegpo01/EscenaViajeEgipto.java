@@ -359,7 +359,7 @@ public class EscenaViajeEgipto extends EscenaBase {
 
         spriteNavecita=null;
 
-        admMusica.cargarMusica(2);
+        //admMusica.cargarMusica(2);
 
         agregarJoystick();
         agregarBotonSalto();
@@ -371,9 +371,9 @@ public class EscenaViajeEgipto extends EscenaBase {
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.isActionDown()) {
                     pausarJuego();
-                    if(admMusica.getMusicaEncendida()==true) {
+                    /*if(admMusica.getMusicaEncendida()==true) {
                         admMusica.reproduceio();
-                    }
+                    }*/
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
@@ -381,7 +381,8 @@ public class EscenaViajeEgipto extends EscenaBase {
         hud.attachChild(btnPausa);
         hud.registerTouchArea(btnPausa);
 
-        musicaEncendida=admMusica.getMusicaEncendida();
+        musicaEncendida=true;
+        //musicaEncendida=admMusica.getMusicaEncendida();
 
         // Crear la escena de PAUSA, pero NO lo agrega a la escena
         escenaPausa = new CameraScene(actividadJuego.camara);
@@ -429,9 +430,9 @@ public class EscenaViajeEgipto extends EscenaBase {
                         spritebtnOff.detachSelf();
                         spritebtnOn.detachSelf();
 
-                        admMusica.vibrar(100);
+                        //admMusica.vibrar(100);
 
-                        admMusica.setMusicaEncendida(false,2);
+                        //admMusica.setMusicaEncendida(false,2);
                         musicaEncendida=false;
 
                         cambiar=1;
@@ -450,12 +451,12 @@ public class EscenaViajeEgipto extends EscenaBase {
                 if (pSceneTouchEvent.isActionUp()) {
                     if(musicaEncendida==false && cambiar==0){
 
-                        admMusica.vibrar(100);
+                        //admMusica.vibrar(100);
 
                         spritebtnOn.detachSelf();
                         spritebtnOff.detachSelf();
 
-                        admMusica.setMusicaEncendida(true,2);
+                        //admMusica.setMusicaEncendida(true,2);
                         musicaEncendida=true;
 
                         cambiar=1;
@@ -475,9 +476,9 @@ public class EscenaViajeEgipto extends EscenaBase {
     public void onBackKeyPressed() {
         // Regresar al menú principal
         pausarJuego();
-        if(admMusica.getMusicaEncendida()==true) {
+        /*if(admMusica.getMusicaEncendida()==true) {
             admMusica.reproduceio();
-        }
+        }*/
     }
 
     private void pausarJuego() {
@@ -798,46 +799,43 @@ public class EscenaViajeEgipto extends EscenaBase {
                     }
                 }
 
-/*
+
             if (spritePersonaje.collidesWith(enemigo) && miniJuego==false) {
 
-                if(cantidadVida -1<0){
+                if (cantidadVida - 1 < 0) {
                     admEscenas.liberarEscenaViajeEgipto();
-                    admEscenas.crearEscenaPerdiste();
+                    admEscenas.crearEscenaPerdiste(4);
                     admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
-                }
-                else{
-                    if(enemigo.getPersigue()){
-                        unicoQuePersigue=false;
+                } else {
+                    if (enemigo.getPersigue()) {
+                        unicoQuePersigue = false;
                     }
                     enemigo.detachSelf();
                     listaEnemigos.remove(enemigo);
-                    admMusica.vibrar(200);
+                    //admMusica.vibrar(200);
 
 
-                    if(nubecita==true){
+                    if (nubecita == true) {
                         spriteNavecita.detachSelf();
-                        nubecita=false;
-                        enElAire=true;
-                        paArriba=true;
-                        gravedad=false;
-                    }
-
-                    else {
-                        if(2 - cantidadVida>=0) {
+                        nubecita = false;
+                        enElAire = true;
+                        paArriba = true;
+                        gravedad = false;
+                    } else {
+                        if (2 - cantidadVida >= 0) {
                             spriteVidas[2 - cantidadVida].detachSelf();
                             cantidadVida--;
-                        }
-                        else{
+                        } else {
                             admEscenas.liberarEscenaViajeEgipto();
-                            admEscenas.crearEscenaPerdiste();
+                            admEscenas.crearEscenaPerdiste(4);
                             admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                         }
                     }
 
                 }
+                break;
             }
-            */
+
             }
         }
     }
@@ -903,12 +901,12 @@ public class EscenaViajeEgipto extends EscenaBase {
                     // Baja puntos/vida
                     if (cantidadVida - 1 < 0) {
                         admEscenas.liberarEscenaViajeEgipto();
-                        admEscenas.crearEscenaPerdiste();
+                        admEscenas.crearEscenaPerdiste(4);
                         admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                     } else {
                         proyectil.detachSelf();
                         listaProyectilesEnemigo.remove(proyectil);
-                        admMusica.vibrar(200);
+                        //admMusica.vibrar(200);
                         if (nubecita == true) {
                             spriteNavecita.detachSelf();
                             nubecita = false;
@@ -926,6 +924,7 @@ public class EscenaViajeEgipto extends EscenaBase {
                             }
                         }
                     }
+                    break;
                 }
             }
         }
@@ -951,7 +950,7 @@ public class EscenaViajeEgipto extends EscenaBase {
     @Override
     public void liberarRecursos() {
 
-        admMusica.liberarMusica();
+        //admMusica.liberarMusica();
         actividadJuego.getEngine().disableAccelerationSensor(actividadJuego);
         regionFondo.getTexture().unload();
         regionFondo=null;
@@ -1704,8 +1703,9 @@ public class EscenaViajeEgipto extends EscenaBase {
                 // Prueba colisión
                 if (spritePersonaje.collidesWith(moneda)) {
                     // Desaparecer moneda
-                    animacionTexto(moneda.getX(),moneda.getY()+20);
+                    animacionTexto(moneda.getX(), moneda.getY() + 20);
                     desaparecerMoneda(moneda);
+                    break;
                 }
                 // Salen las monedas que han desaparecido
                 if (moneda.getScaleX() == 0) {
@@ -1730,8 +1730,8 @@ public class EscenaViajeEgipto extends EscenaBase {
 
                         if(numeroDeBalas>0) {
                             dispararProyectil();
-                            admMusica.vibrar(100);
-                            admMusica.reproducirMusicaBoton();
+                            //admMusica.vibrar(100);
+                            //admMusica.reproducirMusicaBoton();
                             valorBalas--;
                             numeroDeBalas--;
                         }

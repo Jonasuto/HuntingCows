@@ -29,7 +29,7 @@ public class EscenaSplashHuntingCows extends EscenaBase {
     @Override
     public void cargarRecursos() {
 
-        regionFondo = cargarImagen("Imagenes/fondoSplashHunt.jpg");
+        regionFondo = cargarImagen("Imagenes/pantalla_inicio.jpg");
         regionPress = cargarImagen("Imagenes/press.png");
 
     }
@@ -46,7 +46,7 @@ public class EscenaSplashHuntingCows extends EscenaBase {
         setBackground(fondo);
         setBackgroundEnabled(true);
 
-        admMusica.cargarMusica(0);
+        //admMusica.cargarMusica(0);
 
         Sprite spritePress = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-300,
                 regionPress, actividadJuego.getVertexBufferObjectManager()) {
@@ -100,7 +100,7 @@ public class EscenaSplashHuntingCows extends EscenaBase {
     @Override
     public void liberarRecursos() {
         // Estas dos instrucciones por cada región inicializada
-        admMusica.liberarMusica();
+        //admMusica.liberarMusica();
         regionFondo.getTexture().unload();
         regionFondo = null;
     }

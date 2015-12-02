@@ -308,7 +308,7 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
         spritePersonaje=spritePersonajeNave;
         attachChild(spritePersonaje);
 
-        admMusica.cargarMusica(2);
+        //admMusica.cargarMusica(2);
 
         posicionarEnemigos();
 
@@ -322,9 +322,9 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.isActionDown()) {
                     pausarJuego();
-                    if(admMusica.getMusicaEncendida()==true) {
+                    /*if(admMusica.getMusicaEncendida()==true) {
                         admMusica.reproduceio();
-                    }
+                    }*/
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
@@ -332,7 +332,8 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
         attachChild(btnPausa);
         registerTouchArea(btnPausa);
 
-        musicaEncendida=admMusica.getMusicaEncendida();
+        musicaEncendida=true;
+        //musicaEncendida=admMusica.getMusicaEncendida();
 
         // Crear la escena de PAUSA, pero NO lo agrega a la escena
         escenaPausa = new CameraScene(actividadJuego.camara);
@@ -382,9 +383,9 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
                         spritebtnOff.detachSelf();
                         spritebtnOn.detachSelf();
 
-                        admMusica.vibrar(100);
+                        //admMusica.vibrar(100);
 
-                        admMusica.setMusicaEncendida(false,2);
+                        //admMusica.setMusicaEncendida(false,2);
                         musicaEncendida=false;
 
                         cambiar=1;
@@ -406,12 +407,12 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
                 if (pSceneTouchEvent.isActionUp()) {
                     if(musicaEncendida==false && cambiar==0){
 
-                        admMusica.vibrar(100);
+                        //admMusica.vibrar(100);
 
                         spritebtnOn.detachSelf();
                         spritebtnOff.detachSelf();
 
-                        admMusica.setMusicaEncendida(true,2);
+                        //admMusica.setMusicaEncendida(true,2);
                         musicaEncendida=true;
 
                         cambiar=1;
@@ -433,9 +434,9 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
     public void onBackKeyPressed() {
         // Regresar al menú principal
         pausarJuego();
-        if(admMusica.getMusicaEncendida()==true) {
+        /*if(admMusica.getMusicaEncendida()==true) {
             admMusica.reproduceio();
-        }
+        }*/
     }
 
     private void pausarJuego() {
@@ -669,13 +670,13 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
 
                 if(cantidadVida -1<0){
                     admEscenas.liberarEscenaCazaJurasicaRunner();
-                    admEscenas.crearEscenaPerdiste();
+                    admEscenas.crearEscenaPerdiste(3);
                     admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                 }
                 else{
                     enemigo.detachSelf();
                     listaEnemigos.remove(enemigo);
-                    admMusica.vibrar(200);
+                    //admMusica.vibrar(200);
 
                         if(2 - cantidadVida>=0) {
                             try {
@@ -683,13 +684,13 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
                                 cantidadVida--;
                             } catch (Exception e) {
                                 admEscenas.liberarEscenaCazaJurasicaRunner();
-                                admEscenas.crearEscenaPerdiste();
+                                admEscenas.crearEscenaPerdiste(3);
                                 admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                             }
                         }
                         else{
                             admEscenas.liberarEscenaCazaJurasicaRunner();
-                            admEscenas.crearEscenaPerdiste();
+                            admEscenas.crearEscenaPerdiste(3);
                             admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                         }
                 }
@@ -726,13 +727,13 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
                 // Baja puntos/vida
                 if(cantidadVida-1<0){
                     admEscenas.liberarEscenaCazaJurasicaRunner();
-                    admEscenas.crearEscenaPerdiste();
+                    admEscenas.crearEscenaPerdiste(3);
                     admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                 }
                 else{
                     proyectil.detachSelf();
                     listaProyectilesEnemigo.remove(proyectil);
-                    admMusica.vibrar(200);
+                    //admMusica.vibrar(200);
                         if(2-cantidadVida>=0) {
                             spriteVidas[2 - cantidadVida].detachSelf();
                             cantidadVida--;
@@ -766,7 +767,7 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
     @Override
     public void liberarRecursos() {
 
-        admMusica.liberarMusica();
+        //admMusica.liberarMusica();
         actividadJuego.getEngine().disableAccelerationSensor(actividadJuego);
         regionFondo.getTexture().unload();
         regionFondo=null;
@@ -1348,8 +1349,8 @@ public class EscenaCazaJurasicaRunner extends EscenaBase {
 
                         if(numeroDeBalas>0) {
                             dispararProyectil();
-                            admMusica.vibrar(100);
-                            admMusica.reproducirMusicaBoton();
+                            //admMusica.vibrar(100);
+                            //admMusica.reproducirMusicaBoton();
                             valorBalas--;
                             numeroDeBalas--;
                         }

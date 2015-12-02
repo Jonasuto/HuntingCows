@@ -71,7 +71,7 @@ public class EscenaPeleaOvnis extends EscenaBase {
         spriteHoyoNegro= cargarSprite(1100, 400, regionHoyoNegro);
         spriteFondo.attachChild(spriteHoyoNegro);
 
-        admMusica.cargarMusica(2);
+        //admMusica.cargarMusica(2);
 
         agregarJoystick();
         agregarBotonDisparar();
@@ -149,7 +149,7 @@ public class EscenaPeleaOvnis extends EscenaBase {
 
     @Override
     public void liberarRecursos() {
-        admMusica.liberarMusica();
+        //admMusica.liberarMusica();
         actividadJuego.getEngine().disableAccelerationSensor(actividadJuego);
         regionFondo.getTexture().unload();
         regionFondo=null;
@@ -227,8 +227,8 @@ public class EscenaPeleaOvnis extends EscenaBase {
                     if(pSceneTouchEvent.isActionDown()){
 
                         dispararProyectil();
-                        admMusica.vibrar(100);
-                        admMusica.reproducirMusicaBoton();
+                        //admMusica.vibrar(100);
+                        //admMusica.reproducirMusicaBoton();
                     }
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);

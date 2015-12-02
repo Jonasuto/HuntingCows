@@ -5,6 +5,7 @@ import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.util.adt.color.Color;
 
 /**
  * Created by rmroman on 11/09/15.
@@ -18,6 +19,7 @@ public class EscenaHistoriaIntro extends EscenaBase
     private ITextureRegion regionsiguiente;
     private ITextureRegion regionanterior;
     private ITextureRegion regionfinal;
+    private ITextureRegion regionMenu;
 
     private int contadorSlide;
 
@@ -26,8 +28,13 @@ public class EscenaHistoriaIntro extends EscenaBase
     private final int OPCION_SIGUIENTE = 0;
     private final int OPCION_ANTERIOR = 1;
     private final int OPCION_FINAL = 2;
+    private final int OPCION_MENU = 3;
+
 
     private MenuScene menu;
+
+    IMenuItem opcionanterior;
+    IMenuItem opcionafinal;
 
 
     // Sprite para el fondo
@@ -54,6 +61,7 @@ public class EscenaHistoriaIntro extends EscenaBase
         regionsiguiente = cargarImagen("Imagenes/Historia/comic_next.png");
         regionanterior = cargarImagen("Imagenes/Historia/comic_prev.png");
         regionfinal = cargarImagen("Imagenes/Historia/comic_skip.png");
+        regionMenu = cargarImagen("Imagenes/menu.png");
         contadorSlide=0;
     }
 
@@ -74,17 +82,21 @@ public class EscenaHistoriaIntro extends EscenaBase
         IMenuItem opcionSiguiente = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_SIGUIENTE,
                 regionsiguiente, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
-        IMenuItem opcionanterior = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_ANTERIOR,
+        opcionanterior = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_ANTERIOR,
                 regionanterior, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
-        IMenuItem opcionafinal = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_FINAL,
+        opcionafinal = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_FINAL,
                 regionfinal, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
+
+        final IMenuItem opcionMenu = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_MENU,
+                regionMenu, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
 
         // Agrega las opciones al menú
         menu.addMenuItem(opcionSiguiente);
         menu.addMenuItem(opcionanterior);
         menu.addMenuItem(opcionafinal);
+        menu.addMenuItem(opcionMenu);
 
         // que es esto??
 
@@ -100,6 +112,9 @@ public class EscenaHistoriaIntro extends EscenaBase
 
         opcionafinal.setPosition(450,350);
 
+        opcionMenu.setPosition(-450,360);
+        opcionMenu.setColor(Color.WHITE);
+
 
         // Registra el Listener para atender las opciones
         menu.setOnMenuItemClickListener(new MenuScene.IOnMenuItemClickListener() {
@@ -111,32 +126,65 @@ public class EscenaHistoriaIntro extends EscenaBase
 
                     case OPCION_SIGUIENTE:
                         // Mostrar la escena de AcercaDe
-                        if (contadorSlide < regionSlides.length-1) {
+
+                        if (contadorSlide < regionSlides.length - 1) {
                             contadorSlide++;
+                            if (contadorSlide == 6) {
+                                opcionanterior.setPosition(-450, -290);
+                            }
+                            else{
+                                opcionanterior.setPosition(-450, -350);
+                            }
+                            if (contadorSlide == 2) {
+                                opcionafinal.setPosition(450, 300);
+                            }
+                            else{
+                                opcionafinal.setPosition(450, 350);
+                            }
+                            if (contadorSlide == 8) {
+                                opcionMenu.setPosition(-450,300);
+                            }
+                            else{
+                                opcionMenu.setPosition(-450,360);
+                            }
                             regionSlideActual = regionSlides[contadorSlide];
                             spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
                             attachChild(spriteFondo);
                             break;
-                        }
-                        else{
+                        } else {
                             admEscenas.liberarEscenaHistoriaIntro();
                             admEscenas.crearEscenaIntroCazaJurasica();
                             admEscenas.setEscena(TipoEscena.ESCENA_INTRO_CAZA_JURASICA);
                         }
-
-
                         return true;
 
                     case OPCION_ANTERIOR:
                         // Mostrar la escena de AcercaDe
                         if (contadorSlide > 0) {
                             contadorSlide--;
+                            if (contadorSlide == 6) {
+                                opcionanterior.setPosition(-450, -290);
+                            }
+                            else{
+                                opcionanterior.setPosition(-450, -350);
+                            }
+                            if (contadorSlide == 2) {
+                                opcionafinal.setPosition(450,300);
+                            }
+                            else{
+                                opcionafinal.setPosition(450,350);
+                            }
+                            if (contadorSlide == 8) {
+                                opcionMenu.setPosition(-450,280);
+                            }
+                            else{
+                                opcionMenu.setPosition(-450,360);
+                            }
                             regionSlideActual = regionSlides[contadorSlide];
                             spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
                             attachChild(spriteFondo);
                             break;
                         }
-
                         return true;
 
                     case OPCION_FINAL:
@@ -147,9 +195,16 @@ public class EscenaHistoriaIntro extends EscenaBase
 
                         return true;
 
+                    case OPCION_MENU:
+
+                        onBackKeyPressed();
+
+                        return true;
                 }
                 return true;
             }
+
+
         });
 
         // Asigna este menú a la escena

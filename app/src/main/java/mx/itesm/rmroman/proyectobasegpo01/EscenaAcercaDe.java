@@ -32,7 +32,7 @@ public class EscenaAcercaDe extends mx.itesm.rmroman.proyectobasegpo01.EscenaBas
     public void crearEscena() {
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2, regionFondo);
         attachChild(spriteFondo);
-        admMusica.cargarMusica(1);
+        //admMusica.cargarMusica(1);
         vibrador.vibrate(10000);
 
     }
@@ -63,7 +63,7 @@ public class EscenaAcercaDe extends mx.itesm.rmroman.proyectobasegpo01.EscenaBas
 
     @Override
     public void liberarRecursos() {
-        admMusica.liberarMusica();
+        //admMusica.liberarMusica();
         regionFondo.getTexture().unload();
         regionFondo = null;
     }

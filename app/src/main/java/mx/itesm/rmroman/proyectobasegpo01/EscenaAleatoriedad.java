@@ -173,7 +173,7 @@ public class EscenaAleatoriedad extends EscenaBase {
         spritePersonaje=spritePersonajeDerecha;
         attachChild(spritePersonaje);
 
-        admMusica.cargarMusica(2);
+        //admMusica.cargarMusica(2);
 
         posicionarPisosFlotantes();
         posicionarBolasFlotantes();
@@ -186,9 +186,9 @@ public class EscenaAleatoriedad extends EscenaBase {
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
                 if (pSceneTouchEvent.isActionDown()) {
                     pausarJuego();
-                    if(admMusica.getMusicaEncendida()==true) {
+                    /*if(admMusica.getMusicaEncendida()==true) {
                         admMusica.reproduceio();
-                    }
+                    }*/
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
@@ -196,7 +196,9 @@ public class EscenaAleatoriedad extends EscenaBase {
         attachChild(btnPausa);
         registerTouchArea(btnPausa);
 
-        musicaEncendida=admMusica.getMusicaEncendida();
+        musicaEncendida=true;
+
+       // musicaEncendida=admMusica.getMusicaEncendida();
 
         // Crear la escena de PAUSA, pero NO lo agrega a la escena
         escenaPausa = new CameraScene(actividadJuego.camara);
@@ -246,9 +248,9 @@ public class EscenaAleatoriedad extends EscenaBase {
                         spritebtnOff.detachSelf();
                         spritebtnOn.detachSelf();
 
-                        admMusica.vibrar(100);
+                        //admMusica.vibrar(100);
 
-                        admMusica.setMusicaEncendida(false,2);
+                        //admMusica.setMusicaEncendida(false,2);
                         musicaEncendida=false;
 
                         cambiar=1;
@@ -270,12 +272,12 @@ public class EscenaAleatoriedad extends EscenaBase {
                 if (pSceneTouchEvent.isActionUp()) {
                     if(musicaEncendida==false && cambiar==0){
 
-                        admMusica.vibrar(100);
+                        //admMusica.vibrar(100);
 
                         spritebtnOn.detachSelf();
                         spritebtnOff.detachSelf();
 
-                        admMusica.setMusicaEncendida(true,2);
+                        //admMusica.setMusicaEncendida(true,2);
                         musicaEncendida=true;
 
                         cambiar=1;
@@ -292,10 +294,10 @@ public class EscenaAleatoriedad extends EscenaBase {
     @Override
     public void onBackKeyPressed() {
         // Regresar al menú principal
-        pausarJuego();
+        /*pausarJuego();
         if(admMusica.getMusicaEncendida()==true) {
             admMusica.reproduceio();
-        }
+        }*/
     }
 
     private void pausarJuego() {
@@ -376,7 +378,7 @@ public class EscenaAleatoriedad extends EscenaBase {
             }
             if (spritePersonaje.collidesWith(bola)) {
                 if(bola.getpuedeTeletransportar()) {
-                    admMusica.vibrar(90);
+                    //admMusica.vibrar(90);
                     numMagico=getNumAleatorio(numMagico);
                     spritePersonaje.setPosition(posicionesBolasFlotantesX[numMagico],posicionesBolasFlotantesY[numMagico]);
                 }
@@ -419,7 +421,7 @@ public class EscenaAleatoriedad extends EscenaBase {
     @Override
     public void liberarRecursos() {
 
-        admMusica.liberarMusica();
+        //admMusica.liberarMusica();
         actividadJuego.getEngine().disableAccelerationSensor(actividadJuego);
         regionFondo.getTexture().unload();
         regionFondo=null;
