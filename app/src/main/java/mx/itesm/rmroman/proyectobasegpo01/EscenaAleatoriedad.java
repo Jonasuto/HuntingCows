@@ -22,6 +22,7 @@ import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.util.adt.color.Color;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -39,6 +40,8 @@ public class EscenaAleatoriedad extends EscenaBase {
     private ITextureRegion regionBase;
     private ITextureRegion regionHoyoNegro;
 
+    private IFont fontMonster;
+
     private Random elQueSigue;
 
     private int reloj;
@@ -48,6 +51,8 @@ public class EscenaAleatoriedad extends EscenaBase {
 
     private float[] posicionesBolasFlotantesX;
     private float[] posicionesBolasFlotantesY;
+
+    private int valorBalas;
 
     private Sprite[] listaPisos;
     private Teletransportadora[] listaBolas;
@@ -83,7 +88,22 @@ public class EscenaAleatoriedad extends EscenaBase {
     private ITextureRegion regionPisoAzulTele;
     private ITextureRegion regionPisoAzulClaro;
     private ITextureRegion regionPisoGrandeTele;
+
+    private HUD hud;
+
     private ITextureRegion regionPisoRosaTele;
+
+    private Sprite der;
+    private Sprite iz;
+    private Sprite up;
+    private Sprite down;
+
+    private Text txtTotalBalas; // Por ahora con valorMarcador
+
+    private ITextureRegion regionControlDer;
+    private ITextureRegion regionControlIz;
+    private ITextureRegion regionControlUp;
+    private ITextureRegion regionControlDown;
 
     private ITextureRegion regionBolaTeletransportadoraAmarilla;
     private ITextureRegion regionBolaTeletransportadoraAzul;
@@ -120,6 +140,7 @@ public class EscenaAleatoriedad extends EscenaBase {
         regionFondoPausa = cargarImagen("Imagenes/Logos/logoHuntingCows.png");
         regionBase=cargarImagen("Imagenes/Roman/baseJoystick.png");
         regionControlSalto =cargarImagen("Imagenes/Roman/joystick.png");
+        regionControlSalto.setTextureSize(1,1);
         regionPersonajeAnimado = cargarImagenMosaico("Imagenes/Roman/prueba.png", 870, 200, 1, 8);
 
         // Pausa
@@ -134,10 +155,17 @@ public class EscenaAleatoriedad extends EscenaBase {
         regionMenuMusica=cargarImagen("Imagenes/Ajustes2/pausa_musica.png");
         regionMenuContinuar=cargarImagen("Imagenes/Ajustes2/pausa_continue.png");
 
+        fontMonster = cargarFont("fonts/monster.ttf");
+
         regionPisoAzulTele = cargarImagen("Imagenes/EscenaAleatoriedad/azul_tele.png");
         regionPisoAzulClaro = cargarImagen("Imagenes/EscenaAleatoriedad/azulclaro_tele.png");
         regionPisoGrandeTele = cargarImagen("Imagenes/EscenaAleatoriedad/grande_tele.png");
         regionPisoRosaTele = cargarImagen("Imagenes/EscenaAleatoriedad/rosa_tele.png");
+
+        regionControlDer=cargarImagen("Imagenes/Joystick/derecha_joystick.png");
+        regionControlIz=cargarImagen("Imagenes/Joystick/izquiera_joystick.png");
+        regionControlUp=cargarImagen("Imagenes/Joystick/arriba_joystick.png");
+        regionControlDown=cargarImagen("Imagenes/Joystick/abajo_joystick.png");
 
         regionBolaTeletransportadoraAzul= cargarImagen("Imagenes/EscenaAleatoriedad/teletrans_tele.png");
         regionBolaTeletransportadoraAmarilla= cargarImagen("Imagenes/EscenaAleatoriedad/teletransamarillo_tele.png");
@@ -147,6 +175,8 @@ public class EscenaAleatoriedad extends EscenaBase {
     public void crearEscena() {
 
         reloj=0;
+
+        valorBalas = 10;
 
         actividadJuego.camara.setCenter(640,400);
 
@@ -170,9 +200,12 @@ public class EscenaAleatoriedad extends EscenaBase {
 
         aleatorio= new Random();
 
+        posicionarPisosFlotantes();
+        posicionarBolasFlotantes();
+
         spritePersonajeDerecha = new Jugador((ControlJuego.ANCHO_CAMARA/2), (ControlJuego.ALTO_CAMARA/4),regionPersonajeAnimado, actividadJuego.getVertexBufferObjectManager());
         spritePersonajeDerecha.animate(70);
-        spritePersonajeDerecha.setSize(spritePersonajeDerecha.getWidth()-40,spritePersonajeDerecha.getHeight()-40);
+        spritePersonajeDerecha.setSize(spritePersonajeDerecha.getWidth()-10,spritePersonajeDerecha.getHeight()-10);
 
         spritePersonaje=spritePersonajeDerecha;
         attachChild(spritePersonaje);
@@ -293,12 +326,28 @@ public class EscenaAleatoriedad extends EscenaBase {
         spriteOnFinal.setAlpha(0.2f);
         escenaPausa.attachChild(spriteOnFinal);
         registerTouchArea(spriteOnFinal);
+
+        der = cargarSprite(190, 115, regionControlDer);
+        der.setAlpha(0.001f);
+        control.attachChild(der);
+
+        iz = cargarSprite(50, 115, regionControlIz);
+        iz.setAlpha(0.001f);
+        control.attachChild(iz);
+
+        up = cargarSprite(120, 185, regionControlUp);
+        up.setAlpha(0.001f);
+        control.attachChild(up);
+
+        down = cargarSprite(120, 45, regionControlDown);
+        down.setAlpha(0.001f);
+        control.attachChild(down);
     }
 
     @Override
     public void onBackKeyPressed() {
         // Regresar al menú principal
-        /*pausarJuego();
+        pausarJuego();/*
         if(admMusica.getMusicaEncendida()==true) {
             admMusica.reproduceio();
         }*/
@@ -317,6 +366,7 @@ public class EscenaAleatoriedad extends EscenaBase {
             juegoCorriendo = true;
         }
     }
+
 
     @Override
     public TipoEscena getTipoEscena() {
@@ -348,7 +398,6 @@ public class EscenaAleatoriedad extends EscenaBase {
 
                 cambiar=0;
             }
-
             return;
         }
 
@@ -397,11 +446,24 @@ public class EscenaAleatoriedad extends EscenaBase {
             }
         }
 
-        if(spritePersonaje.collidesWith(spriteHoyoNegro)){
+        if(spritePersonaje.getY()>=780){
             admEscenas.liberarEscenaAleatoriedad();
-            admEscenas.crearEscenaPirata();
-            admEscenas.setEscena(TipoEscena.ESCENA_PIRATA);
+            admEscenas.crearEscenaGanaste(3);
+            admEscenas.setEscena(TipoEscena.ESCENA_GANASTE);
         }
+
+    }
+
+    private Font cargarFont(String archivo) {
+        // La imagen que contiene cada símbolo
+        final ITexture fontTexture = new BitmapTextureAtlas(actividadJuego.getEngine().getTextureManager(),512,256);
+        // Carga el archivo, tamaño 56, antialias y color
+        Font tipoLetra = FontFactory.createFromAsset(actividadJuego.getEngine().getFontManager(),
+                fontTexture, actividadJuego.getAssets(), archivo, 56, true, 0xFF00FF00);
+        tipoLetra.load();
+        tipoLetra.prepareLetters("InicoFnalMed 01234567890.".toCharArray());
+
+        return tipoLetra;
     }
 
     @Override
@@ -429,8 +491,6 @@ public class EscenaAleatoriedad extends EscenaBase {
         actividadJuego.getEngine().disableAccelerationSensor(actividadJuego);
         regionFondo.getTexture().unload();
         regionFondo=null;
-        regionFondoPausa.getTexture().unload();
-        regionFondoPausa=null;
         regionBase.getTexture().unload();
         regionBase=null;
         regionControlSalto.getTexture().unload();
@@ -460,7 +520,7 @@ public class EscenaAleatoriedad extends EscenaBase {
     }
 
     private void agregarJoystick() {
-        control = new AnalogOnScreenControl(100, 100, actividadJuego.camara,
+        control = new AnalogOnScreenControl(120, 115, actividadJuego.camara,
                 regionBase, regionControlSalto,
                 0.03f, 100, actividadJuego.getVertexBufferObjectManager(), new AnalogOnScreenControl.IAnalogOnScreenControlListener() {
 
@@ -470,6 +530,33 @@ public class EscenaAleatoriedad extends EscenaBase {
             @Override
             public void onControlChange(BaseOnScreenControl pBaseOnScreenControl, float pValueX, float pValueY) {
                 if(juegoCorriendo) {
+
+                    if(pValueX>0){
+                        der.setAlpha(1);
+                        iz.setAlpha(0.001f);
+                    }
+                    if(pValueX<0){
+                        iz.setAlpha(1);
+                        der.setAlpha(0.001f);
+                    }
+                    if(pValueX==0){
+                        der.setAlpha(0.001f);
+                        iz.setAlpha(0.001f);
+                    }
+
+                    if(pValueY>0){
+                        up.setAlpha(1);
+                        down.setAlpha(0.001f);
+                    }
+                    if(pValueY<0){
+                        up.setAlpha(0.001f);
+                        down.setAlpha(1);
+                    }
+                    if(pValueY==0){
+                        up.setAlpha(0.001f);
+                        down.setAlpha(0.001f);
+                    }
+
                     if (pValueX > 0) {
                         if(personajeVolteandoDerecha==false) {
                             personajeVolteandoDerecha = true;
@@ -523,13 +610,13 @@ public class EscenaAleatoriedad extends EscenaBase {
         posicionesPisosFlotantesY= new float[maxima];
         listaPisos = new Sprite[maxima];
 
-        posicionesPisosFlotantesX[0]=600;
+        posicionesPisosFlotantesX[0]=650;
         posicionesPisosFlotantesX[1]=200;
         posicionesPisosFlotantesX[2]=200;
         posicionesPisosFlotantesX[3]=200;
-        posicionesPisosFlotantesX[4]=700;
-        posicionesPisosFlotantesX[5]=700;
-        posicionesPisosFlotantesX[6]=700;
+        posicionesPisosFlotantesX[4]=670;
+        posicionesPisosFlotantesX[5]=670;
+        posicionesPisosFlotantesX[6]=670;
         posicionesPisosFlotantesX[7]=1100;
         posicionesPisosFlotantesX[8]=1100;
         posicionesPisosFlotantesX[9]=1100;
@@ -583,20 +670,20 @@ public class EscenaAleatoriedad extends EscenaBase {
         posicionesBolasFlotantesY= new float[maxima];
         listaBolas = new Teletransportadora[maxima];
 
-        posicionesBolasFlotantesX[0]=600;
-        posicionesBolasFlotantesX[1]=430;
-        posicionesBolasFlotantesX[2]=770;
+        posicionesBolasFlotantesX[0]=650;
+        posicionesBolasFlotantesX[1]=480;
+        posicionesBolasFlotantesX[2]=820;
         posicionesBolasFlotantesX[3]=130;
         posicionesBolasFlotantesX[4]=270;
         posicionesBolasFlotantesX[5]=130;
         posicionesBolasFlotantesX[6]=270;
         posicionesBolasFlotantesX[7]=130;
         posicionesBolasFlotantesX[8]=270;
-        posicionesBolasFlotantesX[9]=630;
-        posicionesBolasFlotantesX[10]=770;
-        posicionesBolasFlotantesX[11]=630;
-        posicionesBolasFlotantesX[12]=770;
-        posicionesBolasFlotantesX[13]=700;
+        posicionesBolasFlotantesX[9]=600;
+        posicionesBolasFlotantesX[10]=710;
+        posicionesBolasFlotantesX[11]=600;
+        posicionesBolasFlotantesX[12]=710;
+        posicionesBolasFlotantesX[13]=670;
         posicionesBolasFlotantesX[14]=1030;
         posicionesBolasFlotantesX[15]=1170;
         posicionesBolasFlotantesX[16]=1030;

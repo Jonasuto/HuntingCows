@@ -33,7 +33,7 @@ public class EscenaGanaste extends EscenaBase
         regionFondo = cargarImagen("Imagenes/victoria.jpg");
         regionMenu = cargarImagen("Imagenes/menuNegro.png");
         regionRetry = cargarImagen("Imagenes/retry.png");
-        regionNext = cargarImagen("Imagenes/Historia/comic_next.png");
+        regionNext = cargarImagen("Imagenes/Historia/comic_nextNegro.png");
     }
 
     // Arma la escena que se presentará en pantalla
@@ -68,6 +68,11 @@ public class EscenaGanaste extends EscenaBase
                         admEscenas.crearEscenaCargando(2);
                         admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
                     }
+                    else if(num==3){
+                        admEscenas.liberarEscenaGanaste();
+                        admEscenas.crearEscenaCargando(3);
+                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
+                    }
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
@@ -90,7 +95,7 @@ public class EscenaGanaste extends EscenaBase
         attachChild(btnMenu);
         registerTouchArea(btnMenu);
 
-        Sprite btnNext = new Sprite(1020, 380,
+        Sprite btnNext = new Sprite(1090, 380,
                 regionNext, actividadJuego.getVertexBufferObjectManager()) {
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -100,6 +105,12 @@ public class EscenaGanaste extends EscenaBase
                         admEscenas.liberarEscenaGanaste();
                         admEscenas.crearEscenaAleatoriedad();
                         admEscenas.setEscena(TipoEscena.ESCENA_ALEATORIEDAD);
+                    }
+
+                    if(num==3){
+                        admEscenas.liberarEscenaGanaste();
+                        admEscenas.crearEscenaPirata();
+                        admEscenas.setEscena(TipoEscena.ESCENA_PIRATA);
                     }
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);

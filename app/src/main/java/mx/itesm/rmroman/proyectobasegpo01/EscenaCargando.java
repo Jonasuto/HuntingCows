@@ -67,7 +67,7 @@ public class EscenaCargando extends EscenaBase
 
         actividadJuego.camara.setHUD(new HUD());
 
-        actividadJuego.camara.setCenter(640,400);
+        actividadJuego.camara.setCenter(640, 400);
 
         // Crea el(los) sprite(s) de la escena
         spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA/2, ControlJuego.ALTO_CAMARA/2,
@@ -99,6 +99,11 @@ public class EscenaCargando extends EscenaBase
                             admEscenas.liberarEscenaCargando();
                             admEscenas.crearEscenaCazaJurasicaLvl2();
                             admEscenas.setEscena(TipoEscena.ESCENA_CAZA_JURASICA_LVL2);
+                        }
+                        else if(decision==3){
+                            admEscenas.liberarEscenaCargando();
+                            admEscenas.crearEscenaAleatoriedad();
+                            admEscenas.setEscena(TipoEscena.ESCENA_ALEATORIEDAD);
                         }
 
                     }

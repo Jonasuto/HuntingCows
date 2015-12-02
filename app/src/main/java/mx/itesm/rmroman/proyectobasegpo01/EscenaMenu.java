@@ -241,8 +241,8 @@ public class EscenaMenu extends EscenaBase
                         //admMusica.vibrar(90);
                         //admMusica.reproducirMusicaBoton();
                         admEscenas.liberarEscenaMenu();
-                        admEscenas.crearEscenaPirata();
-                        admEscenas.setEscena(TipoEscena.ESCENA_PIRATA);
+                        admEscenas.crearEscenaAleatoriedad();
+                        admEscenas.setEscena(TipoEscena.ESCENA_ALEATORIEDAD);
 
                         break;
 

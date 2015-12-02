@@ -537,6 +537,7 @@ public class EscenaCazaJurasicaLvl2 extends EscenaBase {
         escenaPausa.attachChild(spriteOnFinal);
         escenaPausa.registerTouchArea(spriteOnFinal);
 
+        // Agregar
 
     }
 
