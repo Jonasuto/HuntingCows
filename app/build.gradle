@@ -3,9 +3,8 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 22
     buildToolsVersion "23.0.0"
-
     defaultConfig {
-        applicationId "mx.itesm.rmroman.proyectobasegpo01"
+        applicationId 'mx.itesm.rmroman.huntingcows'
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
@@ -17,9 +16,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':org.andengine')
 }
