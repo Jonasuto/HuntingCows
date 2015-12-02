@@ -39,10 +39,8 @@ public class EscenaOdiseaPirata extends EscenaBase {
 
     private ITextureRegion regionFondoPausa;
     private ITextureRegion regionBase;
+    private ITextureRegion regionBase2;
     private ITextureRegion regionDisparar;
-
-    private Text txtMarcador; // Por ahora con valorMarcador
-    private IFont fontMonster;
 
     private HUD hud;
 
@@ -101,7 +99,6 @@ public class EscenaOdiseaPirata extends EscenaBase {
     private TiledTextureRegion regionEnemigoSimple;
     private TiledTextureRegion regionEnemigoFinal;
 
-
     private Sprite spriteFondoPausa;
 
     private ButtonSprite btnDisparar;
@@ -144,12 +141,12 @@ public class EscenaOdiseaPirata extends EscenaBase {
 
         cantidadVida = 2;
 
-        fontMonster = cargarFont("fonts/monster.ttf");
-
         vidas = cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
         regionFondo = cargarImagen("Imagenes/playa.jpg");
         regionFondoPausa = cargarImagen("Imagenes/Logos/logoHuntingCows.png");
         regionBase=cargarImagen("Imagenes/Roman/baseJoystick.png");
+        regionBase2=cargarImagen("Imagenes/Roman/baseJoystick.png");
+        regionBase2.setTextureSize(1,1);
         regionDisparar=cargarImagen("Imagenes/Roman/boton_fuego.png");
         regionVida = cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
         regionPersonajeParado = cargarImagenMosaico("Imagenes/Roman/spritelanchaparada.png", 400, 150, 1, 2);
@@ -190,7 +187,7 @@ public class EscenaOdiseaPirata extends EscenaBase {
         // Fondo atrás
         Sprite spriteFondoAtras = cargarSprite(ControlJuego.ANCHO_CAMARA/2,
                 ControlJuego.ALTO_CAMARA/2, regionFondo);
-        fondoAnimado.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(20, spriteFondoAtras));
+        fondoAnimado.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-28, spriteFondoAtras));
 
         setBackground(fondoAnimado);
 
@@ -262,11 +259,33 @@ public class EscenaOdiseaPirata extends EscenaBase {
         spritebtnMusica=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-45, regionMenuMusica);
         escenaPausa.attachChild(spritebtnMusica);
 
-        spritebtnContinuar=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2 + 300, regionMenuContinuar);
+        spritebtnContinuar = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2 + 300,
+                regionMenuContinuar, actividadJuego.getVertexBufferObjectManager()) {
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if (pSceneTouchEvent.isActionUp()) {
+                    pausarJuego();
+                }
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
         escenaPausa.attachChild(spritebtnContinuar);
+        registerTouchArea(spritebtnContinuar);
 
-        spritebtnIrAMenu=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-300, regionIrAMenu);
+        spritebtnIrAMenu = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-300,
+                regionIrAMenu, actividadJuego.getVertexBufferObjectManager()) {
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if (pSceneTouchEvent.isActionUp()) {
+                    admEscenas.liberarEscenaPirata();
+                    admEscenas.crearEscenaMenu();
+                    admEscenas.setEscena(TipoEscena.ESCENA_MENU);
+                }
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
         escenaPausa.attachChild(spritebtnIrAMenu);
+        registerTouchArea(spritebtnIrAMenu);
 
         if (musicaEncendida == true) {
             spritebtnOff = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 155, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOffoff);
@@ -391,23 +410,6 @@ public class EscenaOdiseaPirata extends EscenaBase {
     private void agregarHUD() {
         hud = new HUD();
 
-        // Marcador/valorMarcador
-        txtMarcador = new Text(ControlJuego.ANCHO_CAMARA/2,ControlJuego.ALTO_CAMARA-100,
-                fontMonster,"    0    ",actividadJuego.getVertexBufferObjectManager());
-        txtMarcador.setColor(Color.WHITE);
-        hud.attachChild(txtMarcador);
-        valorMarcador = 0;
-
-        txtBalas = new Text(1170, 700,
-                fontMonster,"    10    ",actividadJuego.getVertexBufferObjectManager());
-        txtBalas.setColor(Color.BLUE);
-        hud.attachChild(txtBalas);
-        valorBalas = 7;
-
-        txtTotalBalas = new Text(1220, 700,
-                fontMonster,"    /7    ",actividadJuego.getVertexBufferObjectManager());
-        txtTotalBalas.setColor(Color.BLUE);
-        hud.attachChild(txtTotalBalas);
 
         actividadJuego.camara.setHUD(hud);
     }
@@ -452,12 +454,6 @@ public class EscenaOdiseaPirata extends EscenaBase {
             }
         }
 
-
-        DecimalFormat df = new DecimalFormat("##.##"); // Para formatear 2 decimales
-        txtMarcador.setText(df.format(valorMarcador));
-
-        txtBalas.setText(df.format(valorBalas));
-
         actualizarProyectilesEnemigo();
 
         actualizarProyectiles();
@@ -468,9 +464,10 @@ public class EscenaOdiseaPirata extends EscenaBase {
 
             Barco enemigo = listaEnemigos.get(i);
 
-                if (spritePersonaje.collidesWith(enemigo) && spritePersonaje.getX()-enemigo.getX()>-20 && spritePersonaje.getX()-enemigo.getX()<20 && spritePersonaje.getY()-enemigo.getY()<20 && spritePersonaje.getY()-enemigo.getY()>-20 ) {
-
-
+            if(enemigo.getBoss()==false){
+                enemigo.setX(enemigo.getX()-1);
+                if(enemigo.getX()<0){
+                    //admMusica.vibrar(20);
                     if(cantidadVida -1<0){
                         admEscenas.liberarEscenaPirata();
                         admEscenas.crearEscenaPerdiste(4);
@@ -497,16 +494,6 @@ public class EscenaOdiseaPirata extends EscenaBase {
 
                     }
                     break;
-                }
-
-
-
-            if(enemigo.getBoss()==false){
-                enemigo.setX(enemigo.getX()-1);
-                if(enemigo.getX()<0){
-                    //admMusica.vibrar(20);
-                    enemigo.detachSelf();
-                    listaEnemigos.remove(enemigo);
                 }
             }
             else{
@@ -630,8 +617,8 @@ public class EscenaOdiseaPirata extends EscenaBase {
     }
 
     private void agregarJoystick() {
-        control = new AnalogOnScreenControl(160, 160, actividadJuego.camara,
-                regionBase, regionBase,
+        control = new AnalogOnScreenControl(120, 115, actividadJuego.camara,
+                regionBase, regionBase2,
                 0.03f, 100, actividadJuego.getVertexBufferObjectManager(), new AnalogOnScreenControl.IAnalogOnScreenControlListener() {
 
             @Override
@@ -805,7 +792,7 @@ public class EscenaOdiseaPirata extends EscenaBase {
                         if (balaRoman.getYinicial()== balaRoman.getY()) {
                     for (int k = listaEnemigos.size() - 1; k >= 0; k--) {
                         Barco enemigo = listaEnemigos.get(k);
-                        if (balaRoman.collidesWith(enemigo) && (balaRoman.getX()-enemigo.getX()>-80 && balaRoman.getX()-enemigo.getX()<80) && (balaRoman.getY()-enemigo.getY()<80 && balaRoman.getY()-enemigo.getY()>-80) ) {
+                        if (balaRoman.collidesWith(enemigo) && balaRoman.getY()-enemigo.getY()<100 && balaRoman.getY()-enemigo.getY()>-100 ) {
                             // Lo destruye
 
                             if (enemigo.getRegalo() == 1 || enemigo.getRegalo() == 3) {
@@ -818,6 +805,12 @@ public class EscenaOdiseaPirata extends EscenaBase {
                             // desaparece el proyectil
                             detachChild(balaRoman);
                             listaProyectiles.remove(balaRoman);
+
+                            if(enemigo.getBoss()){
+                                admEscenas.liberarEscenaPirata();
+                                admEscenas.crearEscenaGanaste(5);
+                                admEscenas.setEscena(TipoEscena.ESCENA_GANASTE);
+                            }
                             break;
 
                         }

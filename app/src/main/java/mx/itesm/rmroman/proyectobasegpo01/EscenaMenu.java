@@ -147,9 +147,6 @@ public class EscenaMenu extends EscenaBase
         IMenuItem opcionBotonRojo = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_BOTON_ROJO,
                 regionBtnRojo, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
-        IMenuItem opcionMusica = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_MUSICA,
-                regionBtnMusica, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
-
         IMenuItem opcionBotonArcade = new ScaleMenuItemDecorator(new SpriteMenuItem(OPCION_ARCADE,
                 regionBtnArcade, actividadJuego.getVertexBufferObjectManager()), 1.5f, 1);
 
@@ -162,7 +159,6 @@ public class EscenaMenu extends EscenaBase
         menu.addMenuItem(opcionAcercaDe);
         menu.addMenuItem(opcionJugar);
         menu.addMenuItem(opcionBotonRojo);
-        menu.addMenuItem(opcionMusica);
         menu.addMenuItem(opcionBotonArcade);
         menu.addMenuItem(opcionBotonComics);
 
@@ -179,7 +175,6 @@ public class EscenaMenu extends EscenaBase
             opcionAcercaDe.setPosition(-550, 340);
             opcionJugar.setPosition(200, 200);
             opcionBotonRojo.setPosition(550, -340);
-            opcionMusica.setPosition(550, 350);
             opcionBotonArcade.setPosition(450, 0);
             opcionBotonComics.setPosition(200, -200);
         }
@@ -187,7 +182,6 @@ public class EscenaMenu extends EscenaBase
             opcionAcercaDe.setPosition(-550, 340);
             opcionJugar.setPosition(200, 200);
             opcionBotonRojo.setPosition(550, -340);
-            opcionMusica.setPosition(550, 350);
             opcionBotonArcade.setPosition(450, 0);
             opcionBotonComics.setPosition(200, -200);
         }
@@ -195,7 +189,6 @@ public class EscenaMenu extends EscenaBase
             opcionAcercaDe.setPosition(-550, 340);
             opcionJugar.setPosition(200, 200);
             opcionBotonRojo.setPosition(550, -340);
-            opcionMusica.setPosition(550, 350);
             opcionBotonArcade.setPosition(450, 0);
             opcionBotonComics.setPosition(200, -200);
         }
@@ -203,7 +196,6 @@ public class EscenaMenu extends EscenaBase
             opcionAcercaDe.setPosition(-550, 340);
             opcionJugar.setPosition(200, 200);
             opcionBotonRojo.setPosition(550, -340);
-            opcionMusica.setPosition(550, 350);
             opcionBotonArcade.setPosition(450, 0);
             opcionBotonComics.setPosition(200, -200);
         }
@@ -241,8 +233,8 @@ public class EscenaMenu extends EscenaBase
                         //admMusica.vibrar(90);
                         //admMusica.reproducirMusicaBoton();
                         admEscenas.liberarEscenaMenu();
-                        admEscenas.crearEscenaPirata();
-                        admEscenas.setEscena(TipoEscena.ESCENA_PIRATA);
+                        admEscenas.crearEscenaGanaste(10);
+                        admEscenas.setEscena(TipoEscena.ESCENA_GANASTE);
 
                         break;
 

@@ -110,6 +110,11 @@ public class EscenaCargando extends EscenaBase
                             admEscenas.crearEscenaPirata();
                             admEscenas.setEscena(TipoEscena.ESCENA_PIRATA);
                         }
+                        else if(decision==7){
+                            admEscenas.liberarEscenaCargando();
+                            admEscenas.crearEscenaViajeEgipto();
+                            admEscenas.setEscena(TipoEscena.ESCENA_VIAJE_EGIPTO);
+                        }
 
                     }
                 }));

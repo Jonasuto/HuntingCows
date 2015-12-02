@@ -43,6 +43,7 @@ public class EscenaCazaJurasicaLvl2 extends EscenaBase {
     private ITextureRegion regionPua;
     private ITextureRegion regionPicos;
     private ITextureRegion regionLava;
+    private ITextureRegion regionBoss;
 
     private Random elQueSigue;
 
@@ -257,6 +258,7 @@ public class EscenaCazaJurasicaLvl2 extends EscenaBase {
         regionPua= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/pua.png");
         regionPicos= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/picos.png");
         regionLava= cargarImagen("Imagenes/Niveles/CazaJurasica/Enemigos/lava.png");
+        regionBoss= cargarImagen("Imagenes/boss_Jurasico.png");
 
         regionMenuPausa = cargarImagen("Imagenes/Ajustes2/pausa_fondo.png");
         regionMenuOffoff=cargarImagen("Imagenes/Ajustes2/music_off_OFF.png");
@@ -850,8 +852,23 @@ public class EscenaCazaJurasicaLvl2 extends EscenaBase {
                     if(enemigo.getPersigue()){
                         unicoQuePersigue=false;
                     }
-                    enemigo.detachSelf();
-                    listaEnemigos.remove(enemigo);
+
+                    if(enemigo.getNoPuedeSerDestruido()==false) {
+                        enemigo.detachSelf();
+                        listaEnemigos.remove(enemigo);
+                    }
+                    else{
+                        estoySaltando=true;
+                        permiso=true;
+                        permiso2=true;
+                        enElAire=true;
+                        paArriba=true;
+                        gravedad=false;
+                        poderDeSalto=4.1f;
+                        if(estoySobreUnaPalmera==true){
+                            brincaSobrepalmera=true;
+                        }
+                    }
                     //admMusica.vibrar(200);
 
 
@@ -1449,7 +1466,7 @@ public class EscenaCazaJurasicaLvl2 extends EscenaBase {
                 attachChild(nuevoEnemigo);
             }
             else{
-                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionEnemigo, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
+                Enemigo spriteEnemigo = new Enemigo(posicionesEnemigosx[cont], posicionesEnemigosy[cont], regionBoss, actividadJuego.getVertexBufferObjectManager(), camina[cont], brinca[cont], rota[cont], numPasos[cont],rotaCamina[cont],disparar[cont], noPuedeSerDestruido[cont]);
                 Enemigo nuevoEnemigo = spriteEnemigo;
                 listaEnemigos.add(nuevoEnemigo);
                 attachChild(nuevoEnemigo);

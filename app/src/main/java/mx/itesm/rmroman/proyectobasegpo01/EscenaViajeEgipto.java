@@ -41,8 +41,10 @@ public class EscenaViajeEgipto extends EscenaBase {
     private ITextureRegion regionFondoPausa;
     private ITextureRegion regionControlSalto;
     private ITextureRegion regionBase;
+    private ITextureRegion regionBase2;
     private ITextureRegion regionNave;
     private ITextureRegion regionHoyoNegro;
+    private ITextureRegion regionDisparar;
     private ITextureRegion regionOvni;
     private ITextureRegion regionPua;
     private ITextureRegion regionPicos;
@@ -240,7 +242,9 @@ public class EscenaViajeEgipto extends EscenaBase {
         regionFondo2 = cargarImagen("Imagenes/ViajeEgipto/minijuego.jpg");
         regionFondoPausa = cargarImagen("Imagenes/Logos/logoHuntingCows.png");
         regionBase=cargarImagen("Imagenes/Roman/baseJoystick.png");
-        regionControlSalto =cargarImagen("Imagenes/Roman/joystick.png");
+        regionBase2=cargarImagen("Imagenes/Roman/baseJoystick.png");
+        regionBase2.setTextureSize(1,1);
+        regionControlSalto =cargarImagen("Imagenes/Roman/jump.png");
         regionEnemigo = cargarImagen("Imagenes/ViajeEgipto/vaca_momia.png");
         regionEnemigo2 = cargarImagen("Imagenes/ViajeEgipto/vaca_principe2.png");
         regionVida = cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
@@ -250,6 +254,8 @@ public class EscenaViajeEgipto extends EscenaBase {
         regionPersonajeSaltandoDos = cargarImagenMosaico("Imagenes/Roman/spritesaltodos.png", 370, 200, 1, 3);
         regionPersonajeSaltandoCompleto = cargarImagenMosaico("Imagenes/Roman/spritesalto.png", 700, 200, 1, 6);
         regionPersonajeNave = cargarImagenMosaico("Imagenes/Roman/lanchajuego.png", 500, 300, 1, 1);
+
+        regionDisparar=cargarImagen("Imagenes/Roman/boton_fuego.png");
 
         // Pausa
         regionBtnPausa = cargarImagen("Imagenes/Niveles/CazaJurasica/btnPausa.png");
@@ -402,11 +408,33 @@ public class EscenaViajeEgipto extends EscenaBase {
         spritebtnMusica=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-45, regionMenuMusica);
         escenaPausa.attachChild(spritebtnMusica);
 
-        spritebtnContinuar=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2 + 300, regionMenuContinuar);
+        spritebtnContinuar = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2 + 300,
+                regionMenuContinuar, actividadJuego.getVertexBufferObjectManager()) {
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if (pSceneTouchEvent.isActionUp()) {
+                    pausarJuego();
+                }
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
         escenaPausa.attachChild(spritebtnContinuar);
+        escenaPausa.registerTouchArea(spritebtnContinuar);
 
-        spritebtnIrAMenu=cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-300, regionIrAMenu);
+        spritebtnIrAMenu = new Sprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2-300,
+                regionIrAMenu, actividadJuego.getVertexBufferObjectManager()) {
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+                if (pSceneTouchEvent.isActionUp()) {
+                    admEscenas.liberarEscenaViajeEgipto();
+                    admEscenas.crearEscenaMenu();
+                    admEscenas.setEscena(TipoEscena.ESCENA_MENU);
+                }
+                return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+            }
+        };
         escenaPausa.attachChild(spritebtnIrAMenu);
+        escenaPausa.registerTouchArea(spritebtnIrAMenu);
 
         if (musicaEncendida == true) {
             spritebtnOff = cargarSprite(ControlJuego.ANCHO_CAMARA / 2 + 155, ControlJuego.ALTO_CAMARA / 2 - 45, regionMenuOffoff);
@@ -503,7 +531,7 @@ public class EscenaViajeEgipto extends EscenaBase {
         hud = new HUD();
 
         // Marcador/valorMarcador
-        txtMarcador = new Text(ControlJuego.ANCHO_CAMARA/2,ControlJuego.ALTO_CAMARA-100,
+        txtMarcador = new Text(1220, 500,
                 fontMonster,"    0    ",actividadJuego.getVertexBufferObjectManager());
         txtMarcador.setColor(Color.BLUE);
         hud.attachChild(txtMarcador);
@@ -570,6 +598,12 @@ public class EscenaViajeEgipto extends EscenaBase {
         contadorPersigue += 1;
 
         if (spritePersonaje.collidesWith(spriteNaveRoman)) {
+            admEscenas.liberarEscenaViajeEgipto();
+            admEscenas.crearEscenaGanaste(10);
+            admEscenas.setEscena(TipoEscena.ESCENA_GANASTE);
+
+
+            /*
 
             nubecita = true;
             miniJuego = true;
@@ -599,6 +633,8 @@ public class EscenaViajeEgipto extends EscenaBase {
             spritePersonaje.detachSelf();
             spritePersonaje = spritePersonajeNave;
             attachChild(spritePersonaje);
+
+            */
         }
 
         if (contadorPersigue > 190 && unicoQuePersigue == false) {
@@ -809,7 +845,7 @@ public class EscenaViajeEgipto extends EscenaBase {
 
                 if (cantidadVida - 1 < 0) {
                     admEscenas.liberarEscenaViajeEgipto();
-                    admEscenas.crearEscenaPerdiste(4);
+                    admEscenas.crearEscenaPerdiste(10);
                     admEscenas.setEscena(TipoEscena.ESCENA_PERDISTE);
                 } else {
                     if (enemigo.getPersigue()) {
@@ -961,8 +997,6 @@ public class EscenaViajeEgipto extends EscenaBase {
         regionFondo=null;
         regionNave.getTexture().unload();
         regionNave=null;
-        regionFondoPausa.getTexture().unload();
-        regionFondoPausa=null;
         regionBase.getTexture().unload();
         regionBase=null;
         regionControlSalto.getTexture().unload();
@@ -1007,7 +1041,7 @@ public class EscenaViajeEgipto extends EscenaBase {
 
     private void agregarJoystick() {
         control = new AnalogOnScreenControl(100, 100, actividadJuego.camara,
-                regionBase, regionControlSalto,
+                regionBase, regionBase2,
                 0.03f, 100, actividadJuego.getVertexBufferObjectManager(), new AnalogOnScreenControl.IAnalogOnScreenControlListener() {
 
             @Override
@@ -1657,7 +1691,7 @@ public class EscenaViajeEgipto extends EscenaBase {
     }
 
     private void agregarBotonSalto() {
-        btnSaltar = new ButtonSprite(1100,100,
+        btnSaltar = new ButtonSprite(1070,100,
                 regionControlSalto,actividadJuego.getVertexBufferObjectManager()) {
             // Aquí el código que ejecuta el botón cuando es presionado
             @Override
@@ -1724,8 +1758,8 @@ public class EscenaViajeEgipto extends EscenaBase {
 
 
     private void agregarBotonDisparar() {
-        btnDisparar = new ButtonSprite(1190,200,
-                regionControlSalto,actividadJuego.getVertexBufferObjectManager()) {
+        btnDisparar = new ButtonSprite(1200,200,
+                regionDisparar,actividadJuego.getVertexBufferObjectManager()) {
             // Aquí el código que ejecuta el botón cuando es presionado
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {

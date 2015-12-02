@@ -73,6 +73,21 @@ public class EscenaGanaste extends EscenaBase
                         admEscenas.crearEscenaCargando(3);
                         admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
                     }
+                    else if(num==5){
+                        admEscenas.liberarEscenaGanaste();
+                        admEscenas.crearEscenaCargando(4);
+                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
+                    }
+                    else if(num==7){
+                        admEscenas.liberarEscenaGanaste();
+                        admEscenas.crearEscenaMenu();
+                        admEscenas.setEscena(TipoEscena.ESCENA_MENU);
+                    }
+                    else if(num==10){
+                        admEscenas.liberarEscenaGanaste();
+                        admEscenas.crearEscenaCargando(7);
+                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
+                    }
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
@@ -109,8 +124,21 @@ public class EscenaGanaste extends EscenaBase
 
                     if(num==3){
                         admEscenas.liberarEscenaGanaste();
-                        admEscenas.crearEscenaCargando(4);
-                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
+                        admEscenas.crearEscenaHistoriaPirata();
+                        admEscenas.setEscena(TipoEscena.ESCENA_HISTORIA_PIRATA);
+                    }
+
+                    if(num==5){
+                        admEscenas.liberarEscenaGanaste();
+                        admEscenas.crearEscenaHistoriaEgipto();
+                        admEscenas.setEscena(TipoEscena.ESCENA_HISTORIA_EGIPTO);
+                    }
+
+                    else if(num==10) {
+
+                        admEscenas.liberarEscenaGanaste();
+                        admEscenas.crearEscenaMenu();
+                        admEscenas.setEscena(TipoEscena.ESCENA_MENU);
                     }
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);

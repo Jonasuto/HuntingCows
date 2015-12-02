@@ -77,11 +77,14 @@ public class EscenaArcade extends EscenaBase
                     }
                     else if(contadorSlide==1) {
                         //admMusica.vibrar(90);
+                        admEscenas.liberarEscenaArcade();
+                        admEscenas.crearEscenaCargando(4);
+                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
                     }
                     else {
                         admEscenas.liberarEscenaArcade();
-                        admEscenas.crearEscenaViajeEgipto();
-                        admEscenas.setEscena(TipoEscena.ESCENA_VIAJE_EGIPTO);
+                        admEscenas.crearEscenaCargando(7);
+                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
                     }
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);

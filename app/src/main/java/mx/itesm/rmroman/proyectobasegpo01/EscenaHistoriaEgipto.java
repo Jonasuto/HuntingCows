@@ -12,7 +12,7 @@ import org.andengine.util.adt.color.Color;
 /**
  * Created by rmroman on 11/09/15.
  */
-public class EscenaHistoriaPirata extends EscenaBase
+public class EscenaHistoriaEgipto extends EscenaBase
 {
     // Regiones para imágenes
 
@@ -41,10 +41,8 @@ public class EscenaHistoriaPirata extends EscenaBase
     @Override
     public void cargarRecursos() {
 
-        regionSlides = new ITextureRegion[2];
-        regionSlides[0] = cargarImagen("Imagenes/huida_planeta.jpg");
-        regionSlides[1] = cargarImagen("Imagenes/piratas_mundo.jpg");
-
+        regionSlides = new ITextureRegion[1];
+        regionSlides[0] = cargarImagen("Imagenes/egipto.jpg");
         regionSlideActual=regionSlides[0];
         regionsiguiente = cargarImagen("Imagenes/Historia/comic_next.png");
         regionanterior = cargarImagen("Imagenes/Historia/comic_prev.png");
@@ -127,8 +125,8 @@ public class EscenaHistoriaPirata extends EscenaBase
                             break;
                         }
                         else{
-                            admEscenas.liberarEscenaHistoriaPirata();
-                            admEscenas.crearEscenaCargando(4);
+                            admEscenas.liberarEscenaHistoriaEgipto();
+                            admEscenas.crearEscenaCargando(7);
                             admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
                         }
 
@@ -150,8 +148,8 @@ public class EscenaHistoriaPirata extends EscenaBase
 
                     case OPCION_FINAL:
 
-                        admEscenas.liberarEscenaHistoriaPirata();
-                        admEscenas.crearEscenaCargando(4);
+                        admEscenas.liberarEscenaHistoriaEgipto();
+                        admEscenas.crearEscenaCargando(7);
                         admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
 
 
@@ -162,10 +160,12 @@ public class EscenaHistoriaPirata extends EscenaBase
                         onBackKeyPressed();
 
                         return true;
+
                 }
                 return true;
             }
         });
+
         // Asigna este menú a la escena
         setChildScene(menu);
     }
@@ -181,7 +181,7 @@ public class EscenaHistoriaPirata extends EscenaBase
     @Override
     public TipoEscena getTipoEscena() {
 
-        return TipoEscena.ESCENA_HISTORIA_PIRATA;
+        return TipoEscena.ESCENA_HISTORIA_EGIPTO;
     }
 
     @Override

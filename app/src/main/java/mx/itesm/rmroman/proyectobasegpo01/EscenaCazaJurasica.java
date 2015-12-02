@@ -122,7 +122,6 @@ public class EscenaCazaJurasica extends EscenaBase {
 
     private int contadorTiempo;
 
-
     private AnalogOnScreenControl control;
 
     private Jugador spritePersonaje;
