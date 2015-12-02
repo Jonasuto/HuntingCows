@@ -74,6 +74,8 @@ public class EscenaOdiseaPirata extends EscenaBase {
     private AnalogOnScreenControl control;
 
     private Jugador spritePersonaje;
+    private Jugador spritePersonajeParado;
+    private Jugador spritePersonajeMovimiento;
 
     private boolean juegoCorriendo = true;
 
@@ -84,6 +86,7 @@ public class EscenaOdiseaPirata extends EscenaBase {
     private ITextureRegion regionBtnPausa;
 
     private TiledTextureRegion regionPersonajeParado;
+    private TiledTextureRegion regionPersonajeMovimiento;
     private TiledTextureRegion regionEnemigoSimple;
     private TiledTextureRegion regionEnemigoFinal;
 
@@ -132,15 +135,16 @@ public class EscenaOdiseaPirata extends EscenaBase {
 
         fontMonster = cargarFont("fonts/monster.ttf");
 
-        vidas=cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
+        vidas = cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
         regionFondo = cargarImagen("Imagenes/playa.jpg");
         regionFondoPausa = cargarImagen("Imagenes/Logos/logoHuntingCows.png");
         regionBase=cargarImagen("Imagenes/Roman/baseJoystick.png");
         regionDisparar=cargarImagen("Imagenes/Roman/boton_fuego.png");
         regionVida = cargarImagen("Imagenes/Niveles/CazaJurasica/corazon.png");
-        regionPersonajeParado = cargarImagenMosaico("Imagenes/Roman/spritelanchaparada.png", 800, 300, 1, 2);
+        regionPersonajeParado = cargarImagenMosaico("Imagenes/Roman/spritelanchaparada.png", 400, 150, 1, 2);
+        regionPersonajeMovimiento = cargarImagenMosaico("Imagenes/Roman/lanchamovimiento.png", 450, 150, 1, 2);
         regionEnemigoSimple= cargarImagenMosaico("Imagenes/Roman/spritePirata.png", 1120, 300, 1, 4);
-        regionEnemigoFinal= cargarImagenMosaico("Imagenes/Roman/bossPirata.png", 2000, 400, 1, 4);
+        regionEnemigoFinal= cargarImagenMosaico("Imagenes/Roman/spritesbosspirata.png", 1000, 400, 1, 2);
 
         // Pausa
         regionBtnPausa = cargarImagen("Imagenes/Niveles/CazaJurasica/btnPausa.png");
@@ -313,8 +317,15 @@ public class EscenaOdiseaPirata extends EscenaBase {
         escenaPausa.registerTouchArea(spriteOnFinal);
 
 
-        spritePersonaje = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeParado, actividadJuego.getVertexBufferObjectManager());
-        spritePersonaje.animate(75);
+
+        spritePersonajeParado = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeParado, actividadJuego.getVertexBufferObjectManager());
+        spritePersonajeParado.animate(75);
+
+        spritePersonajeMovimiento = new Jugador((ControlJuego.ANCHO_CAMARA/2)-100, (ControlJuego.ALTO_CAMARA/4)-20,regionPersonajeMovimiento, actividadJuego.getVertexBufferObjectManager());
+        spritePersonajeMovimiento.animate(75);
+
+
+        spritePersonaje=spritePersonajeParado;
         attachChild(spritePersonaje);
 
         Barco spriteEnemigo = new Barco(1250, (aleatorio.nextInt(7)+1)*100, regionEnemigoSimple, actividadJuego.getVertexBufferObjectManager());
@@ -603,6 +614,19 @@ public class EscenaOdiseaPirata extends EscenaBase {
             public void onControlChange(BaseOnScreenControl pBaseOnScreenControl, float pValueX, float pValueY) {
 
                 if(juegoCorriendo) {
+
+                    if(pValueX!=0){
+                        spritePersonajeMovimiento.setPosition(spritePersonaje);
+                        spritePersonaje.detachSelf();
+                        spritePersonaje=spritePersonajeMovimiento;
+                        attachChild(spritePersonaje);
+                    }
+                    else{
+                        spritePersonajeParado.setPosition(spritePersonaje);
+                        spritePersonaje.detachSelf();
+                        spritePersonaje=spritePersonajeParado;
+                        attachChild(spritePersonaje);
+                    }
 
                         if(spritePersonaje.getY()<0){
                             if(pValueY<0){
