@@ -46,6 +46,17 @@ public class EscenaOdiseaPirata extends EscenaBase {
 
     private HUD hud;
 
+
+    private Sprite der;
+    private Sprite iz;
+    private Sprite up;
+    private Sprite down;
+
+    private ITextureRegion regionControlDer;
+    private ITextureRegion regionControlIz;
+    private ITextureRegion regionControlUp;
+    private ITextureRegion regionControlDown;
+
     private float valorMarcador;
 
     private ArrayList<Barco> listaEnemigos;
@@ -146,6 +157,12 @@ public class EscenaOdiseaPirata extends EscenaBase {
         regionEnemigoSimple= cargarImagenMosaico("Imagenes/Roman/spritePirata.png", 1120, 300, 1, 4);
         regionEnemigoFinal= cargarImagenMosaico("Imagenes/Roman/spritesbosspirata.png", 1000, 400, 1, 2);
 
+        regionControlDer=cargarImagen("Imagenes/Joystick/derecha_joystick.png");
+        regionControlIz=cargarImagen("Imagenes/Joystick/izquiera_joystick.png");
+        regionControlUp=cargarImagen("Imagenes/Joystick/arriba_joystick.png");
+        regionControlDown=cargarImagen("Imagenes/Joystick/abajo_joystick.png");
+
+
         // Pausa
         regionBtnPausa = cargarImagen("Imagenes/Niveles/CazaJurasica/btnPausa.png");
         regionProyectil = cargarImagen("Imagenes/Roman/laser.png");
@@ -179,7 +196,7 @@ public class EscenaOdiseaPirata extends EscenaBase {
 
         agregarHUD();
 
-        numeroDeBalas=1;
+        numeroDeBalas=7;
 
         contadorBarcos=0;
 
@@ -335,6 +352,18 @@ public class EscenaOdiseaPirata extends EscenaBase {
 
         crearEnemigos();
 
+        der = cargarSprite(190, 115, regionControlDer);
+        control.attachChild(der);
+
+        iz = cargarSprite(50, 115, regionControlIz);
+        control.attachChild(iz);
+
+        up = cargarSprite(120, 185, regionControlUp);
+        control.attachChild(up);
+
+        down = cargarSprite(120, 45, regionControlDown);
+        control.attachChild(down);
+
     }
 
     @Override
@@ -373,10 +402,10 @@ public class EscenaOdiseaPirata extends EscenaBase {
                 fontMonster,"    10    ",actividadJuego.getVertexBufferObjectManager());
         txtBalas.setColor(Color.BLUE);
         hud.attachChild(txtBalas);
-        valorBalas = 1;
+        valorBalas = 7;
 
         txtTotalBalas = new Text(1220, 700,
-                fontMonster,"    /1    ",actividadJuego.getVertexBufferObjectManager());
+                fontMonster,"    /7    ",actividadJuego.getVertexBufferObjectManager());
         txtTotalBalas.setColor(Color.BLUE);
         hud.attachChild(txtTotalBalas);
 
@@ -414,9 +443,9 @@ public class EscenaOdiseaPirata extends EscenaBase {
             return;
         }
 
-        if(numeroDeBalas<1){
+        if(numeroDeBalas<7){
             contadorTiempo+=1;
-            if(contadorTiempo>=70){
+            if(contadorTiempo>=150){
                 numeroDeBalas++;
                 valorBalas++;
                 contadorTiempo=0;
@@ -439,7 +468,7 @@ public class EscenaOdiseaPirata extends EscenaBase {
 
             Barco enemigo = listaEnemigos.get(i);
 
-                if (spritePersonaje.collidesWith(enemigo) && spritePersonaje.getX()-enemigo.getX()>-20 && spritePersonaje.getY()-enemigo.getY()<20 ) {
+                if (spritePersonaje.collidesWith(enemigo) && spritePersonaje.getX()-enemigo.getX()>-20 && spritePersonaje.getX()-enemigo.getX()<20 && spritePersonaje.getY()-enemigo.getY()<20 && spritePersonaje.getY()-enemigo.getY()>-20 ) {
 
 
                     if(cantidadVida -1<0){
@@ -574,8 +603,6 @@ public class EscenaOdiseaPirata extends EscenaBase {
         actividadJuego.getEngine().disableAccelerationSensor(actividadJuego);
         regionFondo.getTexture().unload();
         regionFondo=null;
-        regionFondoPausa.getTexture().unload();
-        regionFondoPausa=null;
         regionBase.getTexture().unload();
         regionBase=null;
         regionVida.getTexture().unload();
@@ -614,6 +641,32 @@ public class EscenaOdiseaPirata extends EscenaBase {
             public void onControlChange(BaseOnScreenControl pBaseOnScreenControl, float pValueX, float pValueY) {
 
                 if(juegoCorriendo) {
+
+                    if(pValueX>0){
+                        der.setAlpha(1);
+                        iz.setAlpha(0.001f);
+                    }
+                    if(pValueX<0){
+                        iz.setAlpha(1);
+                        der.setAlpha(0.001f);
+                    }
+                    if(pValueX==0){
+                        der.setAlpha(0.001f);
+                        iz.setAlpha(0.001f);
+                    }
+
+                    if(pValueY>0){
+                        up.setAlpha(1);
+                        down.setAlpha(0.001f);
+                    }
+                    if(pValueY<0){
+                        up.setAlpha(0.001f);
+                        down.setAlpha(1);
+                    }
+                    if(pValueY==0){
+                        up.setAlpha(0.001f);
+                        down.setAlpha(0.001f);
+                    }
 
                     if(pValueX!=0){
                         spritePersonajeMovimiento.setPosition(spritePersonaje);
@@ -723,42 +776,57 @@ public class EscenaOdiseaPirata extends EscenaBase {
 
             for (int i = listaProyectiles.size() - 1; i >= 0; i--) {
                 final Laser balaRoman = listaProyectiles.get(i);
+
+                if(balaRoman.getY()-200>balaRoman.getYinicial()){
+                    balaRoman.setSeSupero(true);
+                }
+
                 if(balaRoman.getYaDespegue()==false){
                     balaRoman.setYaDespegue(true);
                     // Animar sprite central
-                    JumpModifier salto = new JumpModifier(1, balaRoman.getX()+30, balaRoman.getX()+530,
-                            balaRoman.getY()+30, balaRoman.getY(),-300);
+                    JumpModifier salto = new JumpModifier(1, balaRoman.getX()+10, balaRoman.getX()+530,
+                            balaRoman.getY(), balaRoman.getY(),-300);
                     RotationModifier rotacion = new RotationModifier(1, -95, 0);
                     ParallelEntityModifier paralelo = new ParallelEntityModifier(salto,rotacion)
                     {
                         @Override
                         protected void onModifierFinished(IEntity pItem) {
-                            for (int k = listaEnemigos.size() - 1; k >= 0; k--) {
-                                Barco enemigo = listaEnemigos.get(k);
-                                if (balaRoman.collidesWith(enemigo) && balaRoman.getX()-enemigo.getX()>-20 && balaRoman.getY()-enemigo.getY()<20 ) {
-                                    // Lo destruye
-
-                                    if (enemigo.getRegalo() == 1 || enemigo.getRegalo() == 3) {
-                                        crearVida(enemigo);
-                                    }
-
-                                    enemigo.detachSelf();
-                                    listaEnemigos.remove(enemigo);
-
-                                    // desaparece el proyectil
-                                    detachChild(balaRoman);
-                                    listaProyectiles.remove(balaRoman);
-                                    break;
-
-                                }
-                            }
-
-                            detachChild(balaRoman);
                             unregisterEntityModifier(this);
                             super.onModifierFinished(pItem);
                         }
                     };
                     balaRoman.registerEntityModifier(paralelo);
+                }
+
+                else {
+
+                    if(balaRoman.getseSupero()) {
+
+                        if (balaRoman.getYinicial()== balaRoman.getY()) {
+                    for (int k = listaEnemigos.size() - 1; k >= 0; k--) {
+                        Barco enemigo = listaEnemigos.get(k);
+                        if (balaRoman.collidesWith(enemigo) && (balaRoman.getX()-enemigo.getX()>-80 && balaRoman.getX()-enemigo.getX()<80) && (balaRoman.getY()-enemigo.getY()<80 && balaRoman.getY()-enemigo.getY()>-80) ) {
+                            // Lo destruye
+
+                            if (enemigo.getRegalo() == 1 || enemigo.getRegalo() == 3) {
+                                crearVida(enemigo);
+                            }
+
+                            enemigo.detachSelf();
+                            listaEnemigos.remove(enemigo);
+
+                            // desaparece el proyectil
+                            detachChild(balaRoman);
+                            listaProyectiles.remove(balaRoman);
+                            break;
+
+                        }
+                        else{
+                            detachChild(balaRoman);
+                        }
+                    }
+                        }
+                    }
                 }
             }
     }

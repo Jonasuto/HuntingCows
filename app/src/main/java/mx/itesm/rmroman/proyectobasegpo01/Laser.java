@@ -19,7 +19,11 @@ public class Laser extends Sprite {
     private Random aleatorio;
     private int movimiento;
 
+    private float yinicial;
+    private float xinicial;
+
     private boolean yaDespegue;
+    private boolean seSupero;
 
 
     public Laser(float pX, float pY, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager,boolean volteandoDerecha,boolean disparoOvni) {
@@ -29,7 +33,28 @@ public class Laser extends Sprite {
         aleatorio= new Random();
         movimiento=aleatorio.nextInt(3);
         yaDespegue=false;
+        yinicial=pY;
+        xinicial=pX;
+        seSupero=false;
     }
+
+    public float getYinicial(){
+        return yinicial;
+    }
+
+    public void setSeSupero(boolean supero){
+        this.seSupero=supero;
+    }
+
+    public boolean getseSupero(){
+        return this.seSupero;
+    }
+
+
+    public float getXinicial(){
+        return xinicial;
+    }
+
 
     public void mover(){
 

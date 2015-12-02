@@ -65,6 +65,11 @@ public class EscenaPerdiste extends EscenaBase
                         admEscenas.crearEscenaCargando(2);
                         admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
                     }
+                    else if(num==4){
+                        admEscenas.liberarEscenaPerdiste();
+                        admEscenas.crearEscenaCargando(4);
+                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
+                    }
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
             }
