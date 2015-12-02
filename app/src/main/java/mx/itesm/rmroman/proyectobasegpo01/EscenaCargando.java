@@ -105,6 +105,11 @@ public class EscenaCargando extends EscenaBase
                             admEscenas.crearEscenaAleatoriedad();
                             admEscenas.setEscena(TipoEscena.ESCENA_ALEATORIEDAD);
                         }
+                        else if(decision==4){
+                            admEscenas.liberarEscenaCargando();
+                            admEscenas.crearEscenaPirata();
+                            admEscenas.setEscena(TipoEscena.ESCENA_PIRATA);
+                        }
 
                     }
                 }));

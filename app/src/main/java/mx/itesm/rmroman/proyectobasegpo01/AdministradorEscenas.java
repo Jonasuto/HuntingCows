@@ -36,6 +36,7 @@ public class AdministradorEscenas {
     private EscenaBase escenaCazaJurasicaRunner;
     private EscenaBase escenaPirata;
     private EscenaBase escenaJurasicaLvl2;
+    private EscenaBase escenaHistoriaPirata;
 
     private boolean cazaJurasicaDesbloqueado=false;
 
@@ -154,6 +155,9 @@ public class AdministradorEscenas {
             case ESCENA_CAZA_JURASICA_LVL2:
                 setEscenaBase(escenaJurasicaLvl2);
                 break;
+            case ESCENA_HISTORIA_PIRATA:
+                setEscenaBase(escenaHistoriaPirata);
+                break;
         }
     }
 
@@ -167,6 +171,17 @@ public class AdministradorEscenas {
     public void liberarEscenaSplash() {
         escenaSplash.liberarEscena();
         escenaSplash = null;
+    }
+
+    public void crearEscenaHistoriaPirata() {
+        // Carga los recursos
+        escenaHistoriaPirata = new mx.itesm.rmroman.proyectobasegpo01.EscenaHistoriaPirata();
+    }
+
+    //*** Libera la escena de Splash
+    public void liberarEscenaHistoriaPirata() {
+        escenaHistoriaPirata.liberarEscena();
+        escenaHistoriaPirata = null;
     }
 
     public void crearEscenaCazaJurasicaLvl2() {

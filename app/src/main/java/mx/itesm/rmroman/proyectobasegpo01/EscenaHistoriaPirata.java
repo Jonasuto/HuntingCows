@@ -41,11 +41,9 @@ public class EscenaHistoriaPirata extends EscenaBase
     @Override
     public void cargarRecursos() {
 
-        regionSlides = new ITextureRegion[4];
-        regionSlides[0] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_12.jpg");
-        regionSlides[1] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_13.jpg");
-        regionSlides[2] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_14.jpg");
-        regionSlides[3] = cargarImagen("Imagenes/Historia/CazaJurasica/historia_15.jpg");
+        regionSlides = new ITextureRegion[2];
+        regionSlides[0] = cargarImagen("Imagenes/huida_planeta.jpg");
+        regionSlides[1] = cargarImagen("Imagenes/piratas_mundo.jpg");
 
         regionSlideActual=regionSlides[0];
         regionsiguiente = cargarImagen("Imagenes/Historia/comic_next.png");
@@ -122,26 +120,15 @@ public class EscenaHistoriaPirata extends EscenaBase
                         // Mostrar la escena de AcercaDe
                         if (contadorSlide < regionSlides.length-1) {
                             contadorSlide++;
-                            if (contadorSlide == 1) {
-                                opcionMenu.setPosition(-450,250);
-                            }
-                            else{
-                                opcionMenu.setPosition(-450,315);
-                            }
-                            if (contadorSlide == 2) {
-                                opcionafinal.setPosition(450,270);
-                            }
-                            else{
-                                opcionafinal.setPosition(450,350);
-                            }
+
                             regionSlideActual = regionSlides[contadorSlide];
                             spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
                             attachChild(spriteFondo);
                             break;
                         }
                         else{
-                            admEscenas.liberarEscenaHistoriaCazaJurasica();
-                            admEscenas.crearEscenaCargando(1);
+                            admEscenas.liberarEscenaHistoriaPirata();
+                            admEscenas.crearEscenaCargando(4);
                             admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
                         }
 
@@ -152,18 +139,7 @@ public class EscenaHistoriaPirata extends EscenaBase
                         // Mostrar la escena de AcercaDe
                         if (contadorSlide > 0) {
                             contadorSlide--;
-                            if (contadorSlide == 1) {
-                                opcionMenu.setPosition(-450,250);
-                            }
-                            else{
-                                opcionMenu.setPosition(-450,315);
-                            }
-                            if (contadorSlide == 2) {
-                                opcionafinal.setPosition(450,270);
-                            }
-                            else{
-                                opcionafinal.setPosition(450,350);
-                            }
+
                             regionSlideActual = regionSlides[contadorSlide];
                             spriteFondo = cargarSprite(ControlJuego.ANCHO_CAMARA / 2, ControlJuego.ALTO_CAMARA / 2, regionSlideActual);
                             attachChild(spriteFondo);
@@ -174,9 +150,10 @@ public class EscenaHistoriaPirata extends EscenaBase
 
                     case OPCION_FINAL:
 
-                        admEscenas.liberarEscenaHistoriaCazaJurasica();
-                        admEscenas.crearEscenaCargando(1);
+                        admEscenas.liberarEscenaHistoriaPirata();
+                        admEscenas.crearEscenaCargando(4);
                         admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
+
 
                         return true;
 
@@ -198,15 +175,15 @@ public class EscenaHistoriaPirata extends EscenaBase
     @Override
     public void onBackKeyPressed() {
         // Regresar al menú principal
+        admEscenas.liberarEscenaHistoriaPirata();
         admEscenas.crearEscenaMenu();
         admEscenas.setEscena(TipoEscena.ESCENA_MENU);
-        admEscenas.liberarEscenaHistoriaCazaJurasica();
     }
 
     @Override
     public TipoEscena getTipoEscena() {
 
-        return TipoEscena.ESCENA_HISTORIA_CAZA_JURASICA;
+        return TipoEscena.ESCENA_HISTORIA_PIRATA;
     }
 
     @Override

@@ -103,14 +103,14 @@ public class EscenaGanaste extends EscenaBase
 
                     if(num==2){
                         admEscenas.liberarEscenaGanaste();
-                        admEscenas.crearEscenaAleatoriedad();
-                        admEscenas.setEscena(TipoEscena.ESCENA_ALEATORIEDAD);
+                        admEscenas.crearEscenaCargando(3);
+                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
                     }
 
                     if(num==3){
                         admEscenas.liberarEscenaGanaste();
-                        admEscenas.crearEscenaPirata();
-                        admEscenas.setEscena(TipoEscena.ESCENA_PIRATA);
+                        admEscenas.crearEscenaCargando(4);
+                        admEscenas.setEscena(TipoEscena.ESCENA_CARGANDO);
                     }
                 }
                 return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
