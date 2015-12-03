@@ -183,10 +183,10 @@ public class EscenaMenu extends EscenaBase
 
         if(tipoMenu==4) {
             opcionAcercaDe.setPosition(-550, 340);
-            opcionJugar.setPosition(200, 200);
+            opcionJugar.setPosition(-200, 200);
             opcionBotonRojo.setPosition(550, -340);
-            opcionBotonArcade.setPosition(450, 0);
-            opcionBotonComics.setPosition(200, -200);
+            opcionBotonArcade.setPosition(-450, 0);
+            opcionBotonComics.setPosition(-200, -200);
         }
         else if(tipoMenu==2){
             opcionAcercaDe.setPosition(-550, 340);
